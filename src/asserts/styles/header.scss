@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900&display=swap");
+
+.head {
+  // margin-bottom: 10%;
+  height: 52px;
+  margin-bottom: -4px;
+
+  .header {
+    background-image: linear-gradient(to right, #0d0d8b, #44aea9);
+    height: 52px;
+  }
+  .login {
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  .web-name {
+    font-weight: bold;
+    color: #44aea9;
+    font-size: 15px;
+    margin-left: 10%;
+    margin-top: -5px;
+  }
+  .web-name1 {
+    font-style: normal;
+    color: #ffffff;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: -105px;
+  }
+}

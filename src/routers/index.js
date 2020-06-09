@@ -5,6 +5,9 @@ import { Router, Switch, Route } from "react-router-dom";
 import Login from "pages/Login";
 import Homepage from "pages/Home";
 import NotFound from "pages/NotFound";
+import ForgetPassword from "pages/ForgetPassword";
+import ChangePassword from "pages/ChangePassword";
+import CreateBankAccount from "pages/CreateBankAccount";
 
 class WrapRouter extends Component {
   render() {
@@ -18,6 +21,21 @@ class WrapRouter extends Component {
         path: "/login",
         exact: true,
         main: () => <Login />,
+      },
+      {
+        path: "/createAccount",
+        exact: true,
+        main: () => <CreateBankAccount />,
+      },
+      {
+        path: "/forgetPassword",
+        exact: true,
+        main: () => <ForgetPassword />,
+      },
+      {
+        path: "/changePassword",
+        exact: true,
+        main: () => <ChangePassword />,
       },
       {
         path: "",

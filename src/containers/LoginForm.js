@@ -1,8 +1,28 @@
 import React, { Component } from "react";
-import { Button, Form, Input, } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userActions } from "action/user.action";
+
+// select a role
+const { Option } = Select;
+
+function onChange(value) {
+  console.log(`selected ${value}`);
+}
+
+function onBlur() {
+  console.log("blur");
+}
+
+function onFocus() {
+  console.log("focus");
+}
+
+function onSearch(val) {
+  console.log("search:", val);
+}
 class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -15,12 +35,10 @@ class LoginForm extends Component {
     const { email, password } = this.state;
     const { login } = this.props;
     login(email, password);
-
   };
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
-
     });
     console.log(this.state.email, this.state.password);
   };
@@ -32,59 +50,87 @@ class LoginForm extends Component {
   };
   render() {
     const inputStyle = {
-
-      height: '40px',
-      borderRadius: '5px'
-    }
+      height: "40px",
+      borderRadius: "5px",
+    };
     const { email, password } = this.state;
     const activeEmail = email && password.trim();
     return (
-      <div className=" mt-5">
-        <div style={{
-          marginRight: '5%', marginLeft: '10%'
-        }}>
-          < h1 style={{ textAlign: 'center', fontWeight: 'bolder', color: 'white', }}>Login</h1>
+      <div className=" mt-5 loginForm">
+        <div
+          style={{
+            marginRight: "5%",
+            marginLeft: "10%",
+          }}
+        >
+          <h1
+            style={{
+              textAlign: "center",
+              color: "blue",
+            }}
+          >
+            Login
+          </h1>
           <Form
-            style={{ marginTop: '10%' }}
+            style={{ marginTop: "10%", zIndex: "-1" }}
             name="basic"
             initialValues={{
               remember: true,
             }}
-
           >
             <Form.Item
-
               rules={[
                 {
                   required: true,
-                  message: 'Please input your email!',
+                  message: "Please input your username!",
                 },
               ]}
             >
-              <Input style={inputStyle}
+              <Input
+                // style={inputStyle}
                 value={email}
                 name="email"
                 onChange={this.onChange}
-                placeholder="Please input your email" />
+                placeholder="Username"
+              />
             </Form.Item>
 
             <Form.Item
-
               rules={[
                 {
                   required: true,
-                  message: 'Please input your password!',
+                  message: "Please input your password!",
                 },
               ]}
             >
-              <Input.Password style={inputStyle}
+              <Input.Password
+                // style={inputStyle}
                 value={password}
                 name="password"
                 onChange={this.onChange}
-                placeholder="Please input your password" />
+                placeholder="Password"
+              />
             </Form.Item>
 
-
+            <Form.Item>
+              <Select
+                showSearch
+                placeholder="Select a role"
+                optionFilterProp="children"
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onSearch={onSearch}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                <Option value="jack">Customer</Option>
+                <Option value="lucy">Employee</Option>
+                <Option value="tom">Admin</Option>
+              </Select>
+            </Form.Item>
             {/* <Form.Item >
               <ReCAPTCHA
 
@@ -92,22 +138,34 @@ class LoginForm extends Component {
 
               />
             </Form.Item> */}
-            <Form.Item >
-              <Button style={{
-                width: '100%', background: '#F4D03F', height: '40px',
-                borderRadius: '10px', opacity: '1'
-              }} type="primary"
+            <div className="ant-row">
+              <div className="ant-col-12  ">
+                <Link to="/" style={{ textAlign: "right" }}>
+                  Quên mật khẩu?
+                </Link>
+              </div>
+            </div>
 
+            <Form.Item>
+              <Button
+                style={{
+                  width: "100%",
+                  background: "#F4D03F",
+                  height: "40px",
+                  // borderRadius: "10px",
+                  opacity: "1",
+                }}
+                type="primary"
                 disabled={!activeEmail}
                 onClick={this.handleLogin}
               >
                 Login
-        </Button>
+              </Button>
             </Form.Item>
           </Form>
-        </div >
-      </div >
-    )
+        </div>
+      </div>
+    );
   }
 }
 const mapStateToProps = (state) => {
@@ -121,4 +179,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
-
