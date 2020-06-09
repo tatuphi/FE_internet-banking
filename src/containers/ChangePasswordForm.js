@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, Input, Button } from "antd";
+
 const layout = {
   labelCol: { span: 5 },
   wrapperCol: { span: 16 },
@@ -26,11 +27,7 @@ class ChangePasswordForm extends Component {
               },
             ]}
           >
-            <Input.Password
-              // style={inputStyle}
-              name="password"
-              onChange={this.onChange}
-            />
+            <Input.Password name="password" onChange={this.onChange} />
           </Form.Item>
           <Form.Item
             label="New password"
@@ -41,11 +38,7 @@ class ChangePasswordForm extends Component {
               },
             ]}
           >
-            <Input.Password
-              // style={inputStyle}
-              name="password"
-              onChange={this.onChange}
-            />
+            <Input.Password name="password" onChange={this.onChange} />
           </Form.Item>
           <Form.Item
             label="New password confirm"
@@ -56,22 +49,13 @@ class ChangePasswordForm extends Component {
               },
             ]}
           >
-            <Input.Password
-              // style={inputStyle}
-              name="password"
-              onChange={this.onChange}
-            />
+            <Input.Password name="password" onChange={this.onChange} />
           </Form.Item>
           <Form.Item label=" " colon={false}>
             <Button type="primary" className="btnSubmit" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-          {/* <Form.Item>
-            <Button className="btnSubmit" htmlType="submit">
               Save
             </Button>
-          </Form.Item> */}
+          </Form.Item>
         </Form>
       </div>
     );

@@ -8,6 +8,7 @@ import NotFound from "pages/NotFound";
 import ForgetPassword from "pages/ForgetPassword";
 import ChangePassword from "pages/ChangePassword";
 import CreateBankAccount from "pages/CreateBankAccount";
+import TransferMoney from "pages/TransferMoney";
 
 class WrapRouter extends Component {
   render() {
@@ -36,6 +37,11 @@ class WrapRouter extends Component {
         path: "/changePassword",
         exact: true,
         main: () => <ChangePassword />,
+      },
+      {
+        path: "/transferMoney",
+        exact: true,
+        main: () => <TransferMoney />,
       },
       {
         path: "",

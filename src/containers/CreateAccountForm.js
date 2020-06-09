@@ -76,7 +76,7 @@ class CreateAccountForm extends Component {
           </Form.Item>
 
           <Form.Item label=" " colon={false}>
-            <Button type="primary" htmlType="submit">
+            <Button className="btnSubmit" type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

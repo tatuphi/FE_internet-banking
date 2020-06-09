@@ -21,7 +21,7 @@
   .myForm {
     border-radius: 5px;
     background-color: #ffffff;
-    padding: 5% 10%;
+    padding: 2% 10%;
     .resItem {
       margin-bottom: -10px;
     }
@@ -37,5 +37,11 @@
     // borderRadius: "10px",
     float: right;
     opacity: 1;
+  }
+  .titlePart {
+    font-weight: bold;
+    color: rgb(90, 98, 212);
+    margin-bottom: -10px;
+    margin-top: 20px;
   }
 }
