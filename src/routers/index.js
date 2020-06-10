@@ -5,8 +5,12 @@ import { Router, Switch, Route } from "react-router-dom";
 import Login from "pages/Login";
 import Homepage from "pages/Home";
 import NotFound from "pages/NotFound";
+import Info from 'pages/Info'
 
 class WrapRouter extends Component {
+  componentDidMount() {
+
+  }
   render() {
     const routes = [
       {
@@ -18,6 +22,11 @@ class WrapRouter extends Component {
         path: "/login",
         exact: true,
         main: () => <Login />,
+      },
+      {
+        path: "/info",
+        exact: true,
+        main: () => <Info />,
       },
       {
         path: "",

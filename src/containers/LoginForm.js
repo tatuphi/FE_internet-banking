@@ -7,14 +7,14 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      username: "",
       password: "",
     };
   }
   handleLogin = () => {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
     const { login } = this.props;
-    login(email, password);
+    login(username, password);
 
   };
   onChange = (e) => {
@@ -22,7 +22,7 @@ class LoginForm extends Component {
       [e.target.name]: e.target.value,
 
     });
-    console.log(this.state.email, this.state.password);
+    console.log(this.state.username, this.state.password);
   };
 
   onFocus = () => {
@@ -36,8 +36,9 @@ class LoginForm extends Component {
       height: '40px',
       borderRadius: '5px'
     }
-    const { email, password } = this.state;
-    const activeEmail = email && password.trim();
+    const { pendding } = this.props;
+    const { username, password } = this.state;
+    const activeEmail = username && password.trim();
     return (
       <div className=" mt-5">
         <div style={{
@@ -57,15 +58,15 @@ class LoginForm extends Component {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your email!',
+                  message: 'Please input your username!',
                 },
               ]}
             >
               <Input style={inputStyle}
-                value={email}
-                name="email"
+                value={username}
+                name="username"
                 onChange={this.onChange}
-                placeholder="Please input your email" />
+                placeholder="Please input your username" />
             </Form.Item>
 
             <Form.Item
@@ -97,7 +98,7 @@ class LoginForm extends Component {
                 width: '100%', background: '#F4D03F', height: '40px',
                 borderRadius: '10px', opacity: '1'
               }} type="primary"
-
+                loading={pendding}
                 disabled={!activeEmail}
                 onClick={this.handleLogin}
               >
@@ -117,7 +118,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  login: (email, password) => dispatch(userActions.login(email, password)),
+  login: (username, password) => dispatch(userActions.login(username, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
