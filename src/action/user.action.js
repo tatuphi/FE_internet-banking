@@ -12,9 +12,9 @@ const login = (username, password) => {
 
         console.log(res.data.accessToken);
         localStorage.setItem('token', res.data.accessToken);
-
         localStorage.setItem('x-refresh-token', res.data.refreshToken);
         localStorage.setItem('user', res.data.name);
+        localStorage.setItem('role', res.data.role);
         dispatch(success(res.data));
 
         history.push("/");
