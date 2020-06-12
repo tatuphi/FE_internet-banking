@@ -5,6 +5,6 @@
         "baseUrl": "./src"
     },
     "include": [
-        "src/**/*"
+        "src/**/*", "src/utils/.js"
     ]
 }

@@ -27,20 +27,21 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      username: "",
       password: "",
     };
   }
   handleLogin = () => {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
     const { login } = this.props;
-    login(email, password);
+    login(username, password);
+
   };
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(this.state.email, this.state.password);
+    console.log(this.state.username, this.state.password);
   };
 
   onFocus = () => {
@@ -50,11 +51,13 @@ class LoginForm extends Component {
   };
   render() {
     const inputStyle = {
-      height: "40px",
-      borderRadius: "5px",
-    };
-    const { email, password } = this.state;
-    const activeEmail = email && password.trim();
+
+      height: '40px',
+      borderRadius: '5px'
+    }
+    const { pendding } = this.props;
+    const { username, password } = this.state;
+    const activeEmail = username && password.trim();
     return (
       <div className=" mt-5 loginForm">
         <div
@@ -83,17 +86,15 @@ class LoginForm extends Component {
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: 'Please input your username!',
                 },
               ]}
             >
-              <Input
-                // style={inputStyle}
-                value={email}
-                name="email"
+              <Input style={inputStyle}
+                value={username}
+                name="username"
                 onChange={this.onChange}
-                placeholder="Username"
-              />
+                placeholder="Please input your username" />
             </Form.Item>
 
             <Form.Item
@@ -140,24 +141,12 @@ class LoginForm extends Component {
 
               />
             </Form.Item> */}
-            <div className="ant-row">
-              <div className="ant-col-12  ">
-                <Link to="/" style={{ textAlign: "right" }}>
-                  Quên mật khẩu?
-                </Link>
-              </div>
-            </div>
-
-            <Form.Item>
-              <Button
-                style={{
-                  width: "100%",
-                  background: "#F4D03F",
-                  height: "40px",
-                  // borderRadius: "10px",
-                  opacity: "1",
-                }}
-                type="primary"
+            <Form.Item >
+              <Button style={{
+                width: '100%', background: '#F4D03F', height: '40px',
+                borderRadius: '10px', opacity: '1'
+              }} type="primary"
+                loading={pendding}
                 disabled={!activeEmail}
                 onClick={this.handleLogin}
               >
@@ -177,7 +166,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  login: (email, password) => dispatch(userActions.login(email, password)),
+  login: (username, password) => dispatch(userActions.login(username, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
