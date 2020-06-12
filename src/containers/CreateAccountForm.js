@@ -19,16 +19,16 @@ class CreateAccountForm extends Component {
           wrapperCol={{ span: 16 }}
         >
           <Form.Item
-            name={["user", "name"]}
             label=" Full Name"
-            rules={[{ required: true }]}
+            name="fullName"
+            rules={[{ required: true, message: "Please input your fullname!" }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name={["user", "name"]}
-            label=" Username"
-            rules={[{ required: true }]}
+            label=" Email"
+            name="email"
+            rules={[{ required: true, message: "Please input your email!" }]}
           >
             <Input />
           </Form.Item>
@@ -36,7 +36,6 @@ class CreateAccountForm extends Component {
           <Form.Item label="Address">
             <Input.Group compact>
               <Form.Item
-                name={["address", "province"]}
                 noStyle
                 rules={[{ required: true, message: "Province is required" }]}
               >
@@ -46,7 +45,6 @@ class CreateAccountForm extends Component {
                 </Select>
               </Form.Item>
               <Form.Item
-                name={["address", "district"]}
                 noStyle
                 rules={[{ required: true, message: "District is required" }]}
               >
@@ -57,7 +55,6 @@ class CreateAccountForm extends Component {
               </Form.Item>
             </Input.Group>
             <Form.Item
-              name={["address", "street"]}
               noStyle
               rules={[{ required: true, message: "Street is required" }]}
             >
@@ -65,9 +62,11 @@ class CreateAccountForm extends Component {
             </Form.Item>
           </Form.Item>
           <Form.Item
-            name={["user", "name"]}
             label="Phone number"
-            rules={[{ required: true }]}
+            name="phoneNumber"
+            rules={[
+              { required: true, message: "Please input your phone number!" },
+            ]}
           >
             <Input />
           </Form.Item>
