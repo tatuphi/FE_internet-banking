@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900&display=swap");
+.foot {
+  height: 30px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  .footer {
+    background: #0d0d8b;
+    height: 30px;
+  }
+  .web-name {
+    font-weight: bold;
+    color: #000000;
+    font-size: 15px;
+    margin-left: 10%;
+    margin-top: -5px;
+  }
+}
