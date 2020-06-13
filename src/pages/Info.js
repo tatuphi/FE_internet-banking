@@ -39,18 +39,18 @@ class informationUser extends Component {
                 </Select>
                 <div className="mt-5">
                     <Select style={{ width: '50%' }}>
-                        <Select style={{ width: '100%' }} onChange={this.onChangeAccount}>
-                            {accountNumber.map((item) => (
-                                <Option key={item._id} value={item.accountNumber}>
 
-                                </Option>
-                            ))}
-                        </Select>
+
+                        <Option value={accountNumber.accountNumber} >
+                            {accountNumber.accountNumber}
+                        </Option>
+
+
                     </Select>
                 </div>
                 <div className="d-flex mt-5">
-                    <p>Số dư hiện tại </p>
-                    <p>100000 VNĐ</p>
+                    <p>Số dư hiện tại : </p>
+                    <p className="ml-5" >{accountNumber.currentBalance}</p>
                 </div>
             </div>
         );

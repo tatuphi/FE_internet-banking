@@ -87,7 +87,7 @@ const getAccountNumber = (typeAccount) => {
     API.get(`/auth/accountNumber`, { params: { typeAccount }, headers }
     )
       .then((res) => {
-        console.log(res.data.result);
+        console.log('typeAccount : ', res.data.result);
         dispatch(success(res.data.result));
 
       })
