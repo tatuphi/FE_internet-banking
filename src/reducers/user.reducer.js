@@ -1,9 +1,11 @@
 import { userConstant } from "constants/index";
 
 const initialState = {
-  token: localStorage.getItem('token'),
+  token: localStorage.getItem("token"),
   isLogined: false,
   pendding: false,
+  errMessage: "",
+  sendOTP: false,
   userInfo: null,
   accountNumber: [],
 };
@@ -40,7 +42,7 @@ const user = (state = initialState, action) => {
         ...state,
         userInfo: action.payload,
         pending: false,
-        isLogined: true
+        isLogined: true,
       };
     case userConstant.GET_CURRENT_USER_FAILURE:
       return {
@@ -60,13 +62,69 @@ const user = (state = initialState, action) => {
         ...state,
         accountNumber: action.accountNumber,
         pending: false,
-        isLogined: true
+        isLogined: true,
       };
     case userConstant.GET_ACCOUNT_NUMBER_FAILURE:
       return {
         ...state,
         accountNumber: null,
         pending: false,
+      };
+
+    case userConstant.SENDEMAILFORGOTPASSWORD_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+      };
+    case userConstant.SENDEMAILFORGOTPASSWORD_FAILURE:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: action.error,
+        sendOTP: false,
+      };
+
+    case userConstant.SENDEMAILFORGOTPASSWORD_SUCCESS:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: "",
+        sendOTP: true,
+      };
+    case userConstant.FORGOTPASSWORD_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+      };
+    case userConstant.FORGOTPASSWORD_FAILURE:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: action.error,
+      };
+    case userConstant.FORGOTPASSWORD_SUCCESS:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: "",
+      };
+
+    case userConstant.REGISTERBANKACCOUN_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+      };
+    case userConstant.REGISTERBANKACCOUN_FAILURE:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: action.error,
+      };
+    case userConstant.REGISTERBANKACCOUN_SUCCESS:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: "",
       };
 
     default:

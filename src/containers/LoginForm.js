@@ -82,6 +82,7 @@ class LoginForm extends Component {
             }}
           >
             <Form.Item
+              name="username"
               rules={[
                 {
                   required: true,
@@ -97,6 +98,7 @@ class LoginForm extends Component {
             </Form.Item>
 
             <Form.Item
+              name="password"
               rules={[
                 {
                   required: true,
