@@ -3,9 +3,9 @@ import { Row, Col } from "antd";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
 import VerticalMenu from "containers/Share/VerticalMenu";
-import TransferOtherForm from "containers/TransferOtherForm";
+import BeneficiaryForm from "containers/BeneficiaryForm";
 
-class Home extends Component {
+class Beneficiary extends Component {
   render() {
     return (
       <div style={{ backgroundColor: "#757272" }}>
@@ -19,7 +19,7 @@ class Home extends Component {
               <VerticalMenu />
             </Col>
             <Col span={18}>
-              <TransferOtherForm />
+              <BeneficiaryForm />
             </Col>
           </Row>
         </div>
@@ -29,4 +29,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Beneficiary;

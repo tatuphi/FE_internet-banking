@@ -9,6 +9,10 @@ const initialState = {
   userInfo: null,
   accountNumber: [],
   receiver: [],
+  nameAccount: [],
+  numberAccount: [],
+  nameRemind: [],
+  idBank: [],
 };
 
 const user = (state = initialState, action) => {
@@ -143,6 +147,29 @@ const user = (state = initialState, action) => {
         ...state,
         pendding: false,
         errMessage: "",
+      };
+    case userConstant.GET_BENEFICIARY_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+      };
+    case userConstant.GET_BENEFICIARY_FAILURE:
+      return {
+        ...state,
+        nameAccount: null,
+        numberAccount: null,
+        nameRemind: null,
+        idBank: null,
+        pendding: false,
+      };
+    case userConstant.GET_BENEFICIARY_SUCCESS:
+      return {
+        ...state,
+        nameAccount: action.nameAccount,
+        numberAccount: action.numberAccount,
+        nameRemind: action.nameRemind,
+        idBank: action.idBank,
+        pendding: false,
       };
 
     case userConstant.TRANSACTION_LOCAL_RECEIVE_REQUEST:

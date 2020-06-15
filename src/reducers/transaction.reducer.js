@@ -94,7 +94,7 @@ const transaction = (state = initialState, action) => {
             return {
                 ...state,
                 pendding: false,
-                transferUser: action.transferUser,
+                transferUser: action && action.transferUser,
                 errMess: null,
                 showNextModal: true
 
@@ -103,7 +103,7 @@ const transaction = (state = initialState, action) => {
             return {
                 ...state,
                 pendding: false,
-                errMess: action.error,
+                errMess: action && action.error,
                 transferUser: [],
 
 

@@ -85,9 +85,14 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
                 console.log('transaction : ', res.data.result);
                 dispatch(success(res.data.result));
             })
-            .catch((err) => {
-                dispatch(failure(err.response.data))
-                console.log('test1', err.response.data);
+            .catch((error) => {
+                const { data } = error.response;
+                if (data.error) {
+                    return dispatch(
+                        failure(data.error.message) || "OOPs! something wrong"
+                    );
+                }
+                return dispatch(failure(error) || "OOPs! something wrong");
             });
     };
 
@@ -103,10 +108,10 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
         };
     }
 
-    function failure(err) {
+    function failure(error) {
         return {
             type: transactionConstants.TRANSACTION_LOCAL_FAILURE,
-            err,
+            error,
         };
     }
 };
@@ -124,10 +129,16 @@ const verifyOTP = (receiver, amountMoney, content, typeSend, code) => {
                 console.log('transaction : ', res.data.result);
                 dispatch(success(res.data.result));
             })
-            .catch((err) => {
-                console.log("test", err.response);
-                dispatch(failure(err))
+            .catch((error) => {
+                const { data } = error.response;
+                if (data.error) {
+                    return dispatch(
+                        failure(data.error.message) || "OOPs! something wrong"
+                    );
+                }
+                return dispatch(failure(error) || "OOPs! something wrong");
             });
+
     };
 
     function request() {
@@ -142,10 +153,10 @@ const verifyOTP = (receiver, amountMoney, content, typeSend, code) => {
         };
     }
 
-    function failure(err) {
+    function failure(error) {
         return {
-            type: transactionConstants.TRANSACTION_LOCAL_FAILURE,
-            err,
+            type: transactionConstants.TRANSFER_FAILURE,
+            error,
         };
     }
 };

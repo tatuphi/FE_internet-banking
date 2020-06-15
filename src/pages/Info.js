@@ -1,9 +1,14 @@
 import React, { Component } from "react";
-import { Select, Divider, Input } from 'antd';
+import { Select, Divider, Input, Row, Col } from 'antd';
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
+
+
+
+import TransferMoneyForm from "containers/TransferMoneyForm";
+import VerticalMenu from "containers/Share/VerticalMenu";
 const { Option } = Select;
 
 class informationUser extends Component {
@@ -35,31 +40,51 @@ class informationUser extends Component {
         const { accountNumber, pendding } = this.props;
         console.log("mo:", accountNumber)
         return (
-            <div>
+
+
+            <div style={{ backgroundColor: "#757272" }}>
                 <Header />
-                <div style={{ padding: '20%' }}>
-                    <Select style={{ width: '50%' }} onChange={this.onChangeAccount} loading={pendding}>
-                        <Option value="Credit">Tài khoản thanh toán</Option>
-                        <Option value="Saving">Tài khoản tiết kiệm</Option>
-                    </Select>
-                    <div className="mt-5">
-                        <Select style={{ width: '50%' }}>
+                <div
+                    className="container"
+                    style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
+                >
+                    <Row>
+                        <Col span={6}>
+                            <VerticalMenu />
+                        </Col>
+                        <Col span={18}>
+                            <div style={{ padding: '20%' }}>
+                                <Select style={{ width: '50%' }} onChange={this.onChangeAccount} loading={pendding}>
+                                    <Option value="Credit">Tài khoản thanh toán</Option>
+                                    <Option value="Saving">Tài khoản tiết kiệm</Option>
+                                </Select>
+                                <div className="mt-5">
+                                    <Select style={{ width: '50%' }}>
 
-                            {accountNumber.map((item, index) =>
-                                <Option value={item.accountNumber} >
-                                    {item.accountNumber}
-                                </Option>
-                            )}
+                                        {accountNumber.map((item, index) =>
+                                            <Option value={item.accountNumber} >
+                                                {item.accountNumber}
+                                            </Option>
+                                        )}
 
-                        </Select>
-                    </div>
-                    <div className="d-flex mt-5">
-                        <p>Số dư hiện tại : </p>
-                        <p className="ml-5" >{accountNumber.currentBalance} VNĐ</p>
-                    </div>
+                                    </Select>
+                                </div>
+                                <div className="d-flex mt-5">
+                                    <p>Số dư hiện tại : </p>
+                                    <p className="ml-5" >{accountNumber.currentBalance} VNĐ</p>
+                                </div>
+                            </div>
+
+
+                        </Col>
+                    </Row>
                 </div>
+
+
+
                 <Footer />
             </div>
+
         );
     }
 }

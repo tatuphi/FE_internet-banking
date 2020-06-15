@@ -9,7 +9,7 @@ class Header extends Component {
     const fullName = localStorage.getItem('user');
     const { logout } = this.props;
     return (
-      <div className="head ">
+      <div className="head">
         <nav className="nav header ">
           <Link to="" className="nav-link active web-name ">
             Internet Banking

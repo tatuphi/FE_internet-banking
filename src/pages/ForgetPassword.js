@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import RequestForm from "containers/ForgetPassword/RequestForm";
 import { userActions } from "action/user.action";
+import Header from "containers/Share/Header";
+import Footer from "containers/Share/Footer";
 
 class ForgetPassword extends Component {
   constructor(props) {
@@ -14,9 +16,11 @@ class ForgetPassword extends Component {
   render() {
     return (
       <div>
-        <div className="container" style={{ paddingTop: "10px" }}>
+        <Header />
+        <div className="container" style={{ paddingTop: "10px", width: "50%" }}>
           <RequestForm />
         </div>
+        <Footer />
       </div>
     );
   }

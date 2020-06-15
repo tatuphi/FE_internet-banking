@@ -135,9 +135,9 @@ class TransferMoneyForm extends Component {
   render() {
     const { receiver, pendding1, transactionUser, showNextModal,
       errMessage, transferUser, pendding2, errMess } = this.props;
-    console.log("1", errMess);
+    console.log("1", errMessage);
     const { account, amount, content, otp, accBalance, accNumber } = this.state
-    const activeEmail = account && amount && content.trim();
+    const activeEmail = account.trim();
 
     console.log("receiver", transactionUser);
 
@@ -152,7 +152,6 @@ class TransferMoneyForm extends Component {
         <div className="formName"> TRANSFER MONEY TO BENEFICIARY AT MPBANK</div>
 
         <hr />
-
         <div className="titlePart">TRANSFER INFORMATION</div>
         <hr />
 
@@ -176,9 +175,9 @@ class TransferMoneyForm extends Component {
         <hr />
 
         <Form {...layout} name="control-ref" className="myForm" {...layout} form={this.form}>
-          {errMess && (
+          {errMessage && (
             <Form.Item>
-              <h6 style={{ color: "red" }}>{errMess}</h6>
+              <h6 style={{ color: "red" }}>{errMessage}</h6>
             </Form.Item>
           )}
           <Form.Item
@@ -207,7 +206,7 @@ class TransferMoneyForm extends Component {
 
           <Form.Item
             label="accountNumber"
-            name="accountNumber"
+
             rules={[
               {
                 required: true,
@@ -218,7 +217,7 @@ class TransferMoneyForm extends Component {
             <Input name="account"
               value={account} onChange={this.onChange} />
           </Form.Item>
-          <Form.Item label="Save beneficiary information" name="username">
+          <Form.Item label="Save beneficiary information">
             <Checkbox className="resText" />
           </Form.Item>
 
@@ -271,7 +270,7 @@ class TransferMoneyForm extends Component {
               type="primary"
               htmlType="submit"
               loading={pendding2}
-
+              disabled={!activeEmail}
               onClick={this.handleSubmit}
             >
               continue
@@ -286,27 +285,30 @@ class TransferMoneyForm extends Component {
           <Modal
             title="Transfer"
             visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
+
+
+            footer={[
+              <Button onClick={this.handleCancel}>cancel</Button>
+            ]}
           >
             <Form>
               <Form.Item className="resItem" label="Source account" name="username">
-                <h6 name="username" className="resText">
+                <h6 name="username" className="resText mt-2">
                   {transactionUser.sender.accountNumber}
                 </h6>
               </Form.Item>
               <Form.Item className="resItem" label="Name Receiver" name="nameReceiver">
-                <span name="email" className="resText">
+                <h6 name="email" className="resText mt-2">
                   {transactionUser.nameReceiver}
-                </span>
+                </h6>
               </Form.Item>
               <Form.Item className="resItem" label="account receiver">
-                <h6 name="emailOTP" className="resText">
+                <h6 name="emailOTP" className="resText mt-2">
                   {transactionUser.receiver}
                 </h6>
               </Form.Item>
               <Form.Item className="resItem" label="Money">
-                <h6 name="emailOTP" className="resText">
+                <h6 name="emailOTP" className="resText mt-2">
                   {transactionUser.amountMoney}
                 </h6>
               </Form.Item>
@@ -316,7 +318,7 @@ class TransferMoneyForm extends Component {
                 </h5>
               </Form.Item>
               <Form.Item className="resItem" label="Content">
-                <h6 name="emailOTP" className="resText">
+                <h6 name="emailOTP" className="resText mt-2">
                   {transactionUser.content}
                 </h6>
               </Form.Item>
@@ -325,9 +327,9 @@ class TransferMoneyForm extends Component {
           </Form.Item>
             </Form>
             <Form >
-              {errMessage && (
+              {errMess && (
                 <Form.Item>
-                  <h6 style={{ color: "red" }}>{errMessage}</h6>
+                  <h6 style={{ color: "red" }}>{errMess}</h6>
                 </Form.Item>
               )}
               <Form.Item
@@ -357,6 +359,7 @@ class TransferMoneyForm extends Component {
                   // disabled={!active}
                   type="primary"
                   onClick={this.handleSubmitMoney}
+
                 >
                   Submit
             </Button>
