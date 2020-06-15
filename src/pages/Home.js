@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-
+import Header from "containers/Share/Header";
+import Footer from "containers/Share/Footer";
 class Home extends Component {
   render() {
     return (
       <div>
-        <h2>Homepage</h2>
+        <Header />
+        <Footer />
       </div>
     );
   }

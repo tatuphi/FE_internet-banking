@@ -12,9 +12,8 @@ const login = (username, password) => {
         console.log(res.data.accessToken);
         localStorage.setItem("token", res.data.accessToken);
         localStorage.setItem("x-refresh-token", res.data.refreshToken);
-        localStorage.setItem("user", res.data.name);
-        localStorage.setItem("role", res.data.role);
-        dispatch(success(res.data));
+
+        dispatch(success(res.data.userFind));
 
         history.push("/");
       })
@@ -44,7 +43,7 @@ const getUserCurrent = () => {
   return (dispatch) => {
     dispatch(request());
 
-    API.get("/auth//user", { headers: authHeader() })
+    API.get("/auth/user", { headers: authHeader() })
       .then((res) => {
         console.log(res.data.result);
         dispatch(success(res.data.result));
@@ -69,6 +68,17 @@ const getUserCurrent = () => {
       type: userConstant.GET_CURRENT_USER_FAILURE,
       err,
     };
+  }
+};
+const logout = () => {
+
+  return (dispatch) => {
+    dispatch(request());
+    history.push('/');
+  };
+
+  function request() {
+    return { type: userConstant.LOGOUT };
   }
 };
 const getAccountNumber = (typeAccount) => {
@@ -189,4 +199,6 @@ export const userActions = {
   forgotPassword,
   getUserCurrent,
   getAccountNumber,
+  logout,
+
 };

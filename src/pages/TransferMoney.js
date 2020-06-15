@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
+
 import TransferMoneyForm from "containers/TransferMoneyForm";
 
 class TransferMoney extends Component {
@@ -17,5 +19,6 @@ class TransferMoney extends Component {
     );
   }
 }
+
 
 export default TransferMoney;
