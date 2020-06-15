@@ -9,11 +9,11 @@ import ForgetPassword from "pages/ForgetPassword";
 import ChangePassword from "pages/ChangePassword";
 import CreateBankAccount from "pages/CreateBankAccount";
 import TransferMoney from "pages/TransferMoney";
-import Info from 'pages/Info';
+import Info from "pages/Info";
+import TransferOtherBank from "pages/TransferOtherBank";
+import Beneficiary from "pages/Beneficiary";
 class WrapRouter extends Component {
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
   render() {
     const routes = [
       {
@@ -50,6 +50,16 @@ class WrapRouter extends Component {
         path: "/transferMoney",
         exact: true,
         main: () => <TransferMoney />,
+      },
+      {
+        path: "/transferOtherBank",
+        exact: true,
+        main: () => <TransferOtherBank />,
+      },
+      {
+        path: "/beneficiary",
+        exact: true,
+        main: () => <Beneficiary />,
       },
       {
         path: "",

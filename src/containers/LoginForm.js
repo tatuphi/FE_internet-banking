@@ -35,7 +35,6 @@ class LoginForm extends Component {
     const { username, password } = this.state;
     const { login } = this.props;
     login(username, password);
-
   };
   onChange = (e) => {
     this.setState({
@@ -51,10 +50,9 @@ class LoginForm extends Component {
   };
   render() {
     const inputStyle = {
-
-      height: '40px',
-      borderRadius: '5px'
-    }
+      height: "40px",
+      borderRadius: "5px",
+    };
     const { pendding } = this.props;
     const { username, password } = this.state;
     const activeEmail = username && password.trim();
@@ -86,15 +84,17 @@ class LoginForm extends Component {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your username!',
+                  message: "Please input your username!",
                 },
               ]}
             >
-              <Input style={inputStyle}
+              <Input
+                style={inputStyle}
                 value={username}
                 name="username"
                 onChange={this.onChange}
-                placeholder="Please input your username" />
+                placeholder="Please input your username"
+              />
             </Form.Item>
 
             <Form.Item
@@ -141,11 +141,17 @@ class LoginForm extends Component {
 
               />
             </Form.Item> */}
-            <Form.Item >
-              <Button style={{
-                width: '100%', background: '#F4D03F', height: '40px',
-                borderRadius: '10px', opacity: '1'
-              }} type="primary"
+            <Link to="/forgetPassword">Forget Password</Link>
+            <Form.Item>
+              <Button
+                style={{
+                  width: "100%",
+                  background: "#F4D03F",
+                  height: "40px",
+                  borderRadius: "10px",
+                  opacity: "1",
+                }}
+                type="primary"
                 loading={pendding}
                 disabled={!activeEmail}
                 onClick={this.handleLogin}
@@ -166,7 +172,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  login: (username, password) => dispatch(userActions.login(username, password)),
+  login: (username, password) =>
+    dispatch(userActions.login(username, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

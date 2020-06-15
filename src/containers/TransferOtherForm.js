@@ -7,25 +7,15 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-class TransferMoneyForm extends Component {
+class TransferOtherForm extends Component {
   render() {
     return (
       <div className="outletMain">
-        <div className="formName"> TRANSFER MONEY TO BENEFICIARY AT MPBANK</div>
-        <div className="titlePart">FORM OF TRANSFER</div>
-        <hr />
-        <Form className="myForm" {...layout} form={this.form}>
-          <Form.Item label="Form of transfer">
-            <Select defaultValue="Form 1">
-              <Option value="District 1">Form 1</Option>
-              <Option value="District 2">Form 2</Option>
-            </Select>
-          </Form.Item>
-        </Form>
+        <div className="formName"> TRANSFER MONEY TO OTHER BANK</div>
         <div className="titlePart">TRANSFER INFORMATION</div>
         <hr />
         <Form className="myForm" {...layout} form={this.form}>
-          <Form.Item label="Source account">
+          <Form.Item label="Source account" name="username">
             <Select defaultValue="Account 1">
               <Option value="District 1">Account 1</Option>
               <Option value="District 2">Account 2</Option>
@@ -33,45 +23,43 @@ class TransferMoneyForm extends Component {
           </Form.Item>
           <Form.Item
             className="resItem"
-            label="Current Balance"
+            label="Current balance"
             name="currentBalance"
           >
             <span className="resText">20,000,000 VND</span>
           </Form.Item>
-        </Form>
-        <div className="titlePart">BENEFICIARY INFORMATION</div>
-        <hr />
-        <Form className="myForm" {...layout} form={this.form}>
-          <Form.Item label="Search">
-            <Input placeholder="Input reminiscent name" />
-          </Form.Item>
-          <Form.Item label="Account number">
+          <div className="titlePart">BENEFICIARY INFORMATION</div>
+          <hr />
+          <Form.Item label="Account number" name="accountNumber">
             <Input placeholder="Input account number" />
           </Form.Item>
-          <Form.Item label="Beneficiary name">
-            <Input placeholder="Input beneficiary name" />
+          <Form.Item label="Bank name" name="username">
+            <Select defaultValue="Quyen Bank Name">
+              <Option value="quyen">Quyen Bank Name</Option>
+              <Option value="nhi">Nhi Bank Name</Option>
+            </Select>
           </Form.Item>
-          <Form.Item label="Save beneficiary information">
+          <Form.Item label="Save beneficiary information" name="username">
             <Checkbox className="resText" />
           </Form.Item>
-        </Form>
-        <div className="titlePart">TRANSACTION INFORMATION</div>
-        <hr />
-        <Form className="myForm" {...layout} form={this.form}>
-          <Form.Item label="Transfer amount">
+
+          <div className="titlePart">TRANSACTION INFORMATION</div>
+          <hr />
+          <Form.Item label="Transfer amount" name="username">
             <Input placeholder="Input amount" />
           </Form.Item>
           <Form.Item label="Transfer content" name="username">
             <Input placeholder="Input transfer content" />
           </Form.Item>
-          <Form.Item label="Transfer fee">
+          <Form.Item label="Transfer fee" name="username">
             <Select defaultValue="Payer">
+              {/* nguoi chuyen tra phi */}
               <Option value="District 1">Payer</Option>
+              {/* nguoi nhan tra phi */}
               <Option value="District 2">Payee</Option>
             </Select>
           </Form.Item>
-        </Form>
-        <Form>
+
           <Form.Item label=" " colon={false}>
             <Button
               className="btnSubmit"
@@ -88,4 +76,4 @@ class TransferMoneyForm extends Component {
   }
 }
 
-export default TransferMoneyForm;
+export default TransferOtherForm;

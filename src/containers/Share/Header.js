@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 class Header extends Component {
   render() {
     return (
-      <div className="head ">
+      <div className="head">
         <nav className="nav header ">
           <Link to="" className="nav-link active web-name ">
             Internet Banking

@@ -55,7 +55,6 @@ class RequestForm extends Component {
               )}
               <Form.Item
                 label="Username"
-                name="username"
                 rules={[
                   { required: true, message: "Please input your username!" },
                 ]}
@@ -69,7 +68,6 @@ class RequestForm extends Component {
               </Form.Item>
               <Form.Item
                 label="Email"
-                name="email"
                 rules={[
                   { required: true, message: "Please input your email!" },
                 ]}

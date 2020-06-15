@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Row, Col } from "antd";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
-import VerticalMenu from "containers/Share/VerticalMenu";
 import TransferOtherForm from "containers/TransferOtherForm";
+import VerticalMenu from "containers/Share/VerticalMenu";
 
-class Home extends Component {
+class TransferOtherBank extends Component {
   render() {
     return (
       <div style={{ backgroundColor: "#757272" }}>
@@ -29,4 +29,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default TransferOtherBank;

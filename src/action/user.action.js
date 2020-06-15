@@ -182,6 +182,37 @@ const forgotPassword = (email, username, otp, newPassword) => {
     return { type: userConstant.FORGOTPASSWORD_FAILURE, error };
   }
 };
+const getBeneficiary = () => {
+  return (dispatch) => {
+    dispatch(request());
+
+    API.get("/transfer/receiver", { headers: authHeader() })
+      .then((res) => {
+        console.log(res.data.result);
+        dispatch(success(res.data.result));
+      })
+      .catch((err) => dispatch(failure(err)));
+  };
+
+  function request() {
+    return {
+      type: userConstant.GET_BENEFICIARY_REQUEST,
+    };
+  }
+  function success(payload) {
+    return {
+      type: userConstant.GET_BENEFICIARY_SUCCESS,
+      payload,
+    };
+  }
+
+  function failure(err) {
+    return {
+      type: userConstant.GET_BENEFICIARY_FAILURE,
+      err,
+    };
+  }
+};
 
 export const userActions = {
   login,
@@ -189,4 +220,5 @@ export const userActions = {
   forgotPassword,
   getUserCurrent,
   getAccountNumber,
+  getBeneficiary,
 };
