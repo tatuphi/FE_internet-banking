@@ -12,7 +12,13 @@ const initialState = {
     transactionUser: [],
     showNextModal: false,
     transferUser: [],
-    errMess: ''
+    errMess: '',
+    successModal: false,
+    saveInfoReceiver: [],
+    pend: false,
+    penTran: false
+
+
 };
 
 const transaction = (state = initialState, action) => {
@@ -79,36 +85,57 @@ const transaction = (state = initialState, action) => {
                 pendding: false,
                 errMessage: action.error,
                 transactionUser: [],
-                // showNextModal: false
+                showNextModal: false,
+
 
             };
         case transactionConstants.TRANSFER_REQUEST:
             return {
                 ...state,
-                pendding: true,
+                penTran: true,
                 errMess: null,
+                successModal: false,
 
 
             };
         case transactionConstants.TRANSFER_SUCCESS:
             return {
                 ...state,
-                pendding: false,
+                penTran: false,
                 transferUser: action && action.transferUser,
                 errMess: null,
-                showNextModal: true
+                successModal: true,
+
 
             };
         case transactionConstants.TRANSFER_FAILURE:
             return {
                 ...state,
-                pendding: false,
+                penTran: false,
                 errMess: action && action.error,
                 transferUser: [],
-
+                successModal: false,
 
             };
-
+        case transactionConstants.SAVE_RECEIVE_REQUEST:
+            return {
+                ...state,
+                pend: true,
+                errMessage: null,
+            };
+        case transactionConstants.SAVE_RECEIVE_SUCCESS:
+            return {
+                ...state,
+                pend: false,
+                saveInfoReceiver: action.saveInfoReceiver,
+                errMessage: null,
+            };
+        case transactionConstants.SAVE_RECEIVE_FAILURE:
+            return {
+                ...state,
+                pend: false,
+                errMessage: action.error,
+            }
 
         default:
             return state;

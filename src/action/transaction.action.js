@@ -13,7 +13,6 @@ const receiverTransfer = () => {
 
         API.get(`/transfer/receiver`, { headers: headers })
             .then((res) => {
-                console.log('mo : ', res.data.result);
                 dispatch(success(res.data.result));
             })
             .catch((err) => dispatch(failure(err)));
@@ -160,6 +159,48 @@ const verifyOTP = (receiver, amountMoney, content, typeSend, code) => {
         };
     }
 };
+const saveReceiverInformation = (accountNumber, accountName, idBank, nameRemind) => {
+
+    return (dispatch) => {
+
+        return new Promise((resolve, reject) => {
+            let headers = authHeader();
+            dispatch(request());
+
+            API.post(`/transfer/receivers`, { accountNumber, accountName, idBank, nameRemind }, { headers: headers })
+                .then((res) => {
+                    console.log('typeAccount : ', res.data.result);
+                    dispatch(success(res.data.result));
+                    resolve(res.data.result)
+                })
+                .catch((err) => {
+                    dispatch(failure(err))
+                    reject()
+                });
+
+        })
+    };
+
+    function request() {
+        return {
+            type: transactionConstants.SAVE_RECEIVE_REQUEST,
+        };
+    }
+    function success(saveInfoReceiver) {
+        return {
+            type: transactionConstants.SAVE_RECEIVE_SUCCESS,
+            saveInfoReceiver,
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: transactionConstants.SAVE_RECEIVE_FAILURE,
+            error,
+        };
+    }
+};
+
 
 
 export const transactionActions = {
@@ -167,5 +208,6 @@ export const transactionActions = {
     receiverTransfer,
     receiverInformation,
     requestReceiver,
-    verifyOTP
+    verifyOTP,
+    saveReceiverInformation
 };
