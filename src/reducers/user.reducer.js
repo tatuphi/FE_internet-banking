@@ -6,7 +6,7 @@ const initialState = {
   pendding: false,
   errMessage: "",
   sendOTP: false,
-  userInfo: null,
+  userInfo: [],
   accountNumber: [],
   receiver: [],
   nameAccount: [],

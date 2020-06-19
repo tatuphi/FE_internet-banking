@@ -16,7 +16,8 @@ const initialState = {
     successModal: false,
     saveInfoReceiver: [],
     pend: false,
-    penTran: false
+    penTran: false,
+
 
 
 };
@@ -136,6 +137,61 @@ const transaction = (state = initialState, action) => {
                 pend: false,
                 errMessage: action.error,
             }
+        case transactionConstants.TRANSACTION_LINK_BANK_REQUEST:
+            return {
+                ...state,
+                pendding: true,
+                errMessage: null,
+                showNextModal: false
+
+            };
+        case transactionConstants.TRANSACTION_LINK_BANK_SUCCESS:
+            return {
+                ...state,
+                pendding: false,
+                transactionUser: action.transactionUser,
+                errMessage: null,
+                showNextModal: true
+
+            };
+        case transactionConstants.TRANSACTION_LINK_BANK_FAILURE:
+            return {
+                ...state,
+                pendding: false,
+                errMessage: action.error,
+                transactionUser: [],
+                showNextModal: false,
+
+
+            };
+        case transactionConstants.VERIFY_OTP_LINK_BANK_REQUEST:
+            return {
+                ...state,
+                penTran: true,
+                errMess: null,
+                successModal: false,
+
+
+            };
+        case transactionConstants.VERIFY_OTP_LINK_BANK_SUCCESS:
+            return {
+                ...state,
+                penTran: false,
+                transferUser: action && action.transferUser,
+                errMess: null,
+                successModal: true,
+
+
+            };
+        case transactionConstants.VERIFY_OTP_LINK_BANK_FAILURE:
+            return {
+                ...state,
+                penTran: false,
+                errMess: action && action.error,
+                transferUser: [],
+                successModal: false,
+
+            };
 
         default:
             return state;

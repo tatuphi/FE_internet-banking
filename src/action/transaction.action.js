@@ -201,6 +201,94 @@ const saveReceiverInformation = (accountNumber, accountName, idBank, nameRemind)
     }
 };
 
+const linkBankAccount = (nameBank, content, amountMoney, receiver, typeSend) => {
+    return (dispatch) => {
+        let headers = authHeader();
+        dispatch(request());
+
+        API.post(`/user/linkBankAccount`,
+            { nameBank, content, amountMoney, receiver, typeSend },
+            { headers: headers })
+            .then((res) => {
+                console.log('transaction1 : ', res.data.result);
+                dispatch(success(res.data.result));
+            })
+            .catch((error) => {
+                const { data } = error.response;
+                console.log('1', data.error.message);
+                if (data.error) {
+                    return dispatch(
+
+                        failure(data.error.message) || "OOPs! something wrong"
+                    );
+                }
+                return dispatch(failure(error) || "OOPs! something wrong");
+            });
+    };
+
+    function request() {
+        return {
+            type: transactionConstants.TRANSACTION_LINK_BANK_REQUEST,
+        };
+    }
+    function success(transactionUser) {
+        return {
+            type: transactionConstants.TRANSACTION_LINK_BANK_SUCCESS,
+            transactionUser,
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: transactionConstants.TRANSACTION_LINK_BANK_FAILURE,
+            error,
+        };
+    }
+}
+const verifyOTPLinkBank = (nameBank, content, amountMoney, receiver, typeSend, code) => {
+    return (dispatch) => {
+        let headers = authHeader();
+        dispatch(request());
+
+        API.post(`/user/verifyOTP`,
+            { nameBank, content, amountMoney, receiver, typeSend, code },
+            { headers: headers })
+            .then((res) => {
+                console.log('transaction1 : ', res.data.result);
+                dispatch(success(res.data.result));
+            })
+            .catch((error) => {
+                const { data } = error.response;
+                console.log('1', data.error.message);
+                if (data.error) {
+                    return dispatch(
+
+                        failure(data.error.message) || "OOPs! something wrong"
+                    );
+                }
+                return dispatch(failure(error) || "OOPs! something wrong");
+            });
+    };
+
+    function request() {
+        return {
+            type: transactionConstants.VERIFY_OTP_LINK_BANK_REQUEST,
+        };
+    }
+    function success(transferUser) {
+        return {
+            type: transactionConstants.VERIFY_OTP_LINK_BANK_SUCCESS,
+            transferUser,
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: transactionConstants.VERIFY_OTP_LINK_BANK_FAILURE,
+            error,
+        };
+    }
+}
 
 
 export const transactionActions = {
@@ -209,5 +297,7 @@ export const transactionActions = {
     receiverInformation,
     requestReceiver,
     verifyOTP,
-    saveReceiverInformation
+    saveReceiverInformation,
+    linkBankAccount,
+    verifyOTPLinkBank
 };

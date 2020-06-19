@@ -22,6 +22,7 @@ class informationUser extends Component {
     componentDidMount = () => {
         const { getUserCurrent } = this.props;
 
+
         getUserCurrent();
 
     }
@@ -37,7 +38,8 @@ class informationUser extends Component {
     }
 
     render() {
-        const { accountNumber, pendding } = this.props;
+        const { accountNumber, pendding, userInfo } = this.props;
+        console.log('tl', userInfo)
         console.log("mo:", accountNumber)
         return (
 
@@ -53,7 +55,22 @@ class informationUser extends Component {
                             <VerticalMenu />
                         </Col>
                         <Col span={18}>
-                            <div style={{ padding: '20%' }}>
+
+                            <div >
+                                <div>
+                                    <div className="d-flex mt-5">
+                                        <h6>Account Number :</h6>
+                                        <h5>{userInfo.accountNumber}</h5>
+
+
+                                    </div>
+                                    <div className="d-flex mt-5">
+                                        <h6>Balance Current:</h6>
+                                        <h5>{userInfo.currentBalance}</h5>
+
+                                    </div>
+                                </div>
+
                                 <Select style={{ width: '50%' }} onChange={this.onChangeAccount} loading={pendding}>
                                     <Option value="Credit">Tài khoản thanh toán</Option>
                                     <Option value="Saving">Tài khoản tiết kiệm</Option>
@@ -69,10 +86,9 @@ class informationUser extends Component {
 
                                     </Select>
                                 </div>
-                                <div className="d-flex mt-5">
-                                    <p>Số dư hiện tại : </p>
-                                    <p className="ml-5" >{accountNumber.currentBalance} VNĐ</p>
-                                </div>
+
+
+
                             </div>
 
 
@@ -93,6 +109,7 @@ const mapStateToProps = (state) => {
     return {
         pendding: state.user.pendding,
         accountNumber: state.user.accountNumber,
+        userInfo: state.user.userInfo,
     };
 };
 

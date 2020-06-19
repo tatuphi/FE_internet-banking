@@ -22,7 +22,7 @@ class TransferMoneyForm extends Component {
       account: "",
       amount: "",
       content: " ",
-      pay: false,
+      pay: true,
       visible: false,
       otp: ' ',
       accNumber: accountNumber.length > 0 ? accountNumber[0].accountNumber : '',
@@ -386,7 +386,7 @@ class TransferMoneyForm extends Component {
               </Form.Item>
               <Form.Item className="resItem" label="Type Send: ">
                 <h5 name="emailOTP" className="resText">
-                  {transactionUser.typeSend ? "pay" : "payer"}
+                  {transactionUser.typeSend ? "payerr" : "payer"}
                 </h5>
               </Form.Item>
               <Form.Item className="resItem" label="Content :">
