@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Button, Table } from "antd";
+import { connect } from "react-redux";
+import { userActions } from "action/user.action";
 const columns = [
   {
     title: "Beneficiary Name",
@@ -19,7 +21,7 @@ const columns = [
   {
     title: "Bank Name",
     dataIndex: "bankName",
-    width: 150,
+    width: 100,
   },
   {
     title: "Edit",
@@ -31,30 +33,48 @@ const columns = [
     dataIndex: "delete",
   },
 ];
-const data = [];
-for (let i = 0; i < 20; i++) {
-  data.push({
-    key: i,
-    beneficiaryName: `Edward King ${i}`,
-    reminderName: 32,
-    accountNumber: `accountNumber ${i}`,
-    bankName: `bankName ${i}`,
-    edit: `edit`,
-    delete: `delete`,
-  });
-}
 
 class BeneficiaryForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: props.beneficiaries || [],
+    };
+  }
+  componentDidMount = () => {
+    const { getBeneficiary } = this.props;
+    getBeneficiary();
+  };
+
+  renderBeneficiary = (data) => {
+    const newData = data.map((item) => ({
+      key: item._id,
+      beneficiaryName: item.nameAccount,
+      reminderName: item.nameRemind,
+      accountNumber: item.numberAccount,
+      bankName: item.idBank,
+      edit: false,
+      delete: item.isDelete,
+    }));
+    return newData;
+  };
+
   render() {
+    const { data } = this.state;
+    console.log(this.props.beneficiaries);
+    const newData = this.renderBeneficiary(this.props.beneficiaries);
+    // const data = [];
+
     return (
       <div className="outletMain">
         <div className="formName"> BENEFICIARY LIST SETTINGS</div>
         <Button className="btnSubmit">Add Beneficiary </Button>
         <div className="myForm">
           <Table
-            className="border-left"
+            style={{ marginLeft: "-10%" }}
             columns={columns}
-            dataSource={data}
+            dataSource={newData}
             pagination={{ pageSize: 5 }}
           />
         </div>
@@ -62,5 +82,11 @@ class BeneficiaryForm extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  beneficiaries: state.user.beneficiaries,
+});
 
-export default BeneficiaryForm;
+const mapDispatchToProps = (dispatch) => ({
+  getBeneficiary: () => dispatch(userActions.getBeneficiary()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(BeneficiaryForm);

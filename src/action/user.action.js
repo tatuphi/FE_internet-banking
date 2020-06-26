@@ -199,10 +199,10 @@ const getBeneficiary = () => {
       type: userConstant.GET_BENEFICIARY_REQUEST,
     };
   }
-  function success(payload) {
+  function success(beneficiaries) {
     return {
       type: userConstant.GET_BENEFICIARY_SUCCESS,
-      payload,
+      beneficiaries,
     };
   }
 

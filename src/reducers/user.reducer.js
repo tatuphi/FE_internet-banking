@@ -8,10 +8,7 @@ const initialState = {
   sendOTP: false,
   userInfo: null,
   accountNumber: [],
-  nameAccount: [],
-  numberAccount: [],
-  nameRemind: [],
-  idBank: [],
+  beneficiaries: [],
 };
 
 const user = (state = initialState, action) => {
@@ -134,24 +131,20 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         pendding: true,
+        errMessage: null,
       };
     case userConstant.GET_BENEFICIARY_FAILURE:
       return {
         ...state,
-        nameAccount: null,
-        numberAccount: null,
-        nameRemind: null,
-        idBank: null,
         pendding: false,
+        errMessage: action.error,
       };
     case userConstant.GET_BENEFICIARY_SUCCESS:
       return {
         ...state,
-        nameAccount: action.nameAccount,
-        numberAccount: action.numberAccount,
-        nameRemind: action.nameRemind,
-        idBank: action.idBank,
+        beneficiaries: action.beneficiaries,
         pendding: false,
+        errMessage: null,
       };
 
     default:
