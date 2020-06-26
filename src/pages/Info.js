@@ -1,8 +1,18 @@
 import React, { Component } from "react";
-import { Select, Divider, Input } from 'antd';
+import { Select, Collapse, Row, Col } from 'antd';
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
+import Header from "containers/Share/Header";
+import Footer from "containers/Share/Footer";
+
+
+
+import TransferMoneyForm from "containers/TransferMoneyForm";
+import VerticalMenu from "containers/Share/VerticalMenu";
+import Item from "antd/lib/list/Item";
 const { Option } = Select;
+const { Panel } = Collapse;
+
 class informationUser extends Component {
     constructor(props) {
         super(props);
@@ -12,10 +22,11 @@ class informationUser extends Component {
         };
     }
     componentDidMount = () => {
-        const { getUserCurrent } = this.props;
+        const { getUserCurrent, getAccountNumber } = this.props;
+
 
         getUserCurrent();
-
+        getAccountNumber();
     }
     onChangeAccount = (value) => {
         const { getAccountNumber, accountNumber } = this.props;
@@ -29,30 +40,70 @@ class informationUser extends Component {
     }
 
     render() {
-        const { accountNumber, pendding } = this.props;
+        const { accountNumber, pendding, userInfo } = this.props;
+        console.log('tl', userInfo)
         console.log("mo:", accountNumber)
         return (
-            <div style={{ padding: '20%' }}>
-                <Select style={{ width: '50%' }} onChange={this.onChangeAccount} loading={pendding}>
-                    <Option value="Credit">Tài khoản thanh toán</Option>
-                    <Option value="Saving">Tài khoản tiết kiệm</Option>
-                </Select>
-                <div className="mt-5">
-                    <Select style={{ width: '50%' }}>
-                        <Select style={{ width: '100%' }} onChange={this.onChangeAccount}>
-                            {accountNumber.map((item) => (
-                                <Option key={item._id} value={item.accountNumber}>
 
-                                </Option>
-                            ))}
-                        </Select>
-                    </Select>
+
+            <div style={{ backgroundColor: "#757272" }} >
+                <Header />
+                <div
+                    className="container"
+                    style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
+                >
+                    <Row>
+                        <Col span={6}>
+                            <VerticalMenu />
+                        </Col>
+                        <Col span={18}>
+                            <div className="outletMain">
+                                <div className=" formName">INFORMATION ACCOUNT</div>
+                                <hr></hr>
+                                <Collapse accordion className='mt-4'>
+
+                                    {accountNumber.map(item =>
+
+                                        <Panel header={`Information Account ${item.typeAccount}`} key={item._key}>
+                                            <div>
+                                                <div className="d-flex mt-1">
+                                                    <p>Account Number :</p>
+                                                    <p>{item.accountNumber}</p>
+                                                </div>
+                                                <div className="d-flex mt-1">
+                                                    <p>Balance Current:</p>
+                                                    <p>{item.currentBalance} VND</p>
+
+                                                </div>
+                                                <div className="d-flex mt-1">
+                                                    <p>Type Account:</p>
+                                                    <p>{item.typeAccount} </p>
+
+                                                </div>
+                                            </div>
+                                        </Panel>
+
+                                    )}
+
+
+
+
+
+                                </Collapse>,
+                            <div >
+                                </div>
+                            </div>
+
+
+                        </Col>
+                    </Row>
                 </div>
-                <div className="d-flex mt-5">
-                    <p>Số dư hiện tại </p>
-                    <p>100000 VNĐ</p>
-                </div>
+
+
+
+                <Footer />
             </div>
+
         );
     }
 }
@@ -61,11 +112,12 @@ const mapStateToProps = (state) => {
     return {
         pendding: state.user.pendding,
         accountNumber: state.user.accountNumber,
+        userInfo: state.user.userInfo,
     };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    getAccountNumber: (typeAccount) => dispatch(userActions.getAccountNumber(typeAccount)),
+    getAccountNumber: () => dispatch(userActions.getAccountNumber()),
     getUserCurrent: () => dispatch(userActions.getUserCurrent())
 
 });

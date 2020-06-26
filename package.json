@@ -22,8 +22,10 @@
     "react-resize-image": "^1.0.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-websocket": "^2.1.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "websocket": "^1.0.31"
   },
   "scripts": {
     "start": "react-scripts start",

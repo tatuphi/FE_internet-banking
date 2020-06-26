@@ -2,11 +2,12 @@ import { userConstant } from "constants/index";
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isLogined: false,
+  isAuth: localStorage.getItem("isAuth"),
   pendding: false,
   errMessage: "",
   sendOTP: false,
-  userInfo: null,
+  updatedPassword: false,
+  userInfo: [],
   accountNumber: [],
   beneficiaries: [],
 };
@@ -23,15 +24,32 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         pendding: false,
-        isLogined: false,
+        isAuth: false,
+        userInfo: action.user,
       };
 
     case userConstant.LOGIN_SUCCESS:
+      localStorage.setItem("isAuth", true);
+      localStorage.setItem("user", action.user.fullName);
+      localStorage.setItem("role", action.user.role);
       return {
         ...state,
         pendding: false,
-        isLogined: true,
+        isAuth: true,
       };
+    case userConstant.LOGOUT:
+      localStorage.removeItem("token");
+      localStorage.removeItem("x-refresh-token");
+      localStorage.removeItem("isAuth");
+      localStorage.removeItem("user");
+      localStorage.removeItem("role");
+      return {
+        ...state,
+        userInfo: null,
+        isAuth: false,
+        pending: false,
+      };
+
     case userConstant.GET_CURRENT_USER_REQUEST:
       return {
         ...state,
@@ -43,7 +61,7 @@ const user = (state = initialState, action) => {
         ...state,
         userInfo: action.payload,
         pending: false,
-        isLogined: true,
+        isAuth: true,
       };
     case userConstant.GET_CURRENT_USER_FAILURE:
       return {
@@ -63,7 +81,7 @@ const user = (state = initialState, action) => {
         ...state,
         accountNumber: action.accountNumber,
         pending: false,
-        isLogined: true,
+        isAuth: true,
       };
     case userConstant.GET_ACCOUNT_NUMBER_FAILURE:
       return {
@@ -145,6 +163,45 @@ const user = (state = initialState, action) => {
         beneficiaries: action.beneficiaries,
         pendding: false,
         errMessage: null,
+      };
+
+    case userConstant.TRANSACTION_LOCAL_RECEIVE_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+        errMessage: null,
+      };
+    case userConstant.TRANSACTION_LOCAL_RECEIVE_SUCCESS:
+      return {
+        ...state,
+        pendding: false,
+        receiver: action.receiver,
+        errMessage: null,
+      };
+    case userConstant.TRANSACTION_LOCAL_RECEIVE_FAILURE:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: action.error,
+      };
+    case userConstant.UPDATEPASSWORD_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+      };
+    case userConstant.UPDATEPASSWORD_FAILURE:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: action.error,
+        updatedPassword: false,
+      };
+    case userConstant.UPDATEPASSWORD_SUCCESS:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: "",
+        updatedPassword: true,
       };
 
     default:

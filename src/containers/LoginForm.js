@@ -5,24 +5,7 @@ import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userActions } from "action/user.action";
 
-// select a role
-const { Option } = Select;
 
-function onChange(value) {
-  console.log(`selected ${value}`);
-}
-
-function onBlur() {
-  console.log("blur");
-}
-
-function onFocus() {
-  console.log("focus");
-}
-
-function onSearch(val) {
-  console.log("search:", val);
-}
 class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -42,7 +25,17 @@ class LoginForm extends Component {
     });
     console.log(this.state.username, this.state.password);
   };
+  onChangeCapcha = (value) => {
+    console.log("Captcha value:", value);
+  }
+  ReCAPTCHAForm = (props) => {
+    const recaptchaRef = React.useRef();
 
+    const onSubmitWithReCAPTCHA = async () => {
+      const token = await recaptchaRef.current.executeAsync();
+      console.log('1', token);
+    }
+  }
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
@@ -61,7 +54,7 @@ class LoginForm extends Component {
         <div
           style={{
             marginRight: "5%",
-            marginLeft: "10%",
+            marginLeft: "5%",
           }}
         >
           <h1
@@ -114,33 +107,19 @@ class LoginForm extends Component {
                 placeholder="Password"
               />
             </Form.Item>
+            {/* 6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn */}
 
-            <Form.Item>
-              <Select
-                showSearch
-                placeholder="Select a role"
-                optionFilterProp="children"
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                onSearch={onSearch}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-              >
-                <Option value="jack">Customer</Option>
-                <Option value="lucy">Employee</Option>
-                <Option value="tom">Admin</Option>
-              </Select>
-            </Form.Item>
-            {/* <Form.Item >
+            {/* <form onSubmit={this.onSubmitWithReCAPTCHA}>
               <ReCAPTCHA
+                ref={this.recaptchaRef}
 
                 sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn"
-
               />
-            </Form.Item> */}
+            </form> */}
+            <ReCAPTCHA
+
+              sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn "
+            />
             <Link to="/forgetPassword">Forget Password</Link>
             <Form.Item>
               <Button

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+
 import { Row, Col } from "antd";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
+
 import TransferMoneyForm from "containers/TransferMoneyForm";
 import VerticalMenu from "containers/Share/VerticalMenu";
 
@@ -28,5 +30,6 @@ class TransferMoney extends Component {
     );
   }
 }
+
 
 export default TransferMoney;

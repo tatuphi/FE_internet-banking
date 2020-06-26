@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
+import { userActions } from "action/user.action";
 
 import {
   FullscreenOutlined,
@@ -13,6 +14,7 @@ import {
   ContactsOutlined,
 } from "@ant-design/icons";
 import MenuItem from "antd/lib/menu/MenuItem";
+import { connect } from "react-redux";
 
 const { SubMenu } = Menu;
 class VerticalMenu extends Component {
@@ -26,6 +28,7 @@ class VerticalMenu extends Component {
     });
   };
   render() {
+    const { logout } = this.props;
     return (
       <div style={{ width: 250 }}>
         <Menu
@@ -36,7 +39,7 @@ class VerticalMenu extends Component {
           inlineCollapsed={this.state.collapsed}
         >
           <Menu.Item key="1" icon={<BankOutlined />}>
-            Account List
+            <Link to="/info"> Account List</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<FullscreenExitOutlined />}>
             <Link to="/transferMoney">Transfer in MPBank</Link>
@@ -49,10 +52,9 @@ class VerticalMenu extends Component {
             icon={<NotificationOutlined />}
             title="Debt Reminder"
           >
-            <Menu.Item key="5">Debt Reminder List</Menu.Item>
-            <Menu.Item key="6">Create Debt Reminder</Menu.Item>
-            <Menu.Item key="7">Cancel Debt Reminder</Menu.Item>
-            <Menu.Item key="8">Debt Reminder Payment</Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/deptRemind">Debt Reminder List</Link>
+            </Menu.Item>
           </SubMenu>
           <SubMenu
             key="sub2"
@@ -71,16 +73,22 @@ class VerticalMenu extends Component {
             icon={<InfoCircleOutlined />}
             title="Profile Settings"
           >
-            <Menu.Item key="13">Change Password</Menu.Item>
+            <Menu.Item key="13">
+              <Link to="/changePassword">Change Password</Link>
+            </Menu.Item>
             <Menu.Item key="14">Profile</Menu.Item>
           </SubMenu>
           <Menu.Item key="15" icon={<LogoutOutlined />}>
-            Logout
+            <Link onClick={logout}>Logout</Link>
           </Menu.Item>
         </Menu>
       </div>
     );
   }
 }
+const mapStateToProps = (state) => ({});
 
-export default VerticalMenu;
+const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch(userActions.logout()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(VerticalMenu);
