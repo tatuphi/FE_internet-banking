@@ -34,10 +34,14 @@ class TransferOtherForm extends Component {
     };
   }
   componentDidMount = () => {
-    const { getAccountNumber, receiverTransfer } = this.props;
+    const { getAccountNumber, receiverTransfer, getLinkBank } = this.props;
     let type = 'Credit'
+    let idBank = "5ee353c900cceb8a5001c7cf";
+    let sentData = {};
+    sentData.idBank = idBank;
     getAccountNumber(type);
-    receiverTransfer();
+    receiverTransfer(sentData);
+    getLinkBank();
 
   }
   componentDidUpdate = (prevProps, prevState) => {
@@ -159,13 +163,24 @@ class TransferOtherForm extends Component {
 
     });
   }
+  totalMoney = (amount, type) => {
+    let m = null;
+    if (type === true) {
+      m = +amount + 3300;
+    }
+    else {
+      m = +amount;
+    }
+
+    return `${m} VND`;
+  }
   render() {
     const { penTran, transactionUser, showNextModal, receiver,
-      errMessage, transferUser, pendding2, errMess, successModal, saveInfoReceiver, pend } = this.props;
+      errMessage, pendding2, errMess, successModal, getBank } = this.props;
     const { account, amount, content, otp, accBalance, accNumber, isfistLoad, isShow, issuccessModal } = this.state
     let { receiverInfo } = this.state;
-    console.log(transactionUser);
-    receiverInfo = receiverInfo.length > 0 ? receiverInfo : [...receiver];
+    console.log("transactionUser", receiver);
+    // receiverInfo = receiverInfo.length > 0 ? receiverInfo : [...receiver];
     const activeEmail = account && amount.trim();
     const prefixSelector = (
       <Form.Item name="prefix" noStyle>
@@ -175,7 +190,7 @@ class TransferOtherForm extends Component {
     return (
       <div className="outletMain">
         <div className="formName"> TRANSFER MONEY TO OTHER BANK</div>
-        <div className="titlePart">TRANSFER INFORMATION</div>
+        <div className="titlePart">SOURCE INFORMATION</div>
         <hr />
         <Form className="myForm" {...layout} form={this.form}>
           <Form.Item label="Source account" name="username">
@@ -186,10 +201,12 @@ class TransferOtherForm extends Component {
             label="Current balance"
             name="currentBalance"
           >
-            <span className="resText">{accBalance}</span>
+            <span className="resText">{accBalance} VND</span>
           </Form.Item>
-          <div className="titlePart">BENEFICIARY INFORMATION</div>
-          <hr />
+        </Form>
+        <div className="titlePart">TRANSACTION INFORMATION</div>
+        <hr />
+        <Form className="myForm"  {...layout} form={this.form}>
           {errMessage && !isfistLoad && (
             <Alert message={errMessage} type="error" />
 
@@ -208,7 +225,7 @@ class TransferOtherForm extends Component {
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              {receiverInfo.map((item, index) =>
+              {receiver.map((item, index) =>
                 <Option key={index} value={item.numberAccount}>{item.nameAccount}</Option>
               )}
 
@@ -233,18 +250,23 @@ class TransferOtherForm extends Component {
             <Select defaultValue="S2QBank"
               onChange={this.onChangeNameBank}
               showSearch
-              // onSearch={onSearch}
+
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              <Option value="S2QBank">S2QBank</Option>
-              <Option value="NKLBank">NKLBank</Option>
+              {
+                getBank.map(item =>
+                  <Option key={item._id} value={item._id}>{item.nameBank}</Option>
+                )
+              }
+              {/* <Option value="S2QBank">S2QBank</Option>
+              <Option value="NKLBank">NKLBank</Option> */}
             </Select>
           </Form.Item>
-          <Form.Item label="Save beneficiary information" name="username">
+          {/* <Form.Item label="Save beneficiary information" name="username">
             <Checkbox className="resText" />
-          </Form.Item>
+          </Form.Item> */}
 
           <div className="titlePart">TRANSACTION INFORMATION</div>
           <hr />
@@ -309,55 +331,56 @@ class TransferOtherForm extends Component {
 
 
             footer={[
-              <div>
-                <Button onClick={this.handleCancel}>cancel</Button>
-                <Button onClick={this.showModal}>Back</Button>
-              </div>
+
             ]}
           >
 
 
             <Form>
-              <Form.Item className="resItem" label="Source account" name="username">
-                <h6 name="username" className="resText mt-2">
-                  {transactionUser.sender.accountNumber}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="Name Receiver" name="nameReceiver">
-                <h6 style={{ textTransform: "uppercase" }} name="email" className="resText mt-2">
-                  {transactionUser.fullName}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="account receiver:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.dataReceiver.receiver}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="name Bank:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.dataReceiver.nameBank}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="Money:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.dataReceiver.amountMoney}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="Type Send: ">
-                <h5 name="emailOTP" className="resText">
-                  {transactionUser.dataReceiver.typeSend ? "payer" : "payee"}
-                </h5>
-              </Form.Item>
-              <Form.Item className="resItem" label="Content :">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.dataReceiver.content}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="fee:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  3.300
-      </h6>
-              </Form.Item>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Account source</div>
+                <div className="col"> {transactionUser.sender.accountNumber}</div>
+              </div>
+
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Account destinate</div>
+                <div className="col"> {account}</div>
+              </div>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">FullName </div>
+                <div className="col"> {transactionUser.fullName}</div>
+              </div>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Name Bank </div>
+                <div className="col">{this.state.naBank}</div>
+              </div>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Amount money </div>
+                <div className="col">{amount}</div>
+              </div>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Type send </div>
+                <div className="col"> {transactionUser.dataReceiver.typeSend ? "payer" : "payee"}</div>
+              </div>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Fee</div>
+                <div className="col"> 3.300</div>
+              </div>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 500 }}>
+                <div className="col">Content</div>
+                <div className="col"> {transactionUser.dataReceiver.content}</div>
+              </div>
+              <hr></hr>
+              <div className="row" style={{ fontSize: '20px', fontWeight: 'bolder' }}>
+                <div className="col">Total:</div>
+                <div className="col"> {this.totalMoney(transactionUser.dataReceiver.amountMoney, transactionUser.dataReceiver.typeSend)}</div>
+              </div>
+
+
+
+
+
+
               <Form.Item style={{ textAlign: "center", fontWeight: "bold" }}>
                 OTP has just been sent to your email !!!
 </Form.Item>
@@ -384,21 +407,27 @@ class TransferOtherForm extends Component {
                   placeholder="Input the OTP"
                 />
               </Form.Item>
+              <div className="d-flex">
+                <Form.Item  >
 
-              <Form.Item colon={false} >
+                  <Button
+                    className="btnSubmit ml-5"
+                    htmlType="submit"
+                    loading={penTran}
+                    // disabled={!active}
+                    type="primary"
+                    onClick={this.handleSubmitMoney}
 
-                <Button
-                  className="btnSubmit"
-                  htmlType="submit"
-                  loading={penTran}
-                  // disabled={!active}
-                  type="primary"
-                  onClick={this.handleSubmitMoney}
-
-                >
-                  Submit
+                  >
+                    Transfer
               </Button>
-              </Form.Item>
+                </Form.Item>
+                <div>
+                  <Button className="ml-4" onClick={this.handleCancel}>cancel</Button>
+                  <Button className="ml-4" onClick={this.showModal}>Back</Button>
+                </div>
+
+              </div>
             </Form>
 
 
@@ -407,7 +436,8 @@ class TransferOtherForm extends Component {
           </Modal>
 
         }
-        {successModal && !issuccessModal &&
+        {
+          successModal && !issuccessModal &&
           <Modal
             visible={this.state.isModal}
             // onOk={this.showSuccess}
@@ -427,7 +457,7 @@ class TransferOtherForm extends Component {
 
           </Modal>
         }
-      </div>
+      </div >
     );
   }
 }
@@ -448,17 +478,18 @@ const mapStateToProps = (state) => {
     mess: state.transaction.errMessage,
     saveInfoReceiver: state.transaction.saveInfoReceiver,
     pend: state.transaction.pend,
+    getBank: state.transaction.getBank
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   getAccountNumber: (typeAccount) => dispatch(userActions.getAccountNumber(typeAccount)),
-  receiverTransfer: () => dispatch(transactionActions.receiverTransfer()),
+  receiverTransfer: (sentData) => dispatch(transactionActions.receiverTransfer(sentData)),
   // getUserCurrent: () => dispatch(transactionActions.getUserCurrent())
   linkBankAccount: (nameBank, content, amountMoney, receiver, typeSend) => dispatch(transactionActions.linkBankAccount(nameBank, content, amountMoney, receiver, typeSend)),
   verifyOTPLinkBank: (nameBank, receiver, amountMoney, content, typeSend, otp) => dispatch(transactionActions.verifyOTPLinkBank(nameBank, receiver, amountMoney, content, typeSend, otp)),
   saveReceiverInformation: (accountNumber, accountName, idBank, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, accountName, idBank, nameRemind)),
-  // verifyOTPLinkBank = (nameBank, content, amountMoney, receiver, typeSend, code)
+  getLinkBank: () => dispatch(transactionActions.getLinkBank()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TransferOtherForm);
 

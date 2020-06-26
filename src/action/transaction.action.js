@@ -5,13 +5,14 @@ import history from "config/history.config";
 import authHeader from "../utils/auth-header";
 
 
-const receiverTransfer = () => {
+const receiverTransfer = (dataSent) => {
 
+    console.log('1', dataSent);
     return (dispatch) => {
         let headers = authHeader();
         dispatch(request());
 
-        API.get(`/transfer/receiver`, { headers: headers })
+        API.get(`/transfer/receiver`, { params: dataSent, headers: headers })
             .then((res) => {
                 dispatch(success(res.data.result));
             })
@@ -114,14 +115,14 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
         };
     }
 };
-const verifyOTP = (receiver, amountMoney, content, typeSend, code) => {
+const verifyOTP = (receiver, amountMoney, content, typeSend, code, typeTransaction, idRemind) => {
 
     return (dispatch) => {
         let headers = authHeader();
         dispatch(request());
 
         API.post(`/transfer/verifyOTP`,
-            { receiver, amountMoney, content, typeSend, code },
+            { receiver, amountMoney, content, typeSend, code, typeTransaction, idRemind },
             { headers: headers })
             .then((res) => {
 
@@ -159,7 +160,7 @@ const verifyOTP = (receiver, amountMoney, content, typeSend, code) => {
         };
     }
 };
-const saveReceiverInformation = (accountNumber, accountName, idBank, nameRemind) => {
+const saveReceiverInformation = (accountNumber, idBank, nameRemind) => {
 
     return (dispatch) => {
 
@@ -167,15 +168,22 @@ const saveReceiverInformation = (accountNumber, accountName, idBank, nameRemind)
             let headers = authHeader();
             dispatch(request());
 
-            API.post(`/transfer/receivers`, { accountNumber, accountName, idBank, nameRemind }, { headers: headers })
+            API.post(`/transfer/receivers`, { accountNumber, idBank, nameRemind }, { headers: headers })
                 .then((res) => {
                     console.log('typeAccount : ', res.data.result);
                     dispatch(success(res.data.result));
                     resolve(res.data.result)
                 })
-                .catch((err) => {
-                    dispatch(failure(err))
-                    reject()
+                .catch((error) => {
+                    console.log(error);
+                    const { data } = error.response;
+                    if (data.error) {
+                        return dispatch(
+                            failure(data.error.message) || "OOPs! something wrong"
+                        );
+                    }
+                    return dispatch(failure(error) || "OOPs! something wrong");
+                    reject();
                 });
 
         })
@@ -244,7 +252,7 @@ const linkBankAccount = (nameBank, content, amountMoney, receiver, typeSend) => 
             error,
         };
     }
-}
+};
 const verifyOTPLinkBank = (nameBank, content, amountMoney, receiver, typeSend, code) => {
     return (dispatch) => {
         let headers = authHeader();
@@ -288,16 +296,61 @@ const verifyOTPLinkBank = (nameBank, content, amountMoney, receiver, typeSend, c
             error,
         };
     }
+};
+const getLinkBank = () => {
+    return (dispatch) => {
+        let headers = authHeader();
+        dispatch(request());
+
+        API.get(`/user/getNameBankLink`,
+            { headers: headers })
+            .then((res) => {
+                console.log('transaction1 : ', res.data.result);
+                dispatch(success(res.data.result));
+            })
+            .catch((error) => {
+                const { data } = error.response;
+                console.log('1', data.error.message);
+                if (data.error) {
+                    return dispatch(
+
+                        failure(data.error.message) || "OOPs! something wrong"
+                    );
+                }
+                return dispatch(failure(error) || "OOPs! something wrong");
+            });
+    };
+
+    function request() {
+        return {
+            type: transactionConstants.GET_LINK_BANK_REQUEST,
+        };
+    }
+    function success(getBank) {
+        return {
+            type: transactionConstants.GET_LINK_BANK_SUCCESS,
+            getBank,
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: transactionConstants.GET_LINK_BANK_FAILURE,
+            error,
+        };
+    }
+
 }
 
 
-export const transactionActions = {
 
+export const transactionActions = {
     receiverTransfer,
     receiverInformation,
     requestReceiver,
     verifyOTP,
     saveReceiverInformation,
     linkBankAccount,
-    verifyOTPLinkBank
+    verifyOTPLinkBank,
+    getLinkBank
 };

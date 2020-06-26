@@ -19,7 +19,7 @@ class Home extends Component {
               <VerticalMenu />
             </Col>
             <Col span={18}>
-              <TransferOtherForm />
+              {/* <TransferOtherForm /> */}
             </Col>
           </Row>
         </div>

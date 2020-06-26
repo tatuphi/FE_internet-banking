@@ -17,6 +17,10 @@ const initialState = {
     saveInfoReceiver: [],
     pend: false,
     penTran: false,
+    errsave: " ",
+    penGetBank: false,
+    getBank: [],
+    errBank: " "
 
 
 
@@ -122,20 +126,20 @@ const transaction = (state = initialState, action) => {
             return {
                 ...state,
                 pend: true,
-                errMessage: null,
+                errsave: null,
             };
         case transactionConstants.SAVE_RECEIVE_SUCCESS:
             return {
                 ...state,
                 pend: false,
                 saveInfoReceiver: action.saveInfoReceiver,
-                errMessage: null,
+                errsave: null,
             };
         case transactionConstants.SAVE_RECEIVE_FAILURE:
             return {
                 ...state,
                 pend: false,
-                errMessage: action.error,
+                errsave: action.error,
             }
         case transactionConstants.TRANSACTION_LINK_BANK_REQUEST:
             return {
@@ -190,6 +194,34 @@ const transaction = (state = initialState, action) => {
                 errMess: action && action.error,
                 transferUser: [],
                 successModal: false,
+
+            };
+
+        case transactionConstants.GET_LINK_BANK_REQUEST:
+            return {
+                ...state,
+                penGetBank: true,
+                errBank: null,
+
+
+            };
+        case transactionConstants.GET_LINK_BANK_SUCCESS:
+            return {
+                ...state,
+                penGetBank: false,
+                getBank: action && action.getBank,
+                errBank: null,
+
+
+
+            };
+        case transactionConstants.GET_LINK_BANK_FAILURE:
+            return {
+                ...state,
+                penGetBank: false,
+                errBank: action && action.error,
+                getBank: [],
+
 
             };
 

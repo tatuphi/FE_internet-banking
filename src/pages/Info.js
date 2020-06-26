@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Select, Divider, Input, Row, Col } from 'antd';
+import { Select, Collapse, Row, Col } from 'antd';
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 import Header from "containers/Share/Header";
@@ -9,7 +9,9 @@ import Footer from "containers/Share/Footer";
 
 import TransferMoneyForm from "containers/TransferMoneyForm";
 import VerticalMenu from "containers/Share/VerticalMenu";
+import Item from "antd/lib/list/Item";
 const { Option } = Select;
+const { Panel } = Collapse;
 
 class informationUser extends Component {
     constructor(props) {
@@ -20,11 +22,11 @@ class informationUser extends Component {
         };
     }
     componentDidMount = () => {
-        const { getUserCurrent } = this.props;
+        const { getUserCurrent, getAccountNumber } = this.props;
 
 
         getUserCurrent();
-
+        getAccountNumber();
     }
     onChangeAccount = (value) => {
         const { getAccountNumber, accountNumber } = this.props;
@@ -44,7 +46,7 @@ class informationUser extends Component {
         return (
 
 
-            <div style={{ backgroundColor: "#757272" }}>
+            <div style={{ backgroundColor: "#757272" }} >
                 <Header />
                 <div
                     className="container"
@@ -55,40 +57,41 @@ class informationUser extends Component {
                             <VerticalMenu />
                         </Col>
                         <Col span={18}>
+                            <div className="outletMain">
+                                <div className=" formName">INFORMATION ACCOUNT</div>
+                                <hr></hr>
+                                <Collapse accordion className='mt-4'>
 
+                                    {accountNumber.map(item =>
+
+                                        <Panel header={`Information Account ${item.typeAccount}`} key={item._key}>
+                                            <div>
+                                                <div className="d-flex mt-1">
+                                                    <p>Account Number :</p>
+                                                    <p>{item.accountNumber}</p>
+                                                </div>
+                                                <div className="d-flex mt-1">
+                                                    <p>Balance Current:</p>
+                                                    <p>{item.currentBalance} VND</p>
+
+                                                </div>
+                                                <div className="d-flex mt-1">
+                                                    <p>Type Account:</p>
+                                                    <p>{item.typeAccount} </p>
+
+                                                </div>
+                                            </div>
+                                        </Panel>
+
+                                    )}
+
+
+
+
+
+                                </Collapse>,
                             <div >
-                                <div>
-                                    <div className="d-flex mt-5">
-                                        <h6>Account Number :</h6>
-                                        <h5>{userInfo.accountNumber}</h5>
-
-
-                                    </div>
-                                    <div className="d-flex mt-5">
-                                        <h6>Balance Current:</h6>
-                                        <h5>{userInfo.currentBalance}</h5>
-
-                                    </div>
                                 </div>
-
-                                <Select style={{ width: '50%' }} onChange={this.onChangeAccount} loading={pendding}>
-                                    <Option value="Credit">Tài khoản thanh toán</Option>
-                                    <Option value="Saving">Tài khoản tiết kiệm</Option>
-                                </Select>
-                                <div className="mt-5">
-                                    <Select style={{ width: '50%' }}>
-
-                                        {accountNumber.map((item, index) =>
-                                            <Option value={item.accountNumber} >
-                                                {item.accountNumber}
-                                            </Option>
-                                        )}
-
-                                    </Select>
-                                </div>
-
-
-
                             </div>
 
 
@@ -114,7 +117,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    getAccountNumber: (typeAccount) => dispatch(userActions.getAccountNumber(typeAccount)),
+    getAccountNumber: () => dispatch(userActions.getAccountNumber()),
     getUserCurrent: () => dispatch(userActions.getUserCurrent())
 
 });

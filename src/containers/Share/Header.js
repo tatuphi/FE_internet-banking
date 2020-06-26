@@ -4,6 +4,13 @@ import { connect } from 'react-redux';
 import { userActions } from 'action/user.action';
 import { Button } from "antd";
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
+
   render() {
     const isAuth = localStorage.getItem('isAuth');
     const fullName = localStorage.getItem('user');

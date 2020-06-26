@@ -33,13 +33,21 @@ class TransferMoneyForm extends Component {
       isModal: false,
       accnameReceiver: " ",
       receiverInfo: [...receiver],
+      reminder: "",
+      ischeck: false,
+      isSave: true,
     };
   }
   componentDidMount = () => {
     const { getAccountNumber, receiverTransfer } = this.props;
     let type = 'Credit'
+    let sentData = {};
+    let a = "mpbank";
+    let idBank = "5ee353c900cceb8a5001c7cf";
+    sentData.type = a;
+    sentData.idBank = idBank;
     getAccountNumber(type);
-    receiverTransfer();
+    receiverTransfer(sentData);
 
   }
 
@@ -99,7 +107,7 @@ class TransferMoneyForm extends Component {
   }
   handleSubmit = () => {
     const { account, amount, content, pay, } = this.state
-    const { requestReceiver } = this.props;
+    const { requestReceiver, } = this.props;
     requestReceiver(account, amount, content, pay)
     this.setState({
       visible: true,
@@ -107,11 +115,41 @@ class TransferMoneyForm extends Component {
     });
 
   }
+  handleSaveBen = () => {
+    const { account, reminder } = this.state
+    const { saveReceiverInformation, receiver } = this.props;
+
+
+    let idBank = "5ee353c900cceb8a5001c7cf";
+
+    saveReceiverInformation(account, idBank, reminder)
+      .then(res => {
+        console.log('TCL : ', res)
+
+        this.setState({
+
+          receiverInfo: [...receiver, { ...res.saveInfo }]
+        })
+      })
+      .catch(() => console.log('err when save info'))
+    this.setState({
+      isSave: false
+
+    })
+
+
+
+
+  }
+  onFocusSave = () => {
+    this.setState({ isSave: true })
+  }
   handleSubmitMoney = () => {
     const { account, amount, content, pay, otp } = this.state
     const { verifyOTP } = this.props;
     let code = otp.trim();
-    verifyOTP(account, amount, content, pay, code)
+    let typeTransaction = 'TRANSFER'
+    verifyOTP(account, amount, content, pay, code, typeTransaction)
     this.setState({
       issuccessModal: false,
       isModal: true,
@@ -173,30 +211,52 @@ class TransferMoneyForm extends Component {
 
     });
   }
-  handleSaveInfo = () => {
-    const { saveReceiverInformation, transferUser, receiver } = this.props;
-    let accnameReceiver = transferUser.userReceiver.accountName;
-    const { account } = this.state;
-    let idBank = "5ee353c900cceb8a5001c7cf";
-    let nameRemind = ' ';
-    saveReceiverInformation(account, accnameReceiver, idBank, nameRemind)
-      .then(res => {
-        console.log('TCL : ', res)
+  onFocus = () => {
 
-        this.setState({
-          receiverInfo: [...receiver, { ...res.saveInfo }]
-        })
-      })
-      .catch(() => console.log('err when save info'))
+    this.setState({
+      isShow: true
+    })
+  }
+  handleSaveInfo = () => {
+    let { ischeck } = this.state;
+    this.setState({ ischeck: !ischeck })
+
+  }
+  totalMoney = (amount, type) => {
+    let m = null;
+    if (type === true) {
+      m = +amount + 2200;
+    }
+    else {
+      m = +amount;
+    }
+
+    return `${m} VND`;
+
+  }
+  onFocusAccount = () => {
+    this.setState({
+      isfistLoad: true
+    })
+  }
+  // handleSearch = (value) => {
+  //   const { receiverTransfer } = this.props;
+  //   let sentData = {};
+  //   let a = "mpbank";
+  //   let idBank = "5ee353c900cceb8a5001c7cf";
+  //   sentData.type = a;
+  //   sentData.idBank = idBank;
+  //   sentData.txtSearch = value;
+  //   receiverTransfer(sentData);
+  // }
+  onChangeName = (e) => {
+    this.setState({ reminder: e.target.value });
   }
 
-
-
-
   render() {
-    const { penTran, transactionUser, showNextModal, receiver,
+    const { penTran, transactionUser, showNextModal, receiver, errsave,
       errMessage, transferUser, pendding2, errMess, successModal, saveInfoReceiver, pend } = this.props;
-    const { account, amount, content, otp, accBalance, accNumber, isfistLoad, isShow, issuccessModal } = this.state
+    const { account, amount, content, otp, accBalance, isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder } = this.state
 
     const activeEmail = account && amount.trim();
     let { receiverInfo } = this.state;
@@ -215,7 +275,7 @@ class TransferMoneyForm extends Component {
         <div className="formName"> TRANSFER MONEY TO BENEFICIARY AT MPBANK</div>
 
         <hr />
-        <div className="titlePart">TRANSFER INFORMATION</div>
+        <div className="titlePart">SOURCE INFORMATION</div>
         <hr />
 
         <Form className="myForm" {...layout} form={this.form}>
@@ -234,35 +294,40 @@ class TransferMoneyForm extends Component {
           </Form.Item>
         </Form>
 
-        <div className="titlePart"> INFORMATION ACCOUNT</div>
+
+        <div className="titlePart">TRANSFER INFORMATION</div>
         <hr />
 
         <Form {...layout} name="control-ref" className="myForm"
-          initialValues={{
-            amount: amount,
-          }}
+
 
         >
+          <div className="titlePart">BENEFICIARY INFORMATION</div>
+          <hr />
           {errMessage && !isfistLoad && (
             <Alert message={errMessage} type="error" />
 
           )}
+
           <Form.Item className=" mt-3"
             name="Receiver"
             label="Receiver"
           >
             <Select
-              placeholder="Select a option and change input text above"
+              placeholder="List Beneficiary"
               onChange={this.onGenderChange}
 
               showSearch
-              // onSearch={onSearch}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
+
+
             >
               {receiverInfo.map((item, index) =>
-                <Option key={index} value={item.numberAccount}>{item.nameAccount}</Option>
+                <Option key={index} value={item.numberAccount}>
+                  {item.nameRemind}
+                </Option>
               )}
 
 
@@ -284,13 +349,34 @@ class TransferMoneyForm extends Component {
             <Input name="account" type="number"
               value={account} onChange={this.onChange} />
           </Form.Item>
-          <Form.Item label="Save beneficiary information">
-            <Checkbox className="resText" />
-          </Form.Item>
 
+          <Form.Item label="Save beneficiary information">
+            <Checkbox onClick={this.handleSaveInfo} className="resText" />
+
+          </Form.Item>
+          {
+            errsave && !isSave && <Alert message={errsave} type="error" />
+
+          }
+          {this.state.ischeck &&
+
+            <Form.Item label="Beneficiary Name" className="mt-3"
+            >
+
+              <div className="d-flex ">
+                <Input placeholder="Input Beneficiary" name="reminder"
+                  value={reminder}
+                  onFocus={this.onFocusSave}
+                  onChange={this.onChangeName}
+                />
+                <Button loading={pend} type='primary' onClick={this.handleSaveBen}>Submit</Button>
+              </div>
+            </Form.Item>
+
+
+          }
           <div className="titlePart">TRANSACTION INFORMATION</div>
           <hr />
-
           <Form.Item label="Transfer amount"
 
             rules={[
@@ -305,6 +391,7 @@ class TransferMoneyForm extends Component {
               value={amount}
               type="number"
               onChange={this.onChange}
+              onFocus={this.onFocusAccount}
             />
           </Form.Item>
 
@@ -319,7 +406,7 @@ class TransferMoneyForm extends Component {
             />
           </Form.Item>
           <Form.Item label="Transfer fee">
-            <Select onChange={this.onChangePayer}>
+            <Select onChange={this.onChangePayer} defaultValue="Payer">
               <Option value="true">Payer</Option>
               <Option value="false">Payee</Option>
             </Select>
@@ -344,115 +431,124 @@ class TransferMoneyForm extends Component {
 
 
 
-        {showNextModal &&
+        {
+          showNextModal &&
 
           <Modal
-            title="Transfer"
+            // title="Transfer"
             visible={this.state.visible}
-
             style={{ top: '10px' }}
             onCancel={this.handleCancel}
 
 
             footer={[
-              <div>
-                <Button onClick={this.handleCancel}>cancel</Button>
-                <Button onClick={this.showModal}>Back</Button>
-              </div>
+
             ]}
           >
+            <div className="outletMain">
+              <div className=" formName">TRANSACTION INFORMATION</div>
 
-
-            <Form>
-              <Form.Item className="resItem" label="Source account" name="username">
-                <h6 name="username" className="resText mt-2">
-                  {transactionUser.sender.accountNumber}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="Name Receiver" name="nameReceiver">
-                <h6 style={{ textTransform: "uppercase" }} name="email" className="resText mt-2">
-                  {transactionUser.nameReceiver}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="account receiver:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.receiver}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="Money:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.amountMoney}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="Type Send: ">
-                <h5 name="emailOTP" className="resText">
-                  {transactionUser.typeSend ? "payerr" : "payer"}
-                </h5>
-              </Form.Item>
-              <Form.Item className="resItem" label="Content :">
-                <h6 name="emailOTP" className="resText mt-1">
-                  {transactionUser.content}
-                </h6>
-              </Form.Item>
-              <Form.Item className="resItem" label="fee:">
-                <h6 name="emailOTP" className="resText mt-1">
-                  2200
-                </h6>
-              </Form.Item>
-              <Form.Item style={{ textAlign: "center", fontWeight: "bold" }}>
+              <Form.Item style={{ textAlign: "center", fontWeight: "bold", color: 'red' }}>
                 OTP has just been sent to your email !!!
           </Form.Item>
-            </Form>
-            <Form >
-              {errMess && !isShow && (
-                <Alert message={errMess} type="error" />
+              <hr></hr>
 
-              )}
-              <Form.Item className="mt-2"
-                label="OTP Code"
+              <Form style={{ fontWeight: 'bold', fontSize: '13px' }}>
+                <div className='row'>
+                  <div className='col' >Source account:</div>
+                  <div className='col'> {transactionUser.sender.accountNumber}</div>
+                </div>
+                <div className='row'>
+                  <div className='col'>Account receiver:</div>
+                  <div className='col'> {transactionUser.receiver}</div>
+                </div>
+                <div className='row'>
+                  <div className='col'>Name receiver:</div>
+                  <div className='col' style={{ textTransform: 'uppercase' }}> {transactionUser.nameReceiver}</div>
+                </div>
+                <div className='row'>
+                  <div className='col'>Amount Money:</div>
+                  <div className='col'>  {transactionUser.amountMoney}</div>
+                </div>
+                <div className='row'>
+                  <div className='col'>Type Send:</div>
+                  <div className='col'>   {transactionUser.typeSend ? "Payer" : "Payee"}</div>
+                </div>
+                <div className='row'>
+                  <div className='col'>Content:</div>
+                  <div className='col'>    {transactionUser.content}</div>
+                </div>
+                <div className='row'>
+                  <div className='col'>Fee transaction:</div>
+                  <div className='col'>  2200 VND</div>
+                </div>
+                <hr></hr>
+                <div className="row" style={{ fontSize: '20px', fontWeight: 'bolder' }}>
+                  <div className="col">Total:</div>
+                  <div className="col"> {this.totalMoney(transactionUser.amountMoney, transactionUser.typeSend)}</div>
+                </div>
 
-                rules={[
-                  { required: true, message: "Please input your OTP!" },
-                  { length: 6, message: "OTP has 6 numbers!" },
-                ]}
-              >
-                <Input
-                  name="otp"
-                  value={otp}
-                  onChange={this.onChange}
-                  onFocus={this.onFocus}
-                  style={{ width: "60%" }}
-                  placeholder="Input the OTP"
-                />
-              </Form.Item>
 
-              <Form.Item colon={false} >
 
-                <Button
-                  className="btnSubmit"
-                  htmlType="submit"
-                  loading={penTran}
-                  // disabled={!active}
-                  type="primary"
-                  onClick={this.handleSubmitMoney}
+              </Form>
+              <Form >
+                {errMess && !isShow && (
+                  <Alert message={errMess} type="error" />
 
+                )}
+                <Form.Item className="mt-2"
+                  label="OTP Code"
+
+
+                  rules={[
+                    { required: true, message: "Please input your OTP!" },
+                    { length: 6, message: "OTP has 6 numbers!" },
+                  ]}
                 >
-                  Submit
+                  <Input
+                    name="otp"
+                    value={otp}
+                    onChange={this.onChange}
+                    onFocus={this.onFocus}
+                    style={{ width: "80%" }}
+                    placeholder="Input the OTP"
+                  />
+                </Form.Item>
+                <div className='d-flex'>
+                  <Form.Item colon={false} style={{ marginLeft: '20%' }} >
+
+                    <Button
+                      className="btnSubmit"
+                      htmlType="submit"
+                      loading={penTran}
+                      // disabled={!active}
+                      type="primary"
+                      onClick={this.handleSubmitMoney}
+                      shape='round'
+
+                    >
+                      Submit
             </Button>
-              </Form.Item>
-            </Form>
+                  </Form.Item>
+                  <div>
+                    <Button type="primary" shape='round' className='ml-3' onClick={this.handleCancel}>cancel</Button>
+                    <Button type="primary" shape='round' className='ml-3' onClick={this.showModal}>Back</Button>
+                  </div>
+                </div>
+              </Form>
 
 
 
-
+            </div>
           </Modal>
 
         }
-        {successModal && !issuccessModal &&
+        {
+          successModal && !issuccessModal &&
           <Modal
             visible={this.state.isModal}
             // onOk={this.showSuccess}
-            // onCancel={this.showSuccess}
+            onCancel={this.showSuccess}
             width={300}
             footer={[
               <div>
@@ -464,7 +560,7 @@ class TransferMoneyForm extends Component {
             ]}
 
           >
-            <h5 >This transaction is complete </h5>
+            <h6 style={{ color: 'green' }} >This transaction is complete </h6>
             {
               transferUser.type ? <div>
                 <h5>Do you want to save receiver information for next times? </h5>
@@ -473,7 +569,14 @@ class TransferMoneyForm extends Component {
                   this.props.mess &&
                   <p>save success</p>
                 } */}
-                <Button type='primary' loading={pend} onClick={this.handleSaveInfo}>save</Button>
+                {/* <Form.Item label="Save beneficiary information">
+                  <Checkbox  onClick={this.handleSaveInfo} className="resText" />
+                </Form.Item> */}
+                {/* <div className="d-flex">
+                  <Input placeholder="Input name remind "></Input>
+                <Butto</Button>
+                </div> */}
+                {/* <Button type='primary' >save</Button> */}
 
               </div>
                 : ' '
@@ -490,7 +593,7 @@ const mapStateToProps = (state) => {
     pendding: state.user.pendding,
     accountNumber: state.user.accountNumber,
     receiver: state.transaction.receiver,
-    penTran: state.transaction.penTran,
+    pendd: state.transaction.pendd,
     transactionUser: state.transaction.transactionUser,
     showNextModal: state.transaction.showNextModal,
     errMess: state.transaction.errMess,
@@ -501,15 +604,16 @@ const mapStateToProps = (state) => {
     mess: state.transaction.errMessage,
     saveInfoReceiver: state.transaction.saveInfoReceiver,
     pend: state.transaction.pend,
+    errsave: state.transaction.errsave
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   getAccountNumber: (typeAccount) => dispatch(userActions.getAccountNumber(typeAccount)),
-  receiverTransfer: () => dispatch(transactionActions.receiverTransfer()),
+  receiverTransfer: (sentData) => dispatch(transactionActions.receiverTransfer(sentData)),
   // getUserCurrent: () => dispatch(transactionActions.getUserCurrent())
   requestReceiver: (receiver, amountMoney, content, typeSend) => dispatch(transactionActions.requestReceiver(receiver, amountMoney, content, typeSend)),
-  verifyOTP: (receiver, amountMoney, content, typeSend, otp) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp)),
+  verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction)),
   saveReceiverInformation: (accountNumber, accountName, idBank, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, accountName, idBank, nameRemind)),
 
 });

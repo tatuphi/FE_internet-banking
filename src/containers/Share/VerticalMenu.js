@@ -50,10 +50,10 @@ class VerticalMenu extends Component {
             icon={<NotificationOutlined />}
             title="Debt Reminder"
           >
-            <Menu.Item key="5">Debt Reminder List</Menu.Item>
-            <Menu.Item key="6">Create Debt Reminder</Menu.Item>
-            <Menu.Item key="7">Cancel Debt Reminder</Menu.Item>
-            <Menu.Item key="8">Debt Reminder Payment</Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/deptRemind">Debt Reminder List</Link>
+            </Menu.Item>
+
           </SubMenu>
           <SubMenu
             key="sub2"

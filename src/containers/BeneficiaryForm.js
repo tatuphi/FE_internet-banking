@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { Button, Table } from "antd";
+import { connect } from "react-redux";
+import { deptActions } from 'action/dept.action';
+
+import { transactionActions } from "action/transaction.action";
 const columns = [
   {
     title: "Beneficiary Name",
@@ -63,4 +67,36 @@ class BeneficiaryForm extends Component {
   }
 }
 
-export default BeneficiaryForm;
+const mapStateToProps = (state) => {
+  return {
+    pendding: state.dept.pendding,
+    listDept: state.dept.listDept,
+    errMessage: state.dept.errMessage,
+    errMess: state.transaction.errMess,
+    transactionUser: state.transaction.transactionUser,
+    penTran: state.transaction.penTran,
+    pendding2: state.transaction.pendding,
+    erMessage: state.transaction.errMessage,
+    showNextModal: state.transaction.showNextModal,
+    listReminder: state.dept.listReminder,
+    successModal: state.transaction.successModal,
+
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  showDeptRemind: () =>
+    dispatch(deptActions.showDeptRemind()),
+  requestDept: (numberAccount, amountMoney, content) => dispatch(deptActions.requestDept(numberAccount, amountMoney, content)),
+  deleteReminder: (reminderId, content) =>
+    dispatch(deptActions.deleteReminder(reminderId, content)),
+  requestReceiver: (receiver, amountMoney, content, typeSend) => dispatch(transactionActions.requestReceiver(receiver, amountMoney, content, typeSend)),
+  showDeptRemindUnPay: () =>
+    dispatch(deptActions.showDeptRemindUnPay()),
+  verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction, idRemind) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction, idRemind)),
+
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BeneficiaryForm);
+

@@ -12,8 +12,9 @@ import TransferMoney from "pages/TransferMoney";
 import Info from "pages/Info";
 import TransferOtherBank from "pages/TransferOtherBank";
 import Beneficiary from "pages/Beneficiary";
+import DeptRemind from "pages/DeptRemind";
 class WrapRouter extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
   render() {
     const routes = [
       {
@@ -60,6 +61,11 @@ class WrapRouter extends Component {
         path: "/beneficiary",
         exact: true,
         main: () => <Beneficiary />,
+      },
+      {
+        path: "/deptRemind",
+        exact: true,
+        main: () => <DeptRemind />,
       },
       {
         path: "",
