@@ -13,6 +13,7 @@ import Info from "pages/Info";
 import TransferOtherBank from "pages/TransferOtherBank";
 import Beneficiary from "pages/Beneficiary";
 import DeptRemind from "pages/DeptRemind";
+import HistoryPayment from "pages/historyPagement"
 class WrapRouter extends Component {
   componentDidMount() { }
   render() {
@@ -66,6 +67,11 @@ class WrapRouter extends Component {
         path: "/deptRemind",
         exact: true,
         main: () => <DeptRemind />,
+      },
+      {
+        path: "/historyPagement",
+        exact: true,
+        main: () => <HistoryPayment />,
       },
       {
         path: "",

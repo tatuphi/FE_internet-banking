@@ -1,6 +1,6 @@
 import API from "config/axios.config";
 import { transactionConstants } from "constants/index";
-import history from "config/history.config";
+
 
 import authHeader from "../utils/auth-header";
 
@@ -115,7 +115,7 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
         };
     }
 };
-const verifyOTP = (receiver, amountMoney, content, typeSend, code, typeTransaction, idRemind) => {
+const verifyOTP = (receiver, amountMoney, content, typeSend, code, typeTransaction, idRemind, idBank) => {
 
     return (dispatch) => {
         let headers = authHeader();

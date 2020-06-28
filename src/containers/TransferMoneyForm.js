@@ -552,15 +552,15 @@ class TransferMoneyForm extends Component {
             width={300}
             footer={[
               <div>
-                <Link to="/">
+                {/* <Link to="/">
                   <Button type='primary'>Back home</Button>
-                </Link>
+                </Link> */}
                 <Button type='primary' className="ml-4" onClick={this.showSuccess}>continue</Button>
               </div>
             ]}
 
           >
-            <h6 style={{ color: 'green' }} >This transaction is complete </h6>
+            <div style={{ color: 'white', height: '40px', background: 'green' }} >This transaction is complete </div>
             {
               transferUser.type ? <div>
                 <h5>Do you want to save receiver information for next times? </h5>

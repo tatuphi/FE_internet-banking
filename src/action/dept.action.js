@@ -35,17 +35,17 @@ const showDeptRemind = () => {
     };
 };
 const showDeptRemindUnPay = () => {
-    let ts = 0;
+    // let ts = 0;
     return (dispatch) => {
         dispatch(request());
 
-        API.get("/transfer/showDeptRemindUnPay", { params: ts, headers: authHeader() })
+        API.get("/transfer/showDeptRemindUnPay", { headers: authHeader() })
             .then((res) => {
-                if (res.status === 200) {
-                    ts = res.data.timeStap;
-                    console.log("iatw", res.data.result);
-                    dispatch(success(res.data.result.dept));
-                }
+                // if (res.status === 200) {
+                // ts = res.data.timeStap;
+                console.log("iatw", res.data.result);
+                dispatch(success(res.data.result));
+                // }
 
             }).then(function () {
                 showDeptRemindUnPay();
@@ -122,24 +122,120 @@ const requestDept = (numberAccount, amountMoney, content) => {
 
 };
 const deleteReminder = (reminderId, content) => {
+
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            API.post('/transfer/deleteReminder', {
-                reminderId, content
-            }, { headers: authHeader() })
+            dispatch(request());
+
+            API.post("/transfer/deleteReminder", { reminderId, content }, { headers: authHeader() })
                 .then((res) => {
-                    resolve('true');
-                    console.log("test", res.data.result);
+                    console.log(res.data.result);
+                    dispatch(success(res.data.result, reminderId));
+                    resolve(res.data.result)
                 })
-                .catch((err) => reject(err));
+                .catch((error) => {
+                    const { data } = error.response;
+                    console.log('1', data.error.message);
+                    if (data.error) {
+                        return dispatch(
+
+                            failure(data.error.message) || "OOPs! something wrong"
+                        );
+                    }
+                    reject()
+                    return dispatch(failure(error) || "OOPs! something wrong");
+                });
+
         });
     };
+
+    function request() {
+        return {
+            type: deptConstants.DELETE_DEPT_REMIND_REQUEST,
+        };
+    }
+    function success(addDept, reminderId) {
+        return {
+            type: deptConstants.DELETE_DEPT_REMIND_SUCCESS,
+            addDept,
+            reminderId
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: deptConstants.DELETE_DEPT_REMIND_FAILURE,
+            error
+        }
+    };
+
 };
+// const deleteReminder = (reminderId, content) => {
+//     return (dispatch) => {
+//         return new Promise((resolve, reject) => {
+//             API.post('/transfer/deleteReminder', {
+//                 reminderId, content
+//             }, { headers: authHeader() })
+//                 .then((res) => {
+//                     resolve('true');
+//                     console.log("test", res.data.result);
+//                 })
+//                 .catch((err) => reject(err));
+//         });
+//     };
+// };
 
+const updateReminder = (sentData) => {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            dispatch(request());
 
+            API.post("/transfer/updateReminder", { sentData }, { headers: authHeader() })
+                .then((res) => {
+                    console.log(res.data.result);
+                    dispatch(success(res.data.result));
+                    resolve(res.data.result)
+                })
+                .catch((error) => {
+                    const { data } = error.response;
+                    console.log('1', data.error.message);
+                    if (data.error) {
+                        return dispatch(
+
+                            failure(data.error.message) || "OOPs! something wrong"
+                        );
+                    }
+                    reject()
+                    return dispatch(failure(error) || "OOPs! something wrong");
+                });
+
+        });
+    };
+
+    function request() {
+        return {
+            type: deptConstants.EDIT_DEPT_REMIND_REQUEST,
+        };
+    }
+    function success(editDept) {
+        return {
+            type: deptConstants.EDIT_DEPT_REMIND_SUCCESS,
+            editDept,
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: deptConstants.EDIT_DEPT_REMIND_FAILURE,
+            error
+        }
+    };
+
+};
 export const deptActions = {
     showDeptRemind,
     requestDept,
     deleteReminder,
     showDeptRemindUnPay,
+    updateReminder,
 };

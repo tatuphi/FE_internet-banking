@@ -60,9 +60,12 @@ class VerticalMenu extends Component {
             icon={<DollarCircleOutlined />}
             title="Transaction History"
           >
-            <Menu.Item key="9">Receive Money</Menu.Item>
-            <Menu.Item key="10">Transfer Money</Menu.Item>
-            <Menu.Item key="11">Debt Reminder Payment</Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/historyPagement">History Payment</Link>
+            </Menu.Item>
+            {/* <Menu.Item key="9">Receive Money</Menu.Item> */}
+            {/* <Menu.Item key="10">Transfer Money</Menu.Item>
+            <Menu.Item key="11">Debt Reminder Payment</Menu.Item> */}
           </SubMenu>
           <MenuItem key="12" icon={<ContactsOutlined />}>
             <Link to="/beneficiary">Beneficiary Settings</Link>

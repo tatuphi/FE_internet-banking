@@ -30,6 +30,7 @@ class TransferOtherForm extends Component {
       isModal: false,
       accnameReceiver: " ",
       receiverInfo: [...receiver],
+      tempList: [],
       naBank: "S2QBank",
     };
   }
@@ -83,6 +84,7 @@ class TransferOtherForm extends Component {
     this.setState({
       naBank: value,
     })
+    console.log(value);
   }
   // verifyOTPLinkBank: (nameBank, receiver, amountMoney, content, typeSend, otp)
   handleSubmit = () => {
@@ -257,7 +259,7 @@ class TransferOtherForm extends Component {
             >
               {
                 getBank.map(item =>
-                  <Option key={item._id} value={item._id}>{item.nameBank}</Option>
+                  <Option key={item._id} value={item.nameBank}>{item.nameBank}</Option>
                 )
               }
               {/* <Option value="S2QBank">S2QBank</Option>

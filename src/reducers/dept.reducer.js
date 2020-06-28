@@ -10,6 +10,8 @@ const initialState = {
     errMess: "",
     listReminder: [],
     pendRe: false,
+    penDelete: false,
+    errDelete: "",
 
 };
 const dept = (state = initialState, action) => {
@@ -69,6 +71,7 @@ const dept = (state = initialState, action) => {
                 pendding: false,
                 errMessage: "",
                 addDept: action.addDept,
+
             };
         case deptConstants.EDIT_DEPT_REMIND_REQUEST:
             return {
@@ -87,6 +90,30 @@ const dept = (state = initialState, action) => {
                 pen: false,
                 errMess: "",
                 editDept: action.editDept,
+            };
+
+        case deptConstants.DELETE_DEPT_REMIND_REQUEST:
+            return {
+                ...state,
+                penDelete: true,
+            };
+        case deptConstants.DELETE_DEPT_REMIND_FAILURE:
+            return {
+                ...state,
+                penDelete: false,
+                errDelete: action.error,
+
+            };
+        case deptConstants.DELETE_DEPT_REMIND_SUCCESS:
+            console.log("action.reminerId", action.reminderId)
+            return {
+                ...state,
+                penDelete: false,
+                errDelete: "",
+                listDept: [...state.listDept.filter(e => e._id !== action.reminderId)],
+                isDeleteSuccess: true,
+                listReminder: [...state.listReminder.filter(e => e._id !== action.reminderId)]
+
             };
 
 

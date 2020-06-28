@@ -1,43 +1,20 @@
 import React, { Component } from "react";
-import { Button, Table, Tabs, Modal, Input, Form, Alert, message, Spin } from "antd";
+import { Button, Table, Tabs, Modal, Input, Form, Alert, message, Spin, } from "antd";
 import {
-    PlusOutlined, EditTwoTone, DeleteTwoTone, ExclamationCircleOutlined
-
+    PlusOutlined, DeleteTwoTone,
 } from '@ant-design/icons';
 import { deptActions } from 'action/dept.action';
 import { connect } from "react-redux";
 import { transactionActions } from "action/transaction.action";
 const ws = new WebSocket('ws://localhost:40510')
-const { confirm } = Modal
+
 
 const { TabPane } = Tabs;
-const { Column, ColumnGroup } = Table;
-const columns = [
-    {
-        title: "Account Number",
-        dataIndex: "accountNumber",
-        width: 150,
-    },
-    {
-        title: "amount Money",
-        dataIndex: "amount",
-        width: 150,
-    },
-    {
-        title: "status",
-        dataIndex: "status",
-        width: 150,
-    },
-    {
-        title: "Edit",
-        dataIndex: "edit",
-        width: 50,
-    },
-    {
-        title: "Delete",
-        dataIndex: "delete",
-    },
-];
+const { Column, } = Table;
+const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 16 },
+};
 
 
 class DeptReminder extends Component {
@@ -56,7 +33,6 @@ class DeptReminder extends Component {
             txtName: " ",
             isDelete: false,
             reminderId: ' ',
-            confirmLoading: false,
             isLoadUpdate: false,
             isShow: true,
             isTransfer: false,
@@ -65,7 +41,14 @@ class DeptReminder extends Component {
             remList: [...listReminder],
             issuccessModal: true,
             otp: ' ',
-            check: ''
+            check: '',
+            listTempDept: [],
+            listTempRe: [],
+            listSave: [],
+            showDeErr: true,
+            showDeSuccess: true,
+            editList: []
+
 
 
 
@@ -86,31 +69,49 @@ class DeptReminder extends Component {
             content: "",
         });
     };
-    isShowEdit = (idEvent) => {
-        const { listDept } = this.props;
-        let dept = listDept.find((ele) => ele._id === idEvent)
+    isShowEdit = (idEvent, check) => {
+        const { listDept, listReminder } = this.props;
+        let dept = null;
+        if (check === 'REMINDER') {
+            dept = listReminder.find((ele) => ele._id === idEvent)
+
+        } else {
+            dept = listDept.find((ele) => ele._id === idEvent)
+
+        }
         this.setState({
             visible: true,
             isLoadUpdate: true,
             account: dept.bankAccountReceiver,
             money: dept.amount,
             content: dept.content,
+            check: check,
+            editList: []
 
         });
     };
     handleOk = () => {
         const { requestDept, listDept } = this.props;
-        const { account, money, content } = this.state;
+        let { account, money, content, listSave } = this.state;
         console.log(account, money, content);
 
         requestDept(account, money, content).then(res => {
             console.log('TCL : ', res)
-
+            listSave = listSave.length > 0 ? [...listSave] : [...listDept]
+            let save = [...listSave, { ...res.deptInfo }]
             this.setState({
-                receiverInfo: [...listDept, { ...res.deptInfo }]
+                receiverInfo: save,
+                account: " ",
+                money: ' ',
+                content: ' ',
+                visible: false,
+                listSave: save,
+                isUpdate: true
             })
+            message.success('This is a success message');
+
         })
-            .catch(() => console.log('err when save info'))
+            .catch((err) => console.log(err))
         this.setState({ isFistLoad: false });
     };
     handleCancel = () => {
@@ -132,48 +133,30 @@ class DeptReminder extends Component {
         })
     }
     showDeleteConfirm = () => {
-        const { deleteReminder, listDept, listReminder } = this.props;
-        const { txtName, reminderId, check } = this.state;
-        this.setState({ confirmLoading: true, })
-        deleteReminder(reminderId, txtName);
+        const { deleteReminder } = this.props;
+        let { txtName, reminderId, check } = this.state;
+        deleteReminder(reminderId, txtName)
         if (check === 'REMINDER') {
-            let listReminde = listReminder.filter((e) => e._id !== reminderId && (s => s.isDelete === false));
-            setTimeout(() => {
-                this.setState({
-                    isDelete: false,
-                    confirmLoading: false,
-                    remList: listReminde,
-                    txtName: ' '
-                });
-            }, 3000);
+            this.setState({ isUpdate: false, showDeErr: false, txtName: " ", showDeSuccess: false })
         } else {
-            let receiver = listDept.filter((e) => e._id !== reminderId && (s => s.isDelete === false));
-            setTimeout(() => {
-                this.setState({
-                    isDelete: false,
-                    confirmLoading: false,
-                    receiverInfo: receiver,
-                    txtName: ' '
-                });
-            }, 3000);
+            this.setState({ isUpdateRe: false, showDeErr: false, txtName: " ", showDeSuccess: false })
         }
-
-
-
 
 
     }
     isShowDelete = (reminderId, check) => {
-        console.log('remind', check);
+        console.log('1', reminderId);
         this.setState({
             isDelete: true,
             reminderId: reminderId,
-            check: check
+            check: check,
+
+
 
         })
     }
     isCancel = () => {
-        this.setState({ isDelete: false })
+        this.setState({ isDelete: false, showDeErr: true, showDeSuccess: true })
     }
     transferStatus = (list) => {
         console.log('1', list)
@@ -214,47 +197,49 @@ class DeptReminder extends Component {
     }
     handleSubmitMoney = () => {
         const { listTranDept, otp, remList } = this.state
+        let { editList } = this.state;
         const { verifyOTP, listReminder } = this.props;
         let code = otp.trim();
         let typeTransaction = 'INDEPT'
-        let content = ' ';
+        let content = 'Transfer Dept ';
         let pay = true;
         console.log('2', listTranDept)
         console.log('3', remList);
+
         verifyOTP(listTranDept.bankAccountSender, listTranDept.amount, content, pay, code, typeTransaction, listTranDept._id)
-        let list = [...listReminder];
-        let send = list.find((e) => e._id === listTranDept._id);
-        const index = list.indexOf(send);
+        editList = editList.length > 0 ? [...editList] : [...listReminder]
+        let send = editList.find((e) => e._id === listTranDept._id);
+        const index = editList.indexOf(send);
         console.log('test', send);
         send.status = 'PAYED';
         this.setState({
             remList: [
-                ...list.slice(0, index),
+                ...editList.slice(0, index),
                 send,
-                ...list.slice(index + 1, list.length),
+                ...editList.slice(index + 1, editList.length),
             ],
             issuccessModal: false,
             isShow: false,
-            otp: ''
+            otp: '',
+            isUpdateRe: true
         });
 
 
 
     }
 
-
     render() {
         const { listDept, errMessage, pendding, errMess,
-            transactionUser, penTran, pendding2
-            , erMessage, showNextModal, listReminder } = this.props;
+            transactionUser, penTran, pendding2, successModal
+            , erMessage, showNextModal, listReminder, penDelete, errDelete, isDeleteSuccess } = this.props;
         console.log('1', listReminder)
         const { content, account,
-            money, isFistLoad, txtName, confirmLoading,
-            isLoadUpdate, isShow, otp, isfistLoad, } = this.state;
+            money, isFistLoad, txtName,
+            isLoadUpdate, isShow, otp, isfistLoad, isUpdate, showDeErr, showDeSuccess, isUpdateRe, issuccessModal } = this.state;
         // const isDisable = money && account && content.trim();
         let { remList, receiverInfo } = this.state;
-        receiverInfo = receiverInfo.length > 0 ? receiverInfo : [...listDept];
-        remList = remList.length > 0 ? remList : [...listReminder];
+        receiverInfo = isUpdate ? [...receiverInfo] : [...listDept]
+        remList = isUpdateRe ? [...remList] : [...listReminder];
         console.log('h', errMessage);
         return (
             <div className="outletMain" >
@@ -274,6 +259,21 @@ class DeptReminder extends Component {
                             {/* {' '} */}
                         </Spin>
                     )}
+                    <div className="mt-4">
+                        {pendding && (
+                            <Spin
+
+                                size="large"
+                                style={{
+                                    position: 'absolute',
+                                    zIndex: '3000',
+                                    margin: '20%'
+                                }}
+                            >
+                                {/* {' '} */}
+                            </Spin>
+                        )}
+                    </div>
                     <Tabs type="card">
 
                         <TabPane tab="List other remind" key="1">
@@ -300,19 +300,12 @@ class DeptReminder extends Component {
                                         render={(_id) => (
 
                                             <div>
-                                                <EditTwoTone onClick={() => this.isShowEdit(_id)} />
                                                 <DeleteTwoTone onClick={() => this.isShowDelete(_id, 'REMINDER')} className="ml-4" />
                                             </div>
                                         )}
                                     />
                                 </Table>
                             </div>
-
-
-
-
-
-
 
 
                         </TabPane>
@@ -335,7 +328,7 @@ class DeptReminder extends Component {
                                         dataIndex="_id"
                                         render={(_id) => (
                                             <div>
-                                                <EditTwoTone />
+                                                {/* <EditTwoTone onClick={() => this.isShowEdit(_id, 'REMIND')} /> */}
                                                 <DeleteTwoTone onClick={() => this.isShowDelete(_id, 'REMIND')} className="ml-4" />
                                             </div>
                                         )}
@@ -353,163 +346,214 @@ class DeptReminder extends Component {
                 )}
 
                 <Modal
-                    title="Add Dept"
+
                     visible={this.state.visible}
 
                     // okButtonProps={{ disabled:  }}
                     // confirmLoading={pendding}
                     onCancel={this.handleCancel}
 
-                    footer={
-                        [
-                            <div>
+                    footer={[
+                    ]}
+
+                >  <div className="outletMain">
+                        <div className=" formName">ADD REMINDER</div>
+                        <Form className="myForm" {...layout} form={this.form} >
+                            {errMessage && !isFistLoad && (
+                                <Alert message={errMessage} type="error" />
+
+                            )}
+
+                            <Form.Item label=" Reminder: " className="mt-5">
+                                <Input type='number' name="account" value={account} onChange={this.onChange} />
+                            </Form.Item>
+                            <Form.Item label=" Money : " >
+                                <Input type='number' name="money" value={money} onChange={this.onChange} />
+                            </Form.Item>
+                            <Form.Item label="Content: " >
+                                <Input name="content" value={content} onChange={this.onChange} />
+                            </Form.Item>
+
+                            <div style={{ marginLeft: '30%' }}>
                                 {isLoadUpdate ?
                                     <Button key="submit" type="primary" >
                                         update
                              </Button> :
                                     <Button key="submit" type="primary" onClick={this.handleOk} loading={pendding}>
                                         Save
-                             </Button>
+                             </Button >
                                 }
-                                <Button key="back" onClick={this.handleCancel}>
+                                <Button className="ml-3" key="back" onClick={this.handleCancel}>
                                     Return
                             </Button>,
                            </div>
-                        ]}
-
-                >
-                    <Form name="control-ref" className="myForm">
-                        {errMessage && !isFistLoad && (
-                            <Alert message={errMessage} type="error" />
-
-                        )}
-
-                        <Form.Item label="Account: " className="mt-5">
-                            <Input type='number' name="account" value={account} onChange={this.onChange} />
-                        </Form.Item>
-                        <Form.Item label=" Money : " >
-                            <Input type='number' name="money" value={money} onChange={this.onChange} />
-                        </Form.Item>
-                        <Form.Item label="Content: " >
-                            <Input name="content" value={content} onChange={this.onChange} />
-                        </Form.Item>
-                    </Form>
+                        </Form>
+                    </div>
                 </Modal>
                 <Modal
-                    title='Are you sure delete this task?'
                     visible={this.state.isDelete}
-                    okText="yes"
-                    okType='danger'
-                    cancelText='No'
-                    onOk={this.showDeleteConfirm}
-                    confirmLoading={confirmLoading}
+                    // okText="yes"
+                    // okType='danger'
+                    // cancelText='No'
+
+                    // confirmLoading={confirmLoading}
 
                     onCancel={this.isCancel}
-                >
-                    <p>content</p>
-                    <Input value={txtName} onChange={this.onChangeName}></Input>
-
-                </Modal>
-                {showNextModal && <Modal
-                    title="Transfer Dept"
-                    visible={this.state.isTransfer}
-
-                    style={{ top: '10px' }}
-                    onCancel={this.handleCancelTransfer}
-
-
                     footer={[
-                        <div>
-                            <Button onClick={this.handleCancelTransfer}>cancel</Button>
-                            <Button onClick={this.showModal}>Back</Button>
-                        </div>
                     ]}
                 >
+                    <div className="outletMain">
+                        <div className=" formName">DELETE REMINDER</div>
+                        <Form className="myForm" {...layout} form={this.form} >
+                            {
+                                errDelete && !showDeErr &&
+                                < h5 style={{ color: 'red' }}>{errDelete}</ h5>
+                            }
+                            {
+                                isDeleteSuccess && !showDeSuccess &&
+                                < h5 style={{ color: 'green' }}>Delete success</ h5>
+                            }
+                            <Form.Item label=" content: " >
+                                <Input value={txtName} onChange={this.onChangeName}></Input>
+                            </Form.Item>
+                            <div style={{ marginLeft: '35%' }}>
+                                <Button type='ghost' loading={penDelete} onClick={this.showDeleteConfirm}>Yes</Button>
+                                <Button className="ml-3" type='default' onClick={this.isCancel}>No</Button>
+                            </div>
+                        </Form>
 
 
-                    <Form>
-                        <div className='row'>
-                            <div className='col'>Source account</div>
-                            <div className='col'> {this.state.listTranDept.bankAccountReceiver}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>Account receiver:</div>
-                            <div className='col'> {transactionUser.receiver}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>Name receiver:</div>
-                            <div className='col'> {transactionUser.nameReceiver}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>Amount Money:</div>
-                            <div className='col'>  {transactionUser.amountMoney}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>Type Send:</div>
-                            <div className='col'>   {transactionUser.typeSend ? "Payer" : "Payee"}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>Content:</div>
-                            <div className='col'>    {transactionUser.content}</div>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>Fee:</div>
-                            <div className='col'>  2200 VND</div>
-                        </div>
-                        <hr></hr>
-                        <div className="row" style={{ fontSize: '20px', fontWeight: 'bolder' }}>
-                            <div className="col">Total:</div>
-                            <div className="col"> {this.totalMoney(transactionUser.amountMoney, transactionUser.typeSend)}</div>
-                        </div>
-
-
-                        <Form.Item style={{ textAlign: "center", fontWeight: "bold" }}>
-                            OTP has just been sent to your email !!!
-          </Form.Item>
-                    </Form>
-                    <Form >
-                        {errMess && !isShow && (
-                            <Alert message={errMess} type="error" />
-
-                        )}
-                        <Form.Item className="mt-2"
-                            label="OTP Code"
-
-                            rules={[
-                                { required: true, message: "Please input your OTP!" },
-                                { length: 6, message: "OTP has 6 numbers!" },
-                            ]}
-                        >
-                            <Input
-                                name="otp"
-                                value={otp}
-                                onChange={this.onChange}
-                                onFocus={this.onFocus}
-                                style={{ width: "60%" }}
-                                placeholder="Input the OTP"
-                            />
-                        </Form.Item>
-
-                        <Form.Item colon={false} >
-
-                            <Button
-                                className="btnSubmit"
-                                htmlType="submit"
-                                loading={penTran}
-                                // disabled={!active}
-                                type="primary"
-                                onClick={this.handleSubmitMoney}
-
-                            >
-                                Submit
-                        </Button>
-                        </Form.Item>
-                    </Form>
+                    </div>
                 </Modal>
+                {
+                    showNextModal && <Modal
+                        title="Transfer Dept"
+                        visible={this.state.isTransfer}
+
+                        style={{ top: '10px' }}
+                        onCancel={this.handleCancelTransfer}
+
+
+                        footer={
+                            null
+                        }
+                    >
+                        <div className="outletMain">
+                            <div className=" formName">TRANSACTION INFORMATION</div>
+
+                            <Form style={{ fontWeight: 'bold', fontSize: '13px' }}>
+                                <div className='row'>
+                                    <div className='col'>Source account</div>
+                                    <div className='col'> {this.state.listTranDept.bankAccountReceiver}</div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>Account receiver:</div>
+                                    <div className='col'> {transactionUser.receiver}</div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>Name receiver:</div>
+                                    <div className='col'> {transactionUser.nameReceiver}</div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>Amount Money:</div>
+                                    <div className='col'>  {transactionUser.amountMoney}</div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>Type Send:</div>
+                                    <div className='col'>   {transactionUser.typeSend ? "Payer" : "Payee"}</div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>Content:</div>
+                                    <div className='col'> {transactionUser.content}</div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>Fee:</div>
+                                    <div className='col'>  2200 VND</div>
+                                </div>
+                                <hr></hr>
+                                <div className="row" style={{ fontSize: '20px', fontWeight: 'bolder' }}>
+                                    <div className="col">Total:</div>
+                                    <div className="col"> {this.totalMoney(transactionUser.amountMoney, transactionUser.typeSend)}</div>
+                                </div>
+
+
+                                <Form.Item style={{ textAlign: "center", fontWeight: "bold" }}>
+                                    OTP has just been sent to your email !!!
+          </Form.Item>
+                            </Form>
+                            <Form >
+                                {errMess && !isShow && (
+                                    <Alert message={errMess} type="error" />
+
+                                )}
+                                <Form.Item className="mt-2"
+                                    label="OTP Code"
+
+                                    rules={[
+                                        { required: true, message: "Please input your OTP!" },
+                                        { length: 6, message: "OTP has 6 numbers!" },
+                                    ]}
+                                >
+                                    <Input
+                                        name="otp"
+                                        value={otp}
+                                        onChange={this.onChange}
+                                        onFocus={this.onFocus}
+                                        style={{ width: "60%" }}
+                                        placeholder="Input the OTP"
+                                    />
+                                </Form.Item>
+                                <div className="d-flex">
+                                    <Form.Item colon={false} >
+
+                                        <Button
+                                            className="btnSubmit"
+                                            htmlType="submit"
+                                            loading={penTran}
+                                            // disabled={!active}
+                                            type="primary"
+                                            onClick={this.handleSubmitMoney}
+
+                                        >
+                                            Submit
+                                </Button>
+                                    </Form.Item>
+                                    <div>
+                                        <Button onClick={this.handleCancelTransfer}>cancel</Button>
+                                        <Button onClick={this.showModal}>Back</Button>
+                                    </div>
+                                </div>
+                            </Form>
+                        </div>
+                    </Modal>
                 }
                 {
-                    this.props.successModal && !this.issuccessModal &&
-                    message.success('This is a success message')
+                    successModal && !issuccessModal &&
+                    <Modal
+                        visible={this.state.isModal}
+                        // onOk={this.showSuccess}
+                        onCancel={this.showSuccess}
+                        width={300}
+                        footer={[
+                            <div>
+                                {/* <Link to="/">
+                  <Button type='primary'>Back home</Button>
+                </Link> */}
+                                <Button type='primary' className="ml-4" onClick={this.showSuccess}>continue</Button>
+                            </div>
+                        ]}
+
+                    >
+                        <div style={{ color: 'white', height: '40px', background: 'green' }} >This transaction is complete </div>
+                        {/* {
+              transferUser.type ? <div>
+                <h5>Do you want to save receiver information for next times? </h5>
+                <p>{saveInfoReceiver.msg}</p>
+            
+              </div>
+                : ' '
+            } */}
+                    </Modal>
                 }
             </div>
 
@@ -529,6 +573,9 @@ const mapStateToProps = (state) => {
         showNextModal: state.transaction.showNextModal,
         listReminder: state.dept.listReminder,
         successModal: state.transaction.successModal,
+        penDelete: state.dept.penDelete,
+        errDelete: state.dept.errDelete,
+        isDeleteSuccess: state.dept.isDeleteSuccess
 
     };
 };
@@ -543,7 +590,7 @@ const mapDispatchToProps = (dispatch) => ({
     showDeptRemindUnPay: () =>
         dispatch(deptActions.showDeptRemindUnPay()),
     verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction, idRemind) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction, idRemind)),
-
+    updateReminder: (sentData) => dispatch(transactionActions.updateReminder(sentData)),
 
 });
 
