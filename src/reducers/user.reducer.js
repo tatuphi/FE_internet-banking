@@ -2,17 +2,14 @@ import { userConstant } from "constants/index";
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isAuth: localStorage.getItem('isAuth'),
+  isAuth: localStorage.getItem("isAuth"),
   pendding: false,
   errMessage: "",
   sendOTP: false,
+  updatedPassword: false,
   userInfo: [],
   accountNumber: [],
-  receiver: [],
-  nameAccount: [],
-  numberAccount: [],
-  nameRemind: [],
-  idBank: [],
+  beneficiaries: [],
 };
 
 const user = (state = initialState, action) => {
@@ -28,24 +25,24 @@ const user = (state = initialState, action) => {
         ...state,
         pendding: false,
         isAuth: false,
-        userInfo: action.user
+        userInfo: action.user,
       };
 
     case userConstant.LOGIN_SUCCESS:
-      localStorage.setItem('isAuth', true);
-      localStorage.setItem('user', action.user.fullName);
-      localStorage.setItem('role', action.user.role);
+      localStorage.setItem("isAuth", true);
+      localStorage.setItem("user", action.user.fullName);
+      localStorage.setItem("role", action.user.role);
       return {
         ...state,
         pendding: false,
         isAuth: true,
       };
     case userConstant.LOGOUT:
-      localStorage.removeItem('token');
-      localStorage.removeItem('x-refresh-token');
-      localStorage.removeItem('isAuth');
-      localStorage.removeItem('user');
-      localStorage.removeItem('role');
+      localStorage.removeItem("token");
+      localStorage.removeItem("x-refresh-token");
+      localStorage.removeItem("isAuth");
+      localStorage.removeItem("user");
+      localStorage.removeItem("role");
       return {
         ...state,
         userInfo: null,
@@ -152,24 +149,20 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         pendding: true,
+        errMessage: null,
       };
     case userConstant.GET_BENEFICIARY_FAILURE:
       return {
         ...state,
-        nameAccount: null,
-        numberAccount: null,
-        nameRemind: null,
-        idBank: null,
         pendding: false,
+        errMessage: action.error,
       };
     case userConstant.GET_BENEFICIARY_SUCCESS:
       return {
         ...state,
-        nameAccount: action.nameAccount,
-        numberAccount: action.numberAccount,
-        nameRemind: action.nameRemind,
-        idBank: action.idBank,
+        beneficiaries: action.beneficiaries,
         pendding: false,
+        errMessage: null,
       };
 
     case userConstant.TRANSACTION_LOCAL_RECEIVE_REQUEST:
@@ -190,6 +183,25 @@ const user = (state = initialState, action) => {
         ...state,
         pendding: false,
         errMessage: action.error,
+      };
+    case userConstant.UPDATEPASSWORD_REQUEST:
+      return {
+        ...state,
+        pendding: true,
+      };
+    case userConstant.UPDATEPASSWORD_FAILURE:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: action.error,
+        updatedPassword: false,
+      };
+    case userConstant.UPDATEPASSWORD_SUCCESS:
+      return {
+        ...state,
+        pendding: false,
+        errMessage: "",
+        updatedPassword: true,
       };
 
     default:

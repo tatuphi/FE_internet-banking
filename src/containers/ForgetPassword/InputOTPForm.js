@@ -158,9 +158,6 @@ class InputOTPForm extends Component {
             </Button>
           </Form.Item>
         </Form>
-
-
-
       </div>
     );
   }

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Button, Table } from "antd";
 import { connect } from "react-redux";
-import { deptActions } from 'action/dept.action';
-
-import { transactionActions } from "action/transaction.action";
+import { userActions } from "action/user.action";
 const columns = [
   {
     title: "Beneficiary Name",
@@ -23,7 +21,7 @@ const columns = [
   {
     title: "Bank Name",
     dataIndex: "bankName",
-    width: 150,
+    width: 100,
   },
   {
     title: "Edit",
@@ -35,30 +33,48 @@ const columns = [
     dataIndex: "delete",
   },
 ];
-const data = [];
-for (let i = 0; i < 20; i++) {
-  data.push({
-    key: i,
-    beneficiaryName: `Edward King ${i}`,
-    reminderName: 32,
-    accountNumber: `accountNumber ${i}`,
-    bankName: `bankName ${i}`,
-    edit: `edit`,
-    delete: `delete`,
-  });
-}
 
 class BeneficiaryForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: props.beneficiaries || [],
+    };
+  }
+  componentDidMount = () => {
+    const { getBeneficiary } = this.props;
+    getBeneficiary();
+  };
+
+  renderBeneficiary = (data) => {
+    const newData = data.map((item) => ({
+      key: item._id,
+      beneficiaryName: item.nameAccount,
+      reminderName: item.nameRemind,
+      accountNumber: item.numberAccount,
+      bankName: item.idBank,
+      edit: false,
+      delete: item.isDelete,
+    }));
+    return newData;
+  };
+
   render() {
+    const { data } = this.state;
+    console.log(this.props.beneficiaries);
+    const newData = this.renderBeneficiary(this.props.beneficiaries);
+    // const data = [];
+
     return (
       <div className="outletMain">
         <div className="formName"> BENEFICIARY LIST SETTINGS</div>
         <Button className="btnSubmit">Add Beneficiary </Button>
         <div className="myForm">
           <Table
-            className="border-left"
+            style={{ marginLeft: "-10%" }}
             columns={columns}
-            dataSource={data}
+            dataSource={newData}
             pagination={{ pageSize: 5 }}
           />
         </div>
@@ -66,37 +82,11 @@ class BeneficiaryForm extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    pendding: state.dept.pendding,
-    listDept: state.dept.listDept,
-    errMessage: state.dept.errMessage,
-    errMess: state.transaction.errMess,
-    transactionUser: state.transaction.transactionUser,
-    penTran: state.transaction.penTran,
-    pendding2: state.transaction.pendding,
-    erMessage: state.transaction.errMessage,
-    showNextModal: state.transaction.showNextModal,
-    listReminder: state.dept.listReminder,
-    successModal: state.transaction.successModal,
-
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  showDeptRemind: () =>
-    dispatch(deptActions.showDeptRemind()),
-  requestDept: (numberAccount, amountMoney, content) => dispatch(deptActions.requestDept(numberAccount, amountMoney, content)),
-  deleteReminder: (reminderId, content) =>
-    dispatch(deptActions.deleteReminder(reminderId, content)),
-  requestReceiver: (receiver, amountMoney, content, typeSend) => dispatch(transactionActions.requestReceiver(receiver, amountMoney, content, typeSend)),
-  showDeptRemindUnPay: () =>
-    dispatch(deptActions.showDeptRemindUnPay()),
-  verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction, idRemind) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction, idRemind)),
-
-
+const mapStateToProps = (state) => ({
+  beneficiaries: state.user.beneficiaries,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  getBeneficiary: () => dispatch(userActions.getBeneficiary()),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(BeneficiaryForm);
-

@@ -71,10 +71,9 @@ const getUserCurrent = () => {
   }
 };
 const logout = () => {
-
   return (dispatch) => {
     dispatch(request());
-    history.push('/login');
+    history.push("/login");
   };
 
   function request() {
@@ -88,7 +87,7 @@ const getAccountNumber = (typeAccount) => {
 
     API.get(`/auth/accountNumber`, { params: { typeAccount }, headers })
       .then((res) => {
-        console.log('typeAccount : ', res.data.result);
+        console.log("typeAccount : ", res.data.result);
         dispatch(success(res.data.result));
       })
       .catch((err) => dispatch(failure(err)));
@@ -209,10 +208,10 @@ const getBeneficiary = () => {
       type: userConstant.GET_BENEFICIARY_REQUEST,
     };
   }
-  function success(payload) {
+  function success(beneficiaries) {
     return {
       type: userConstant.GET_BENEFICIARY_SUCCESS,
-      payload,
+      beneficiaries,
     };
   }
 
@@ -223,7 +222,37 @@ const getBeneficiary = () => {
     };
   }
 };
+const updatePassword = (oldPassword, newPassword) => {
+  return (dispatch) => {
+    if (newPassword.length < 8) {
+      return dispatch(failure("New password has at least 8 characters"));
+    } else if (newPassword.indexOf(" ") !== -1) {
+      return dispatch(failure("Password must not have white space "));
+    } else {
+      let headers = authHeader();
+      dispatch(request());
 
+      API.post(
+        "/auth/updatePassword",
+        { oldPassword, newPassword },
+        { headers: headers }
+      )
+        .then((res) => {
+          dispatch(success());
+        })
+        .catch((err) => dispatch(failure(err)));
+    }
+  };
+  function request() {
+    return { type: userConstant.UPDATEPASSWORD_REQUEST };
+  }
+  function success() {
+    return { type: userConstant.UPDATEPASSWORD_SUCCESS };
+  }
+  function failure(err) {
+    return { type: userConstant.UPDATEPASSWORD_FAILURE, err };
+  }
+};
 export const userActions = {
   login,
   requestForgotPassword,
@@ -231,6 +260,6 @@ export const userActions = {
   getUserCurrent,
   getAccountNumber,
   logout,
-
+  updatePassword,
   getBeneficiary,
 };
