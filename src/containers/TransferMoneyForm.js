@@ -239,16 +239,7 @@ class TransferMoneyForm extends Component {
       isfistLoad: true
     })
   }
-  // handleSearch = (value) => {
-  //   const { receiverTransfer } = this.props;
-  //   let sentData = {};
-  //   let a = "mpbank";
-  //   let idBank = "5ee353c900cceb8a5001c7cf";
-  //   sentData.type = a;
-  //   sentData.idBank = idBank;
-  //   sentData.txtSearch = value;
-  //   receiverTransfer(sentData);
-  // }
+  
   onChangeName = (e) => {
     this.setState({ reminder: e.target.value });
   }
@@ -547,40 +538,25 @@ class TransferMoneyForm extends Component {
           successModal && !issuccessModal &&
           <Modal
             visible={this.state.isModal}
-            // onOk={this.showSuccess}
             onCancel={this.showSuccess}
             width={300}
             footer={[
               <div>
-                {/* <Link to="/">
-                  <Button type='primary'>Back home</Button>
-                </Link> */}
+              
                 <Button type='primary' className="ml-4" onClick={this.showSuccess}>continue</Button>
               </div>
             ]}
 
           >
             <div style={{ color: 'white', height: '40px', background: 'green' }} >This transaction is complete </div>
-            {
+            {/* {
               transferUser.type ? <div>
                 <h5>Do you want to save receiver information for next times? </h5>
                 <p>{saveInfoReceiver.msg}</p>
-                {/* {
-                  this.props.mess &&
-                  <p>save success</p>
-                } */}
-                {/* <Form.Item label="Save beneficiary information">
-                  <Checkbox  onClick={this.handleSaveInfo} className="resText" />
-                </Form.Item> */}
-                {/* <div className="d-flex">
-                  <Input placeholder="Input name remind "></Input>
-                <Butto</Button>
-                </div> */}
-                {/* <Button type='primary' >save</Button> */}
-
+            
               </div>
                 : ' '
-            }
+            } */}
           </Modal>
         }
 

@@ -43,7 +43,7 @@ class HistoryForm extends Component {
 
         const { listHistory, pendingHistory } = this.props
         return (
-            <div className="outletMain">
+            <div className="history">
                 <div className="formName">HISTORY PAYMENT</div>
                 {/* <Button className="btnSubmit">Add Beneficiary </Button> */}
                 <div className="row mt-5 ">
@@ -79,7 +79,7 @@ class HistoryForm extends Component {
                         <Table dataSource={listHistory}
                             pagination={{ pageSize: 10 }}
                         >
-                            <Column title="bankAccountReceiver" dataIndex="bankAccountReceiver" key="bankAccountReceiver" />
+                            <Column title="Receiver" dataIndex="bankAccountReceiver" key="bankAccountReceiver" />
                             <Column title="Amount money" dataIndex="amount" key="amount"
                                 render={(amount) => (
                                     <div>
@@ -87,16 +87,16 @@ class HistoryForm extends Component {
                                     </div>
                                 )}
                             />
-                            <Column title="typeSend" dataIndex="typeSend" key="typeSend" />
-                            <Column title="typeTransaction" dataIndex="typeTransaction" key="typeTransaction" />
-                            <Column title="fee" dataIndex="fee" key="fee"
+                            <Column title="Type Send" dataIndex="typeSend" key="typeSend" />
+                            <Column title="Type Transaction" dataIndex="typeTransaction" key="typeTransaction" />
+                            <Column title="Fee" dataIndex="fee" key="fee"
                                 render={(fee) => (
                                     <div>
                                         <p>{`${fee} VND`}</p>
                                     </div>
                                 )}
                             />
-                            <Column title="createAt" dataIndex="createAt" key="createAt"
+                            <Column title="Date" dataIndex="createAt" key="createAt"
                                 render={(createAt) => (
                                     <div>
                                         <p>{moment(createAt).format('DD/MM/YYYY ')}</p>

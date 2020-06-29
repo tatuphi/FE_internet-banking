@@ -208,6 +208,52 @@ const saveReceiverInformation = (accountNumber, idBank, nameRemind) => {
         };
     }
 };
+const deleteReceiver = (receiverId) => {
+
+    return (dispatch) => {
+
+        let headers = authHeader();
+        dispatch(request());
+
+        API.post(`/transfer/receiver`, { receiverId }, { headers: headers })
+            .then((res) => {
+                console.log('typeAccount : ', res.data.result);
+                dispatch(success(res.data.result, receiverId));
+
+            })
+            .catch((error) => {
+                console.log(error);
+                const { data } = error.response;
+                if (data.error) {
+                    return dispatch(
+                        failure(data.error.message) || "OOPs! something wrong"
+                    );
+                }
+                return dispatch(failure(error) || "OOPs! something wrong");
+
+            });
+    }
+
+    function request() {
+        return {
+            type: transactionConstants.DELETE_RECEIVER_REQUEST,
+        };
+    }
+    function success(saveInfoReceiver, receiverId) {
+        return {
+            type: transactionConstants.DELETE_RECEIVER_SUCCESS,
+            saveInfoReceiver,
+            receiverId
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: transactionConstants.DELETE_RECEIVER_FAILURE,
+            error,
+        };
+    }
+};
 
 const linkBankAccount = (nameBank, content, amountMoney, receiver, typeSend) => {
     return (dispatch) => {
@@ -352,5 +398,6 @@ export const transactionActions = {
     saveReceiverInformation,
     linkBankAccount,
     verifyOTPLinkBank,
-    getLinkBank
+    getLinkBank,
+    deleteReceiver
 };

@@ -20,7 +20,10 @@ const initialState = {
     errsave: " ",
     penGetBank: false,
     getBank: [],
-    errBank: " "
+    errBank: " ",
+    errDelete: " ",
+    pendDelete: false,
+    successDelete: false
 
 
 
@@ -133,7 +136,10 @@ const transaction = (state = initialState, action) => {
                 ...state,
                 pend: false,
                 saveInfoReceiver: action.saveInfoReceiver,
+                // receiver: [...state.receiver, ...action.saveInfoReceiver],
                 errsave: null,
+                // getBank: [...action.saveInfoReceiver, ...state.getBank]
+
             };
         case transactionConstants.SAVE_RECEIVE_FAILURE:
             return {
@@ -155,7 +161,8 @@ const transaction = (state = initialState, action) => {
                 pendding: false,
                 transactionUser: action.transactionUser,
                 errMessage: null,
-                showNextModal: true
+                showNextModal: true,
+                receiver: [...state.receiver, action.transactionUser]
 
             };
         case transactionConstants.TRANSACTION_LINK_BANK_FAILURE:
@@ -215,15 +222,31 @@ const transaction = (state = initialState, action) => {
 
 
             };
-        case transactionConstants.GET_LINK_BANK_FAILURE:
+        case transactionConstants.DELETE_RECEIVER_REQUEST:
             return {
                 ...state,
-                penGetBank: false,
-                errBank: action && action.error,
-                getBank: [],
 
+                pendDelete: true,
 
             };
+
+        case transactionConstants.DELETE_RECEIVER_SUCCESS:
+            return {
+                ...state,
+                pendDelete: false,
+                // saveInfoReceiver: action.saveInfoReceiver,
+                receiver: [...state.receiver.filter(e => e._id !== action.receiverId)],
+                errDelete: null,
+                successDelete: true
+                // getBank: [...action.saveInfoReceiver, ...state.getBank]
+
+            };
+        case transactionConstants.DELETE_RECEIVER_FAILURE:
+            return {
+                ...state,
+                pendDelete: false,
+                errDelete: action.error,
+            }
 
         default:
             return state;

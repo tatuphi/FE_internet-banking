@@ -278,33 +278,7 @@ class DeptReminder extends Component {
 
                         <TabPane tab="List other remind" key="1">
                             <div>
-                                <Table dataSource={remList}
-                                    pagination={{ pageSize: 10 }}
-                                >
-
-                                    <Column title="Acount reminder dept" dataIndex="bankAccountSender" key="bankAccountSender" />
-                                    <Column title="Amount money" dataIndex="amount" key="amount" />
-                                    <Column title="Status" dataIndex="_id" key="status"
-                                        render={(_id) => (
-                                            remList.map(item =>
-                                                item._id === _id ?
-                                                    <Button key={item._id} style={{ background: 'rgb(244, 208, 63)', color: 'white', fontWeight: 'bold', width: '70px' }}
-                                                        onClick={() => this.transferStatus(item)} >{item.status}</Button>
-                                                    : ""
-                                            ))}
-                                    />
-                                    <Column
-                                        title="Action"
-                                        key="action"
-                                        dataIndex="_id"
-                                        render={(_id) => (
-
-                                            <div>
-                                                <DeleteTwoTone onClick={() => this.isShowDelete(_id, 'REMINDER')} className="ml-4" />
-                                            </div>
-                                        )}
-                                    />
-                                </Table>
+                             
                             </div>
 
 
@@ -425,6 +399,7 @@ class DeptReminder extends Component {
 
                     </div>
                 </Modal>
+               
                 {
                     showNextModal && <Modal
                         title="Transfer Dept"
