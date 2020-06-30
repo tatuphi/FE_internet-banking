@@ -44,6 +44,130 @@ const registerAccount = (fullName, email, phone) => {
   }
 };
 
+const applyMoney = (accountNumber, amountMoney) => {
+  return (dispatch) => {
+    if (amountMoney < 0) {
+      return dispatch(failure("Invalid amount"));
+    } else {
+      let headers = authHeader();
+
+      dispatch(request());
+
+      API.post(
+        "/employee/applyMoney",
+        { accountNumber, amountMoney },
+        { headers: headers }
+      )
+        .then((res) => {
+          dispatch(success());
+        })
+        .catch((error) => {
+          const { data } = error.response;
+          if (data.error) {
+            return dispatch(
+              failure(data.error.message) || "OOPs! something wrong"
+            );
+          }
+          return dispatch(failure(error) || "OOPs! something wrong");
+        });
+    }
+  };
+  function request() {
+    return { type: employeeConstants.APPLYMONEY_REQUEST };
+  }
+  function success() {
+    return { type: employeeConstants.APPLYMONEY_SUCCESS };
+  }
+  function failure(error) {
+    return { type: employeeConstants.APPLYMONEY_FAILURE, error };
+  }
+};
+const customerTransaction = (sentData) => {
+  return (dispatch) => {
+    dispatch(request());
+
+    API.get("/employee/history", {
+      params: sentData,
+      headers: authHeader(),
+    })
+      .then((res) => {
+        console.log(res.data.result);
+        dispatch(success(res.data.result));
+      })
+      .catch((error) => {
+        const { data } = error.response;
+        if (data.error) {
+          return dispatch(
+            failure(data.error.message) || "OOPs! something wrong"
+          );
+        }
+        return dispatch(failure(error) || "OOPs! something wrong");
+      });
+  };
+  function request() {
+    return {
+      type: employeeConstants.GET_CUSTOMER_REQUEST,
+    };
+  }
+  function success(listCustomerTransaction) {
+    return {
+      type: employeeConstants.GET_CUSTOMER_SUCCESS,
+      listCustomerTransaction,
+    };
+  }
+
+  function failure(error) {
+    return {
+      type: employeeConstants.GET_CUSTOMER_FAILURE,
+      error,
+    };
+  }
+};
+const getCustomerUserId = (userInfo, cb) => {
+  return (dispatch) => {
+    dispatch(request());
+
+    API.get("/employee/getCustomerUserId", {
+      params: { userInfo },
+      headers: authHeader(),
+    })
+      .then((res) => {
+        console.log(res.data.result);
+        dispatch(success(res.data.result));
+        cb(res.data.result);
+      })
+      .catch((error) => {
+        const { data } = error.response;
+        if (data.error) {
+          return dispatch(
+            failure(data.error.message) || "OOPs! something wrong"
+          );
+        }
+        return dispatch(failure(error) || "OOPs! something wrong");
+      });
+  };
+  function request() {
+    return {
+      type: employeeConstants.GET_CUSTOMER_USERID_REQUEST,
+    };
+  }
+  function success(userResult) {
+    return {
+      type: employeeConstants.GET_CUSTOMER_USERID_SUCCESS,
+      userResult,
+    };
+  }
+
+  function failure(error) {
+    return {
+      type: employeeConstants.GET_CUSTOMER_USERID_FAILURE,
+      error,
+    };
+  }
+};
 export const employeeActions = {
   registerAccount,
+  applyMoney,
+  customerTransaction,
+  getCustomerUserId,
 };

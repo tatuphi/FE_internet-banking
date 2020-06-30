@@ -138,7 +138,7 @@ class InputOTPForm extends Component {
               onFocus={this.onFocus}
             />
           </Form.Item>
-          <Form.Item label=" " colon={false}>
+          <Form.Item className="btnSubmitItem" label=" " colon={false}>
             <Button
               className="btnSubmit"
               htmlType="submit"

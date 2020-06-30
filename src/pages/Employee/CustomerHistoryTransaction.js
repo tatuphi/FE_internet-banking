@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import Header from "containers/Share/Header";
-import Footer from "containers/Share/Footer";
-import ChangePasswordForm from "containers/ChangePasswordForm";
 import { Row, Col } from "antd";
-import VerticalMenu from "containers/Share/VerticalMenu";
+import EmployeeMenu from "containers/EmployeeRole/EmployeeMenu";
+import Footer from "containers/Share/Footer";
+import CustomerTransaction from "containers/EmployeeRole/CustomerTransaction";
 
-class ChangePassword extends Component {
+class CustomerHistoryTransaction extends Component {
   render() {
     return (
       <div style={{ backgroundColor: "#757272" }}>
@@ -16,10 +16,10 @@ class ChangePassword extends Component {
         >
           <Row>
             <Col span={6}>
-              <VerticalMenu />
+              <EmployeeMenu />
             </Col>
             <Col span={18}>
-              <ChangePasswordForm />
+              <CustomerTransaction />
             </Col>
           </Row>
         </div>
@@ -29,4 +29,4 @@ class ChangePassword extends Component {
   }
 }
 
-export default ChangePassword;
+export default CustomerHistoryTransaction;
