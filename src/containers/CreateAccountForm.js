@@ -102,7 +102,7 @@ class CreateAccountForm extends Component {
             <DatePicker rules={[{ required: true }]} />
           </Form.Item>
 
-          <Form.Item label=" " colon={false}>
+          <Form.Item className="btnSubmitItem" label=" " colon={false}>
             <Button
               className="btnSubmit"
               type="primary"

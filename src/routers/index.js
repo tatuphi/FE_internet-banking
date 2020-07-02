@@ -13,7 +13,9 @@ import Info from "pages/Info";
 import TransferOtherBank from "pages/TransferOtherBank";
 import Beneficiary from "pages/Beneficiary";
 import DeptRemind from "pages/DeptRemind";
-import HistoryPayment from "pages/historyPagement"
+import HistoryPayment from "pages/historyPagement";
+import ApplyMoney from "pages/Employee/ApplyMoney";
+import CustomerHistoryTransaction from "pages/Employee/CustomerHistoryTransaction";
 class WrapRouter extends Component {
   componentDidMount() { }
   render() {
@@ -75,6 +77,21 @@ class WrapRouter extends Component {
         path: "/historyPagement",
         exact: true,
         main: () => <HistoryPayment />,
+      },
+      {
+        path: "/employee/createAccount",
+        exact: true,
+        main: () => <CreateBankAccount />,
+      },
+      {
+        path: "/employee/applyMoney",
+        exact: true,
+        main: () => <ApplyMoney />,
+      },
+      {
+        path: "/employee/customerTransaction",
+        exact: true,
+        main: () => <CustomerHistoryTransaction />,
       },
       {
         path: "",

@@ -82,7 +82,12 @@ class RequestForm extends Component {
                 />
               </Form.Item>
 
-              <Form.Item label=" " colon={false} shouldUpdate>
+              <Form.Item
+                className="btnSubmitItem"
+                label=" "
+                colon={false}
+                shouldUpdate
+              >
                 <Button
                   className="btnSubmit"
                   htmlType="submit"

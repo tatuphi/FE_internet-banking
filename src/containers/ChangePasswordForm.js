@@ -4,8 +4,8 @@ import { userActions } from "action/user.action";
 import { connect } from "react-redux";
 
 const layout = {
-  labelCol: { span: 5 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 8 },
+  wrapperCol: { span: 15 },
 };
 class ChangePasswordForm extends Component {
   constructor(props) {
@@ -109,7 +109,7 @@ class ChangePasswordForm extends Component {
                 onFocus={this.onFocus}
               />
             </Form.Item>
-            <Form.Item label=" " colon={false}>
+            <Form.Item className="btnSubmitItem" label=" " colon={false}>
               <Button
                 type="primary"
                 className="btnSubmit"
