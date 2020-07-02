@@ -96,7 +96,6 @@ class DeptReminder extends Component {
         console.log(account, money, content);
 
         requestDept(account, money, content).then(res => {
-            console.log('TCL : ', res)
             listSave = listSave.length > 0 ? [...listSave] : [...listDept]
             let save = [...listSave, { ...res.deptInfo }]
             this.setState({

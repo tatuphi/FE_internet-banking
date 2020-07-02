@@ -115,14 +115,14 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
         };
     }
 };
-const verifyOTP = (receiver, amountMoney, content, typeSend, code, typeTransaction, idRemind, idBank) => {
+const verifyOTP = (receiver, amountMoney, content, typeSend, code, typeTransaction, nameBank, idRemind) => {
 
     return (dispatch) => {
         let headers = authHeader();
         dispatch(request());
 
         API.post(`/transfer/verifyOTP`,
-            { receiver, amountMoney, content, typeSend, code, typeTransaction, idRemind },
+            { receiver, amountMoney, content, typeSend, code, typeTransaction, nameBank, idRemind },
             { headers: headers })
             .then((res) => {
 
@@ -160,7 +160,7 @@ const verifyOTP = (receiver, amountMoney, content, typeSend, code, typeTransacti
         };
     }
 };
-const saveReceiverInformation = (accountNumber, idBank, nameRemind) => {
+const saveReceiverInformation = (accountNumber, idBank, nameBeneficiary, nameRemind) => {
 
     return (dispatch) => {
 
@@ -168,7 +168,7 @@ const saveReceiverInformation = (accountNumber, idBank, nameRemind) => {
             let headers = authHeader();
             dispatch(request());
 
-            API.post(`/transfer/receivers`, { accountNumber, idBank, nameRemind }, { headers: headers })
+            API.post(`/transfer/receivers`, { accountNumber, idBank, nameBeneficiary, nameRemind }, { headers: headers })
                 .then((res) => {
                     console.log('typeAccount : ', res.data.result);
                     dispatch(success(res.data.result));
@@ -204,6 +204,54 @@ const saveReceiverInformation = (accountNumber, idBank, nameRemind) => {
     function failure(error) {
         return {
             type: transactionConstants.SAVE_RECEIVE_FAILURE,
+            error,
+        };
+    }
+};
+const editReceiverInformation = (id, accountNumber, idBank, nameBeneficiary, nameRemind) => {
+
+    return (dispatch) => {
+
+        return new Promise((resolve, reject) => {
+            let headers = authHeader();
+            dispatch(request());
+
+            API.post(`/transfer/updateReceiver`, { id, accountNumber, idBank, nameBeneficiary, nameRemind }, { headers: headers })
+                .then((res) => {
+                    console.log('typeAccount : ', res.data.result);
+                    dispatch(success(res.data.result));
+                    resolve(res.data.result)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    const { data } = error.response;
+                    if (data.error) {
+                        return dispatch(
+                            failure(data.error.message) || "OOPs! something wrong"
+                        );
+                    }
+                    return dispatch(failure(error) || "OOPs! something wrong");
+                    reject();
+                });
+
+        })
+    };
+
+    function request() {
+        return {
+            type: transactionConstants.EDIT_RECEIVE_REQUEST,
+        };
+    }
+    function success(editReceiver) {
+        return {
+            type: transactionConstants.EDIT_RECEIVE_SUCCESS,
+            editReceiver,
+        };
+    }
+
+    function failure(error) {
+        return {
+            type: transactionConstants.EDIT_RECEIVE_FAILURE,
             error,
         };
     }
@@ -399,5 +447,6 @@ export const transactionActions = {
     linkBankAccount,
     verifyOTPLinkBank,
     getLinkBank,
-    deleteReceiver
+    deleteReceiver,
+    editReceiverInformation
 };

@@ -79,7 +79,12 @@ class HistoryForm extends Component {
                         <Table dataSource={listHistory}
                             pagination={{ pageSize: 10 }}
                         >
-                            <Column title="Receiver" dataIndex="bankAccountReceiver" key="bankAccountReceiver" />
+                            <Column title="Receiver" dataIndex="bankAccountReceiver" key="bankAccountReceiver"
+
+                            />
+                            <Column title="Sender" dataIndex="bankAccountSender" key="bankAccountReceiver"
+
+                            />
                             <Column title="Amount money" dataIndex="amount" key="amount"
                                 render={(amount) => (
                                     <div>

@@ -36,6 +36,7 @@ class TransferMoneyForm extends Component {
       reminder: "",
       ischeck: false,
       isSave: true,
+      listTemp: []
     };
   }
   componentDidMount = () => {
@@ -118,17 +119,20 @@ class TransferMoneyForm extends Component {
   handleSaveBen = () => {
     const { account, reminder } = this.state
     const { saveReceiverInformation, receiver } = this.props;
-
+    let { listTemp } = this.state;
 
     let idBank = "5ee353c900cceb8a5001c7cf";
+    let nameAccount = "";
 
-    saveReceiverInformation(account, idBank, reminder)
+    saveReceiverInformation(account, idBank, nameAccount, reminder)
       .then(res => {
-        console.log('TCL : ', res)
-
+        listTemp = listTemp.length > 0 ? [...listTemp] : [...receiver]
+        let save = [...listTemp, { ...res.saveInfo }]
         this.setState({
 
-          receiverInfo: [...receiver, { ...res.saveInfo }]
+          receiverInfo: save,
+          listTemp: save,
+          isUpdate: true
         })
       })
       .catch(() => console.log('err when save info'))
@@ -148,8 +152,9 @@ class TransferMoneyForm extends Component {
     const { account, amount, content, pay, otp } = this.state
     const { verifyOTP } = this.props;
     let code = otp.trim();
-    let typeTransaction = 'TRANSFER'
-    verifyOTP(account, amount, content, pay, code, typeTransaction)
+    let typeTransaction = 'TRANSFER';
+    let nameBank = "MPBank";
+    verifyOTP(account, amount, content, pay, code, typeTransaction, nameBank)
     this.setState({
       issuccessModal: false,
       isModal: true,
@@ -239,21 +244,20 @@ class TransferMoneyForm extends Component {
       isfistLoad: true
     })
   }
-  
+
   onChangeName = (e) => {
     this.setState({ reminder: e.target.value });
   }
 
   render() {
     const { penTran, transactionUser, showNextModal, receiver, errsave,
-      errMessage, transferUser, pendding2, errMess, successModal, saveInfoReceiver, pend } = this.props;
-    const { account, amount, content, otp, accBalance, isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder } = this.state
+      errMessage, pendding2, errMess, successModal, pend } = this.props;
+    const { account, amount, content, otp, accBalance,
+      isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder, isUpdate } = this.state
 
     const activeEmail = account && amount.trim();
     let { receiverInfo } = this.state;
-    receiverInfo = receiverInfo.length > 0 ? receiverInfo : [...receiver];
-    console.log("receiver TCL ", receiver);
-
+    receiverInfo = isUpdate ? [...receiverInfo] : [...receiver];
 
     const prefixSelector = (
       <Form.Item name="prefix" noStyle>
@@ -317,7 +321,11 @@ class TransferMoneyForm extends Component {
             >
               {receiverInfo.map((item, index) =>
                 <Option key={index} value={item.numberAccount}>
-                  {item.nameRemind}
+                  <div className="row">
+                    <div className="col">{item.nameRemind}</div>
+                    <div className="col">{item.nameBeneficiary}</div>
+
+                  </div>
                 </Option>
               )}
 
@@ -426,7 +434,6 @@ class TransferMoneyForm extends Component {
           showNextModal &&
 
           <Modal
-            // title="Transfer"
             visible={this.state.visible}
             style={{ top: '10px' }}
             onCancel={this.handleCancel}
@@ -512,7 +519,7 @@ class TransferMoneyForm extends Component {
                       className="btnSubmit"
                       htmlType="submit"
                       loading={penTran}
-                      // disabled={!active}
+
                       type="primary"
                       onClick={this.handleSubmitMoney}
                       shape='round'
@@ -540,23 +547,13 @@ class TransferMoneyForm extends Component {
             visible={this.state.isModal}
             onCancel={this.showSuccess}
             width={300}
-            footer={[
-              <div>
-              
-                <Button type='primary' className="ml-4" onClick={this.showSuccess}>continue</Button>
-              </div>
-            ]}
-
+            bodyStyle={{ background: 'green', borderRadius: '5px' }}
+            footer={null}
           >
-            <div style={{ color: 'white', height: '40px', background: 'green' }} >This transaction is complete </div>
-            {/* {
-              transferUser.type ? <div>
-                <h5>Do you want to save receiver information for next times? </h5>
-                <p>{saveInfoReceiver.msg}</p>
-            
-              </div>
-                : ' '
-            } */}
+            <div >
+              <h6 style={{ color: 'white', fontWeight: 'bolder' }} >This transaction is complete </h6>
+              <Button style={{ marginLeft: '30%' }} type='primary' shape="round" onClick={this.showSuccess}>OK</Button>
+            </div>
           </Modal>
         }
 
@@ -580,17 +577,17 @@ const mapStateToProps = (state) => {
     mess: state.transaction.errMessage,
     saveInfoReceiver: state.transaction.saveInfoReceiver,
     pend: state.transaction.pend,
-    errsave: state.transaction.errsave
+    errsave: state.transaction.errsave,
+    penTran: state.transaction.penTran
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   getAccountNumber: (typeAccount) => dispatch(userActions.getAccountNumber(typeAccount)),
   receiverTransfer: (sentData) => dispatch(transactionActions.receiverTransfer(sentData)),
-  // getUserCurrent: () => dispatch(transactionActions.getUserCurrent())
   requestReceiver: (receiver, amountMoney, content, typeSend) => dispatch(transactionActions.requestReceiver(receiver, amountMoney, content, typeSend)),
-  verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction)),
-  saveReceiverInformation: (accountNumber, accountName, idBank, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, accountName, idBank, nameRemind)),
+  verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction, nameBank,) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction, nameBank)),
+  saveReceiverInformation: (accountNumber, idBank, nameBeneficiary, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, idBank, nameBeneficiary, nameRemind)),
 
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TransferMoneyForm);

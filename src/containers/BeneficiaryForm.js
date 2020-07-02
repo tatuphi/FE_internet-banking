@@ -32,7 +32,9 @@ class BeneficiaryForm extends Component {
       isDelete: false,
       showDeErr: true,
       showDeSuccess: true,
-      idReceiver: ""
+      idReceiver: "",
+      isEdit: true,
+      beneficiary: ''
     };
   }
   componentDidMount = () => {
@@ -41,10 +43,17 @@ class BeneficiaryForm extends Component {
     getLinkBank();
   };
   showModalSave = () => {
-    this.setState({ visible: true })
+    this.setState({ visible: true, isFistLoad: true, isLoadUpdate: false })
   }
   showModalCancelSave = () => {
-    this.setState({ visible: false })
+    this.setState({
+      visible: false,
+      isEdit: false,
+      account: " ",
+      nameBank: ' ',
+      nameRemind: ' ',
+      beneficiary: "",
+    })
   }
   renderBeneficiary = (data) => {
     const newData = data.map((item) => ({
@@ -61,23 +70,34 @@ class BeneficiaryForm extends Component {
   onChangeValue(newValue, valueParam) {
     this.setState({
       [valueParam]: newValue,
+
     });
-    console.log(newValue);
+
+
+  }
+  onFocusEr = () => {
+    this.setState({
+      isFistLoad: true
+    })
   }
   handleOk = () => {
-    const { saveReceiverInformation, } = this.props;
-    const { account, nameBank, nameReminder } = this.state;
-
-    saveReceiverInformation(account, nameBank, nameReminder).then(res => {
-
+    const { saveReceiverInformation, beneficiaries } = this.props;
+    const { account, nameBank, nameReminder, beneficiary } = this.state;
+    let { listSave } = this.state;
+    saveReceiverInformation(account, nameBank, beneficiary, nameReminder).then(res => {
+      console.log("res", res)
+      listSave = listSave.length > 0 ? [...listSave] : [...beneficiaries];
+      let data = { ...res.saveInfo, linkedbank: res.link };
+      let save = [...listSave, { ...data }]
       this.setState({
-
         account: " ",
         nameBank: ' ',
         nameRemind: ' ',
         visible: false,
-
-
+        isUpdate: true,
+        listSave: save,
+        receiverInfo: save,
+        beneficiary: "",
       })
       message.success('This is a success message');
 
@@ -109,23 +129,69 @@ class BeneficiaryForm extends Component {
     this.setState({
       showDeErr: false,
       showDeSuccess: false,
+      isUpdate: false,
 
+    })
+  }
+  isShowEdit = (idReceiver) => {
+    const { beneficiaries } = this.props;
+    let item = beneficiaries.find(e => e._id === idReceiver);
+
+    this.setState({
+      idReceiver: idReceiver,
+      account: item.numberAccount,
+      nameBank: item.linkedbank._id,
+      nameReminder: item.nameRemind,
+      visible: true,
+      isLoadUpdate: true,
+      beneficiary: item.nameBeneficiary
 
     })
 
-
-
   }
-  // this.setState({
-  //   account: " ",
-  //   nameBank: ' ',
-  //   nameRem
+  showEditReceiver = () => {
+    const { idReceiver, account, nameBank, nameReminder, beneficiary } = this.state;
+    const { editReceiverInformation, beneficiaries } = this.props;
+    let { listSave } = this.state;
+    editReceiverInformation(idReceiver, account, nameBank, beneficiary, nameReminder).then(res => {
+      console.log("res", res)
+      listSave = listSave.length > 0 ? [...listSave] : [...beneficiaries];
+      let data = { ...res.receiver, linkedbank: res.link };
+      let send = listSave.find((e) => e._id === idReceiver);
+      const index = listSave.indexOf(send);
+      send = data;
+      let save = [
+        ...listSave.slice(0, index),
+        send,
+        ...listSave.slice(index + 1, listSave.length)
+      ];
+      this.setState({
+        account: " ",
+        nameBank: ' ',
+        nameRemind: ' ',
+        visible: false,
+        isUpdate: true,
+        listSave: save,
+        receiverInfo: save,
+      })
+
+      message.success('This is a success message');
+
+    })
+      .catch((err) => console.log(err))
+    this.setState({ isEdit: false })
+  }
+
 
   render() {
-    const { isFistLoad, account, nameReminder, isLoadUpdate, isUpdate, showDeErr, showDeSuccess } = this.state;
-    const { beneficiaries, errsave, pend, getBank, pendDelete, errDelete, successDelete, pendding } = this.props;
-    console.log(this.props.beneficiaries);
+    const { isFistLoad, account, nameReminder, isLoadUpdate, isUpdate, nameBank,
+      showDeErr, showDeSuccess, isEdit, beneficiary } = this.state;
+    const { beneficiaries, errsave, pend, getBank,
+      pendDelete, errDelete, successDelete, pendding, pendEdit, errEdit } = this.props;
 
+    let { receiverInfo } = this.state;
+    receiverInfo = isUpdate ? [...receiverInfo] : [...beneficiaries]
+    console.log("receiverInfo", receiverInfo);
     // const data = [];
 
 
@@ -152,14 +218,15 @@ class BeneficiaryForm extends Component {
               </Spin>
             )}
           </div>
-          <Table dataSource={beneficiaries}
+          <Table dataSource={receiverInfo}
             pagination={{ pageSize: 10 }}
           >
-
+            <Column title="Name Beneficiary " dataIndex="nameBeneficiary" key="nameBeneficiary" />
             <Column title="Reminder Name " dataIndex="nameRemind" key="nameRemind" />
             <Column title="Number Account" dataIndex="numberAccount" key="numberAccount" />
             <Column title="Name Bank" dataIndex="linkedbank" key="linkedbank"
               render={(linkedbank) => (
+                linkedbank &&
                 <p>{linkedbank.nameBank}</p>
               )}
             />
@@ -170,8 +237,8 @@ class BeneficiaryForm extends Component {
               render={(_id) => (
 
                 <div>
-                  <EditTwoTone />
-                  <DeleteTwoTone onClick={() => this.isShowDelete(_id,)} className="ml-4" />
+                  <EditTwoTone onClick={() => this.isShowEdit(_id)} />
+                  <DeleteTwoTone onClick={() => this.isShowDelete(_id)} className="ml-4" />
                 </div>
               )}
             />
@@ -180,8 +247,6 @@ class BeneficiaryForm extends Component {
 
             visible={this.state.visible}
 
-            // okButtonProps={{ disabled:  }}
-            // confirmLoading={pendding}
             onCancel={this.showModalCancelSave}
 
             footer={[
@@ -194,14 +259,18 @@ class BeneficiaryForm extends Component {
                   <Alert message={errsave} type="error" />
 
                 )}
+                {errEdit && !isEdit && (
+                  <Alert message={errEdit} type="error" />
+
+                )}
 
                 <Form.Item label="account: " className="mt-5">
-                  <Input type='Account' name="account " value={account} onChange={(e) => this.onChangeValue(e.target.value, 'account')}
+                  <Input type='Account' name="account " onFocus={this.onFocusEr}
+                    value={account} onChange={(e) => this.onChangeValue(e.target.value, 'account')}
                   />
                 </Form.Item>
                 <Form.Item label="Bank : "  >
-                  <Select onChange={(value) => this.onChangeValue(value, 'nameBank')}>
-                    <Option value="5ee353c900cceb8a5001c7cf">MPBank</Option>
+                  <Select onChange={(value) => this.onChangeValue(value, 'nameBank')} defaultValue={nameBank}>
                     {
                       getBank.map(item =>
                         <Option key={item._id} value={item._id}>{item.nameBank}</Option>
@@ -211,19 +280,25 @@ class BeneficiaryForm extends Component {
 
                 </Form.Item>
                 <Form.Item label="  Reminder: " >
-                  <Input name="nameReminder" value={nameReminder} onChange={(e) => this.onChangeValue(e.target.value, 'nameReminder')} />
+                  <Input name="nameReminder" value={nameReminder} onFocus={this.onFocusEr}
+                    onChange={(e) => this.onChangeValue(e.target.value, 'nameReminder')} />
+                </Form.Item>
+                <Form.Item label="  beneficiary: " >
+                  <Input name="beneficiary" value={beneficiary} onFocus={this.onFocusEr}
+                    onChange={(e) => this.onChangeValue(e.target.value, 'beneficiary')} />
                 </Form.Item>
 
                 <div style={{ marginLeft: '30%' }}>
                   {isLoadUpdate ?
-                    <Button key="submit" type="primary" >
+                    <Button key="submit" type="primary" loading={pendEdit} onClick={this.showEditReceiver} >
                       update
          </Button> :
-                    <Button key="submit" type="primary" onClick={this.handleOk} loading={pend}>
+                    <Button key="submit" type="primary" onFocus={this.onFocusEr}
+                      onClick={this.handleOk} loading={pend}>
                       Save
          </Button >
                   }
-                  <Button className="ml-3" key="back" onClick={this.handleCancel}>
+                  <Button className="ml-3" key="back" onClick={this.showModalCancelSave}>
                     Return
         </Button>,
        </div>
@@ -272,15 +347,20 @@ const mapStateToProps = (state) => ({
   getBank: state.transaction.getBank,
   pendDelete: state.transaction.pendDelete,
   errDelete: state.transaction.errDelete,
-  successDelete: state.transaction.successDelete
+  successDelete: state.transaction.successDelete,
+  pendEdit: state.transaction.pendEdit,
+  editReceiver: state.transaction.editReceiver,
+  errEdit: state.transaction.errEdit,
+  successEdit: state.transaction.successEdit,
 
-  // saveInfoReceiver: state.stransaction.saveInfoReceiver
+
 });
 
 const mapDispatchToProps = (dispatch) => ({
   receiverTransfer: () => dispatch(transactionActions.receiverTransfer()),
   getLinkBank: () => dispatch(transactionActions.getLinkBank()),
-  saveReceiverInformation: (accountNumber, idBank, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, idBank, nameRemind)),
+  saveReceiverInformation: (accountNumber, idBank, beneficiary, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, idBank, beneficiary, nameRemind)),
   deleteReceiver: (idReceiver) => dispatch(transactionActions.deleteReceiver(idReceiver)),
+  editReceiverInformation: (idReceiver, account, nameBank, beneficiary, nameReminder) => dispatch(transactionActions.editReceiverInformation(idReceiver, account, nameBank, beneficiary, nameReminder))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(BeneficiaryForm);

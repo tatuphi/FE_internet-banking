@@ -12,12 +12,20 @@ class LoginForm extends Component {
     this.state = {
       username: "",
       password: "",
+      verified: false
     };
   }
   handleLogin = () => {
-    const { username, password } = this.state;
-    const { login } = this.props;
-    login(username, password);
+    console.log(this.state.verified)
+    if (!this.state.verified) {
+
+      alert("you need verifed captcha")
+    }
+    else {
+      const { username, password } = this.state;
+      const { login } = this.props;
+      login(username, password);
+    }
   };
   onChange = (e) => {
     this.setState({
@@ -28,20 +36,39 @@ class LoginForm extends Component {
   onChangeCapcha = (value) => {
     console.log("Captcha value:", value);
   }
-  ReCAPTCHAForm = (props) => {
-    const recaptchaRef = React.useRef();
+  // ReCAPTCHAForm = (props) => {
+  //   const recaptchaRef = React.useRef();
 
-    const onSubmitWithReCAPTCHA = async () => {
-      const token = await recaptchaRef.current.executeAsync();
-      console.log('1', token);
-    }
-  }
+  //   const onSubmitWithReCAPTCHA = async () => {
+  //     const token = await recaptchaRef.current.executeAsync();
+  //     console.log('1', token);
+  //   }
+  // }
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
     });
   };
+  onChangeCapcha = (value) => {
+    if (value) {
+
+      this.setState({ verified: true })
+    }
+  }
+
   render() {
+    const onloadCallbackCaptcha = () => {
+      // console.log("onloadCallbackCaptcha")
+    }
+
+    const verifyCallback = (respond) => {
+      if (respond) {
+
+        this.setState({ verified: true })
+      }
+    }
+
+
     const inputStyle = {
       height: "40px",
       borderRadius: "5px",
@@ -119,6 +146,11 @@ class LoginForm extends Component {
             <ReCAPTCHA
 
               sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn "
+              render="explicit"
+              // onloadCallback={onloadCallbackCaptcha}
+              // verifyCallback={
+              //   verifyCallback}
+              onChange={this.onChangeCapcha}
             />
             <Link to="/forgetPassword">Forget Password</Link>
             <Form.Item>
