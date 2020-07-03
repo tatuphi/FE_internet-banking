@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
-import EmployeeMenu from "containers/EmployeeRole/EmployeeMenu";
 import { Row, Col } from "antd";
 import ManageEmployeeForm from "containers/AdminRole/ManageEmployeeForm";
+import AdminMenu from "containers/AdminRole/AdminMenu";
 
 class ManageEmployee extends Component {
   render() {
@@ -17,7 +17,7 @@ class ManageEmployee extends Component {
           >
             <Row>
               <Col span={6}>
-                <EmployeeMenu />
+                <AdminMenu />
               </Col>
               <Col span={18}>
                 <ManageEmployeeForm />

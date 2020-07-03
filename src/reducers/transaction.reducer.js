@@ -23,7 +23,11 @@ const initialState = {
     errBank: " ",
     errDelete: " ",
     pendDelete: false,
-    successDelete: false
+    successDelete: false,
+    editReceiver: [],
+    pendEdit: false,
+    errEdit: " ",
+    successEdit: false
 
 
 
@@ -246,6 +250,32 @@ const transaction = (state = initialState, action) => {
                 ...state,
                 pendDelete: false,
                 errDelete: action.error,
+            }
+        case transactionConstants.EDIT_RECEIVE_REQUEST:
+            return {
+                ...state,
+
+                pendEdit: true,
+
+            };
+
+
+        case transactionConstants.EDIT_RECEIVE_SUCCESS:
+            return {
+                ...state,
+                pendEdit: false,
+                editReceiver: action.editReceiver,
+                successEdit: true,
+                errEdit: " ",
+
+                // getBank: [...action.saveInfoReceiver, ...state.getBank]
+
+            };
+        case transactionConstants.EDIT_RECEIVE_FAILURE:
+            return {
+                ...state,
+                pendEdit: false,
+                errEdit: action.error,
             }
 
         default:

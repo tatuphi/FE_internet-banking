@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import history from "config/history.config";
-import { Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route, Redirect } from "react-router-dom";
 
 import Login from "pages/Login";
 import Homepage from "pages/Home";
@@ -19,8 +19,11 @@ import CustomerHistoryTransaction from "pages/Employee/CustomerHistoryTransactio
 import ManageEmployee from "pages/Admin/ManageEmployee";
 import TransactionOtherBank from "pages/Admin/TransactionOtherBank";
 class WrapRouter extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
   render() {
+
+    const role = localStorage.getItem('role')
+    console.log(role)
     const routes = [
       {
         path: "/",
@@ -36,6 +39,11 @@ class WrapRouter extends Component {
         path: "/info",
         exact: true,
         main: () => <Info />,
+      },
+      {
+        path: "/createAccount",
+        exact: true,
+        main: () => role === 'EMPLOYEE' ? <CreateBankAccount /> : <Redirect to='/' />
       },
       {
         path: "/forgetPassword",
@@ -60,7 +68,7 @@ class WrapRouter extends Component {
       {
         path: "/beneficiary",
         exact: true,
-        main: () => <Beneficiary />,
+        main: () => role === 'CUSTOMER' ? <Beneficiary /> : <Redirect to='/' />
       },
       {
         path: "/deptRemind",

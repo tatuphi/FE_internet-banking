@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Header from "containers/Share/Header";
 import { Row, Col } from "antd";
-import EmployeeMenu from "containers/EmployeeRole/EmployeeMenu";
 import Footer from "containers/Share/Footer";
 import TransactionOtherBankForm from "containers/AdminRole/TransactionOtherBankForm";
+import AdminMenu from "containers/AdminRole/AdminMenu";
 
 class TransactionOtherBank extends Component {
   render() {
@@ -17,7 +17,7 @@ class TransactionOtherBank extends Component {
           >
             <Row>
               <Col span={6}>
-                <EmployeeMenu />
+                <AdminMenu />
               </Col>
               <Col span={18}>
                 <TransactionOtherBankForm />

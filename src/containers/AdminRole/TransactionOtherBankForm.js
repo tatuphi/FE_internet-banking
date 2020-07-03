@@ -53,7 +53,8 @@ class TransactionOtherBankForm extends Component {
     return (
       <div className="history">
         <div className="formName">HISTORY TRANSACTION WITH OTHER BANK</div>
-        <div style={{ color: "green" }}>TOTAL: {total.total}</div>
+        {total && <div style={{ color: "green" }}>TOTAL: {total.total}</div>}
+
         <div className="row mt-6 itemSmall">
           <div className="col col-6 ">
             <RangePicker

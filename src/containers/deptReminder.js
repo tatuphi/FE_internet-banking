@@ -24,20 +24,22 @@ const layout = {
 };
 
 class DeptReminder extends Component {
+
+
   constructor(props) {
     super(props);
     const { listDept, listReminder } = this.props;
-    console.log("listReminder", listReminder);
+    console.log('listReminder', listReminder);
     this.state = {
       visible: false,
-      account: "",
-      money: " ",
-      content: " ",
+      account: '',
+      money: ' ',
+      content: ' ',
       isFistLoad: true,
       receiverInfo: [...listDept],
       txtName: " ",
       isDelete: false,
-      reminderId: " ",
+      reminderId: ' ',
       isLoadUpdate: false,
       isShow: true,
       isTransfer: false,
@@ -45,21 +47,27 @@ class DeptReminder extends Component {
       isfistLoad: true,
       remList: [...listReminder],
       issuccessModal: true,
-      otp: " ",
-      check: "",
+      otp: ' ',
+      check: '',
       listTempDept: [],
       listTempRe: [],
       listSave: [],
       showDeErr: true,
       showDeSuccess: true,
-      editList: [],
+      editList: []
+
+
+
+
     };
   }
   componentDidMount = () => {
     const { showDeptRemind, showDeptRemindUnPay } = this.props;
     showDeptRemind();
     showDeptRemindUnPay();
-  };
+
+
+  }
   showModal = () => {
     this.setState({
       visible: true,
@@ -71,10 +79,12 @@ class DeptReminder extends Component {
   isShowEdit = (idEvent, check) => {
     const { listDept, listReminder } = this.props;
     let dept = null;
-    if (check === "REMINDER") {
-      dept = listReminder.find((ele) => ele._id === idEvent);
+    if (check === 'REMINDER') {
+      dept = listReminder.find((ele) => ele._id === idEvent)
+
     } else {
-      dept = listDept.find((ele) => ele._id === idEvent);
+      dept = listDept.find((ele) => ele._id === idEvent)
+
     }
     this.setState({
       visible: true,
@@ -83,7 +93,8 @@ class DeptReminder extends Component {
       money: dept.amount,
       content: dept.content,
       check: check,
-      editList: [],
+      editList: []
+
     });
   };
   handleOk = () => {
@@ -91,26 +102,26 @@ class DeptReminder extends Component {
     let { account, money, content, listSave } = this.state;
     console.log(account, money, content);
 
-    requestDept(account, money, content)
-      .then((res) => {
-        console.log("TCL : ", res);
-        listSave = listSave.length > 0 ? [...listSave] : [...listDept];
-        let save = [...listSave, { ...res.deptInfo }];
-        this.setState({
-          receiverInfo: save,
-          account: " ",
-          money: " ",
-          content: " ",
-          visible: false,
-          listSave: save,
-          isUpdate: true,
-        });
-        message.success("This is a success message");
+    requestDept(account, money, content).then(res => {
+      listSave = listSave.length > 0 ? [...listSave] : [...listDept]
+      let save = [...listSave, { ...res.deptInfo }]
+      this.setState({
+        receiverInfo: save,
+        account: " ",
+        money: ' ',
+        content: ' ',
+        visible: false,
+        listSave: save,
+        isUpdate: true
       })
-      .catch((err) => console.log(err));
+      message.success('This is a success message');
+
+    })
+      .catch((err) => console.log(err))
     this.setState({ isFistLoad: false });
   };
   handleCancel = () => {
+
     this.setState({
       visible: false,
     });
@@ -119,112 +130,9 @@ class DeptReminder extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  };
-  onChangeName = (e) => {
-    this.setState({
-      txtName: e.target.value,
-    });
-  };
-  showDeleteConfirm = () => {
-    const { deleteReminder } = this.props;
-    let { txtName, reminderId, check } = this.state;
-    deleteReminder(reminderId, txtName);
-    if (check === "REMINDER") {
-      this.setState({
-        isUpdate: false,
-        showDeErr: false,
-        txtName: " ",
-        showDeSuccess: false,
-      });
-    } else {
-      this.setState({
-        isUpdateRe: false,
-        showDeErr: false,
-        txtName: " ",
-        showDeSuccess: false,
-      });
-    }
-  };
-  isShowDelete = (reminderId, check) => {
-    console.log("1", reminderId);
-    this.setState({
-      isDelete: true,
-      reminderId: reminderId,
-      check: check,
-    });
-  };
-  isCancel = () => {
-    this.setState({ isDelete: false, showDeErr: true, showDeSuccess: true });
-  };
-  transferStatus = (list) => {
-    console.log("1", list);
-    this.setState({
-      listTranDept: list,
-    });
+    ;
 
-    const { requestReceiver } = this.props;
-    let content = "";
-    let pay = true;
-    requestReceiver(list.bankAccountSender, list.amount, content, pay);
-
-    this.setState({
-      isTransfer: true,
-      isfistLoad: true,
-    });
-  };
-  totalMoney = (amount, type) => {
-    let m = null;
-    if (type === true) {
-      m = +amount + 2200;
-    } else {
-      m = +amount;
-    }
-
-    return `${m} VND`;
-  };
-  handleCancelTransfer = () => {
-    this.setState({
-      isTransfer: false,
-    });
-  };
-  handleSubmitMoney = () => {
-    const { listTranDept, otp, remList } = this.state;
-    let { editList } = this.state;
-    const { verifyOTP, listReminder } = this.props;
-    let code = otp.trim();
-    let typeTransaction = "INDEPT";
-    let content = "Transfer Dept ";
-    let pay = true;
-    console.log("2", listTranDept);
-    console.log("3", remList);
-
-    verifyOTP(
-      listTranDept.bankAccountSender,
-      listTranDept.amount,
-      content,
-      pay,
-      code,
-      typeTransaction,
-      listTranDept._id
-    );
-    editList = editList.length > 0 ? [...editList] : [...listReminder];
-    let send = editList.find((e) => e._id === listTranDept._id);
-    const index = editList.indexOf(send);
-    console.log("test", send);
-    send.status = "PAYED";
-    this.setState({
-      remList: [
-        ...editList.slice(0, index),
-        send,
-        ...editList.slice(index + 1, editList.length),
-      ],
-      issuccessModal: false,
-      isShow: false,
-      otp: "",
-      isUpdateRe: true,
-    });
-  };
-
+  }
   render() {
     const {
       listDept,
@@ -383,15 +291,15 @@ class DeptReminder extends Component {
                     update
                   </Button>
                 ) : (
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={this.handleOk}
-                    loading={pendding}
-                  >
-                    Save
-                  </Button>
-                )}
+                    <Button
+                      key="submit"
+                      type="primary"
+                      onClick={this.handleOk}
+                      loading={pendding}
+                    >
+                      Save
+                    </Button>
+                  )}
                 <Button className="ml-3" key="back" onClick={this.handleCancel}>
                   Return
                 </Button>
