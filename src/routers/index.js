@@ -16,6 +16,8 @@ import DeptRemind from "pages/DeptRemind";
 import HistoryPayment from "pages/historyPagement";
 import ApplyMoney from "pages/Employee/ApplyMoney";
 import CustomerHistoryTransaction from "pages/Employee/CustomerHistoryTransaction";
+import ManageEmployee from "pages/Admin/ManageEmployee";
+import TransactionOtherBank from "pages/Admin/TransactionOtherBank";
 class WrapRouter extends Component {
   componentDidMount() { }
   render() {
@@ -88,6 +90,17 @@ class WrapRouter extends Component {
         path: "/employee/customerTransaction",
         exact: true,
         main: () => role === 'EMPLOYEE' ? <CustomerHistoryTransaction /> : <Redirect to='/' />,
+      },
+
+      {
+        path: "/admin/getEmployee",
+        exact: true,
+        main: () => <ManageEmployee />,
+      },
+      {
+        path: "/admin/transactionOtherBank",
+        exact: true,
+        main: () => <TransactionOtherBank />,
       },
       {
         path: "",
