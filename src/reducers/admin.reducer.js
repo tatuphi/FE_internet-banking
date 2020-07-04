@@ -14,6 +14,7 @@ const initialState = {
   pendDelete: false,
   errDelete: "",
   successDelete: false,
+  issucess: false
 };
 const admin = (state = initialState, action) => {
   switch (action.type) {
@@ -51,6 +52,7 @@ const admin = (state = initialState, action) => {
           ...state.listEmployee,
           { ...action.createEmployee.saveLoginUser },
         ],
+        issucess: true
       };
     case adminConstants.CREATE_EMPLOYEE_FAILURE:
       return {

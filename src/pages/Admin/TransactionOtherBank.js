@@ -15,14 +15,11 @@ class TransactionOtherBank extends Component {
             className="container"
             style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
           >
-            <Row>
-              <Col span={6}>
-                <AdminMenu />
-              </Col>
-              <Col span={18}>
-                <TransactionOtherBankForm />
-              </Col>
-            </Row>
+
+            <AdminMenu />
+
+            <TransactionOtherBankForm />
+
           </div>
           <Footer />
         </div>

@@ -15,14 +15,11 @@ class ManageEmployee extends Component {
             className="container"
             style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
           >
-            <Row>
-              <Col span={6}>
-                <AdminMenu />
-              </Col>
-              <Col span={18}>
-                <ManageEmployeeForm />
-              </Col>
-            </Row>
+
+            <AdminMenu />
+
+            <ManageEmployeeForm />
+
           </div>
           <Footer />
         </div>

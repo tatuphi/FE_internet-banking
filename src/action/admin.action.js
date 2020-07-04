@@ -93,13 +93,7 @@ const createEmployee = (fullName, email) => {
           dispatch(success(res.data.data));
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
         });
     }
   };

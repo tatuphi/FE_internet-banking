@@ -16,6 +16,7 @@ import {
 import MenuItem from "antd/lib/menu/MenuItem";
 import { connect } from "react-redux";
 import EmployeeMenu from "containers/EmployeeRole/EmployeeMenu";
+import AdminMenu from "containers/AdminRole/AdminMenu"
 const { SubMenu } = Menu;
 class VerticalMenu extends Component {
   state = {
@@ -95,7 +96,10 @@ class VerticalMenu extends Component {
               role === "EMPLOYEE" && < EmployeeMenu />
 
             }
+            {
+              role === "ADMIN" && < AdminMenu />
 
+            }
           </div>
           : " "
         }

@@ -26,6 +26,7 @@ class ManageEmployeeForm extends Component {
       showDeErr: true,
       showDeSuccess: true,
       idEmployee: "",
+      secondLoad: true
     };
   }
   componentDidMount = () => {
@@ -48,6 +49,7 @@ class ManageEmployeeForm extends Component {
     const { createEmployee } = this.props;
     const { fullName, email } = this.state;
     createEmployee(fullName, email);
+    this.setState({ isFistLoad: false, secondLoad: false })
   };
   isShowDelete = (idEmployee) => {
     this.setState({
@@ -111,6 +113,8 @@ class ManageEmployeeForm extends Component {
       isLoadUpdate,
       showDeErr,
       showDeSuccess,
+      secondLoad,
+
     } = this.state;
 
     const {
@@ -119,12 +123,14 @@ class ManageEmployeeForm extends Component {
       successDelete,
       pendding,
       errMessage,
+      issucess,
     } = this.props;
     console.log(("listEmployee", listEmployee));
     return (
-      <div className="outletMain">
+      <div className="history">
+
         <div className="formName"> LIST EMPLOYEE MANAGEMENT</div>
-        <Button type="primary" shape="round" onClick={this.showModalSave}>
+        <Button type="primary" shape="round" onClick={this.showModalSave} className="ml-2">
           <PlusOutlined /> Add Employee
         </Button>
         <div className="mt-4">
@@ -197,6 +203,9 @@ class ManageEmployeeForm extends Component {
                 {errMessage && !isFistLoad && (
                   <Alert message={errMessage} type="error" />
                 )}
+                {issucess && !secondLoad && (
+                  <Alert message="create success" type="error" />
+                )}
 
                 <Form.Item label="Full name" className="mt-5">
                   <Input
@@ -249,12 +258,12 @@ class ManageEmployeeForm extends Component {
                     </Form.Item>
                   </div>
                 ) : (
-                  <Form.Item label=" " colon={false}>
-                    <Button key="submit" type="primary" onClick={this.handleOk}>
-                      Save
+                    <Form.Item label=" " colon={false}>
+                      <Button key="submit" type="primary" onClick={this.handleOk} loading={pendding}>
+                        Save
                     </Button>
-                  </Form.Item>
-                )}
+                    </Form.Item>
+                  )}
               </Form>
             </div>
           </Modal>
@@ -310,6 +319,7 @@ const mapStateToProps = (state) => {
     pendDelete: state.admin.pendDelete,
     errDelete: state.admin.errDelete,
     successDelete: state.admin.successDelete,
+    issucess: state.admin.issucess
   };
 };
 
