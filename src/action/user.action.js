@@ -17,7 +17,19 @@ const login = (username, password) => {
 
         history.push("/");
       })
-      .catch((err) => dispatch(failure(err)));
+      .catch((error) => {
+        // console.log("data.error", error.response);
+        // const { data } = error.response;
+
+        // if (data.error) {
+        //   console.log("data.error", error.response);
+        //   return dispatch(
+        //     failure(data.error.message) || "OOPs! something wrong"
+        //   );
+        // }
+        return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
+
+      });
   };
 
   function request() {
@@ -32,10 +44,10 @@ const login = (username, password) => {
     };
   }
 
-  function failure(err) {
+  function failure(error) {
     return {
       type: userConstant.LOGIN_FAIL,
-      err,
+      error,
     };
   }
 };
@@ -169,6 +181,7 @@ const forgotPassword = (email, username, otp, newPassword) => {
       })
         .then((res) => {
           dispatch(success());
+          history.push("/login");
         })
         .catch((error) => {
           const { data } = error.response;
@@ -240,7 +253,15 @@ const updatePassword = (oldPassword, newPassword) => {
         .then((res) => {
           dispatch(success());
         })
-        .catch((err) => dispatch(failure(err)));
+        .catch((error) => {
+          const { data } = error.response;
+          if (data.error) {
+            console.log("data.error", error.response);
+            return dispatch(
+              failure(data.error.message) || "OOPs! something wrong"
+            );
+          }
+        });
     }
   };
   function request() {
@@ -249,8 +270,8 @@ const updatePassword = (oldPassword, newPassword) => {
   function success() {
     return { type: userConstant.UPDATEPASSWORD_SUCCESS };
   }
-  function failure(err) {
-    return { type: userConstant.UPDATEPASSWORD_FAILURE, err };
+  function failure(error) {
+    return { type: userConstant.UPDATEPASSWORD_FAILURE, error };
   }
 };
 export const userActions = {

@@ -20,24 +20,18 @@ const registerAccount = (fullName, email, phone) => {
         { headers: headers }
       )
         .then((res) => {
-          dispatch(success());
+          dispatch(success(res.data.result));
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
         });
     }
   };
   function request() {
     return { type: employeeConstants.REGISTERBANKACCOUN_REQUEST };
   }
-  function success() {
-    return { type: employeeConstants.REGISTERBANKACCOUN_SUCCESS };
+  function success(customer) {
+    return { type: employeeConstants.REGISTERBANKACCOUN_SUCCESS, customer };
   }
   function failure(error) {
     return { type: employeeConstants.REGISTERBANKACCOUN_FAILURE, error };
@@ -59,26 +53,21 @@ const applyMoney = (accountNumber, amountMoney) => {
         { headers: headers }
       )
         .then((res) => {
-          dispatch(success());
+          dispatch(success(res.data.result));
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
         });
     }
   };
   function request() {
     return { type: employeeConstants.APPLYMONEY_REQUEST };
   }
-  function success() {
-    return { type: employeeConstants.APPLYMONEY_SUCCESS };
+  function success(money) {
+    return { type: employeeConstants.APPLYMONEY_SUCCESS, money };
   }
   function failure(error) {
+    console.log(error)
     return { type: employeeConstants.APPLYMONEY_FAILURE, error };
   }
 };
@@ -165,9 +154,51 @@ const getCustomerUserId = (userInfo, cb) => {
     };
   }
 };
+const getCustomer = () => {
+  return (dispatch) => {
+    dispatch(request());
+
+    API.get("/employee/customer", {
+      headers: authHeader(),
+    })
+      .then((res) => {
+        console.log(res.data.result);
+        dispatch(success(res.data.result));
+
+      })
+      .catch((error) => {
+        const { data } = error.response;
+        if (data.error) {
+          return dispatch(
+            failure(data.error.message) || "OOPs! something wrong"
+          );
+        }
+        return dispatch(failure(error) || "OOPs! something wrong");
+      });
+  };
+  function request() {
+    return {
+      type: employeeConstants.GET_CUSTOMER_LIST_REQUEST,
+    };
+  }
+  function success(listCustomer) {
+    return {
+      type: employeeConstants.GET_CUSTOMER_LIST_SUCCESS,
+      listCustomer,
+    };
+  }
+
+  function failure(error) {
+    return {
+      type: employeeConstants.GET_CUSTOMER_LIST_FAILURE,
+      error,
+    };
+  }
+};
 export const employeeActions = {
   registerAccount,
   applyMoney,
   customerTransaction,
   getCustomerUserId,
+  getCustomer
 };

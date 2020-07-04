@@ -7,13 +7,12 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+
     };
   }
 
   render() {
-    const src = "/logo.jpg";
+
     const back = {
       // background: `url(${src})`,
       background: "black",
@@ -21,7 +20,7 @@ class Login extends Component {
       height: "100%",
       opacity: "0.8",
     };
-    const { pendding } = this.props;
+
     return (
       <div style={back}>
         <div className="row">
@@ -43,12 +42,12 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    pendding: state.user.pendding,
+
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  login: (email, password) => dispatch(userActions.login(email, password)),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

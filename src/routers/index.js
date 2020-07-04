@@ -39,7 +39,7 @@ class WrapRouter extends Component {
         main: () => <Info />,
       },
       {
-        path: "/createAccount",
+        path: "/employee/createAccount",
         exact: true,
         main: () => role === 'EMPLOYEE' ? <CreateBankAccount /> : <Redirect to='/' />
       },
@@ -78,20 +78,16 @@ class WrapRouter extends Component {
         exact: true,
         main: () => <HistoryPayment />,
       },
-      {
-        path: "/employee/createAccount",
-        exact: true,
-        main: () => <CreateBankAccount />,
-      },
+
       {
         path: "/employee/applyMoney",
         exact: true,
-        main: () => <ApplyMoney />,
+        main: () => role === 'EMPLOYEE' ? <ApplyMoney /> : <Redirect to='/' />,
       },
       {
         path: "/employee/customerTransaction",
         exact: true,
-        main: () => <CustomerHistoryTransaction />,
+        main: () => role === 'EMPLOYEE' ? <CustomerHistoryTransaction /> : <Redirect to='/' />,
       },
       {
         path: "",

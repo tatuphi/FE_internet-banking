@@ -125,17 +125,17 @@ class TransferMoneyForm extends Component {
     let nameAccount = "";
 
     saveReceiverInformation(account, idBank, nameAccount, reminder)
-      .then(res => {
-        listTemp = listTemp.length > 0 ? [...listTemp] : [...receiver]
-        let save = [...listTemp, { ...res.saveInfo }]
-        this.setState({
+      // .then(res => {
+      //   listTemp = listTemp.length > 0 ? [...listTemp] : [...receiver]
+      //   let save = [...listTemp, { ...res.saveInfo }]
+      //   this.setState({
 
-          receiverInfo: save,
-          listTemp: save,
-          isUpdate: true
-        })
-      })
-      .catch(() => console.log('err when save info'))
+      //     receiverInfo: save,
+      //     listTemp: save,
+      //     isUpdate: true
+      //   })
+      // })
+      // .catch(() => console.log('err when save info'))
     this.setState({
       isSave: false
 
@@ -256,8 +256,8 @@ class TransferMoneyForm extends Component {
       isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder, isUpdate } = this.state
 
     const activeEmail = account && amount.trim();
-    let { receiverInfo } = this.state;
-    receiverInfo = isUpdate ? [...receiverInfo] : [...receiver];
+    // let { receiverInfo } = this.state;
+    // receiverInfo = isUpdate ? [...receiverInfo] : [...receiver];
 
     const prefixSelector = (
       <Form.Item name="prefix" noStyle>
@@ -319,7 +319,7 @@ class TransferMoneyForm extends Component {
 
 
             >
-              {receiverInfo.map((item, index) =>
+              {receiver.map((item, index) =>
                 <Option key={index} value={item.numberAccount}>
                   <div className="row">
                     <div className="col">{item.nameRemind}</div>
@@ -552,7 +552,7 @@ class TransferMoneyForm extends Component {
           >
             <div >
               <h6 style={{ color: 'white', fontWeight: 'bolder' }} >This transaction is complete </h6>
-              <Button style={{ marginLeft: '30%' }} type='primary' shape="round" onClick={this.showSuccess}>OK</Button>
+              <Button  type='primary' shape="round" onClick={this.showSuccess}>OK</Button>
             </div>
           </Modal>
         }

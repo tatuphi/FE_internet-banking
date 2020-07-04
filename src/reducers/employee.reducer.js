@@ -4,7 +4,12 @@ const initialState = {
   pendding: false,
   errMessage: "",
   listCustomerTransaction: [],
+  listCustomer: [],
+  pendCustomer: false,
   userResult: {},
+  isSuccessCreate: false,
+  isApplySuccess: false
+
 };
 const employee = (state = initialState, action) => {
   switch (action.type) {
@@ -20,10 +25,13 @@ const employee = (state = initialState, action) => {
         errMessage: action.error,
       };
     case employeeConstants.REGISTERBANKACCOUN_SUCCESS:
+      let customer = { ...action.customer.newUser, user: action.customer.saveLoginUser }
       return {
         ...state,
         pendding: false,
         errMessage: "",
+        isSuccessCreate: true,
+        listCustomer: [...state.listCustomer, { ...customer }]
       };
     case employeeConstants.APPLYMONEY_REQUEST:
       return {
@@ -31,12 +39,24 @@ const employee = (state = initialState, action) => {
         pendding: true,
       };
     case employeeConstants.APPLYMONEY_SUCCESS:
+      let list = state.listCustomer.find(e => e._id === action.money._id)
+      const index = state.listCustomer.indexOf(list);
+      list.currentBalance = action.money.currentBalance;
+      let account = [
+        ...state.listCustomer.slice(0, index),
+        list,
+        ...state.listCustomer.slice(index + 1, state.listCustomer.length)
+      ];
+
       return {
         ...state,
         pendding: false,
         errMessage: "",
+        isApplySuccess: true,
+        listCustomer: [...account]
       };
     case employeeConstants.APPLYMONEY_FAILURE:
+
       return {
         ...state,
         pendding: false,
@@ -76,6 +96,24 @@ const employee = (state = initialState, action) => {
       return {
         ...state,
         pendding: false,
+        errMessage: action.error,
+      };
+    case employeeConstants.GET_CUSTOMER_LIST_REQUEST:
+      return {
+        ...state,
+        pendCustomer: true,
+      };
+    case employeeConstants.GET_CUSTOMER_LIST_SUCCESS:
+      return {
+        ...state,
+        pendCustomer: false,
+        errMessage: "",
+        listCustomer: action.listCustomer,
+      };
+    case employeeConstants.GET_CUSTOMER_LIST_FAILURE:
+      return {
+        ...state,
+        pendCustomer: false,
         errMessage: action.error,
       };
     default:

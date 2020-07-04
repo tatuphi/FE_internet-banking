@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import RequestForm from "containers/ForgetPassword/RequestForm";
 import { userActions } from "action/user.action";
-import Header from "containers/Share/Header";
-import Footer from "containers/Share/Footer";
+
+import { Link } from "react-router-dom";
 
 class ForgetPassword extends Component {
   constructor(props) {
@@ -14,13 +14,28 @@ class ForgetPassword extends Component {
     };
   }
   render() {
+    const src = "/instagram_profile_image.png";
+    const back = {
+      background: 'black',
+      width: "100%",
+      height: "100%",
+      opacity: "0.8",
+    };
     return (
-      <div>
-        <Header />
-        <div className="container" style={{ paddingTop: "10px", width: "50%" }}>
+      <div style={back}>
+
+        <Link to='/login'>
+          <img
+            style={{ height: 250, width: 400 }}
+            src="/instagram_profile_image.png"
+            alt="logo"
+          />
+        </Link>
+
+        <div className="container" style={{ width: "50%" }}>
           <RequestForm />
         </div>
-        <Footer />
+
       </div>
     );
   }

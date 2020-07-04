@@ -1,4 +1,5 @@
 import { deptConstants } from "constants/index";
+// import { deptActions } from 'action/dept.action'
 
 const initialState = {
     pendding: false,
@@ -12,40 +13,46 @@ const initialState = {
     pendRe: false,
     penDelete: false,
     errDelete: "",
+    pendNotification: false,
+    errNotif: " ",
+    listNotification: [],
 
 };
 const dept = (state = initialState, action) => {
     switch (action.type) {
-        case deptConstants.GET_DEPT_REMIND_REQUEST:
+        case deptConstants.GET_DEPT_REQUEST:
             return {
                 ...state,
                 pendding: true,
             };
-        case deptConstants.GET_DEPT_REMIND_FAILURE:
+        case deptConstants.GET_DEPT_FAILURE:
             return {
                 ...state,
                 pendding: false,
                 errMessage: action.error,
             };
-        case deptConstants.GET_DEPT_REMIND_SUCCESS:
+        case deptConstants.GET_DEPT_SUCCESS:
             return {
                 ...state,
                 pendding: false,
                 errMessage: "",
                 listDept: action.listDept,
             };
-        case deptConstants.GET_DEPT_REMINDER_REQUEST:
+        case deptConstants.GET_REMIND_REQUEST:
             return {
                 ...state,
                 pendRe: true,
             };
-        case deptConstants.GET_DEPT_REMINDER_FAILURE:
+        case deptConstants.GET_REMIND_FAILURE:
+            // deptActions.showDeptRemindUnPay()
+
             return {
                 ...state,
                 pendRe: false,
                 errMessage: action.error,
             };
-        case deptConstants.GET_DEPT_REMINDER_SUCCESS:
+        case deptConstants.GET_REMIND_SUCCESS:
+            // deptActions.showDeptRemindUnPay()
             return {
                 ...state,
                 pendRe: false,
@@ -115,6 +122,27 @@ const dept = (state = initialState, action) => {
                 listReminder: [...state.listReminder.filter(e => e._id !== action.reminderId)]
 
             };
+        case deptConstants.GET_DEPT_NOTIFICATION_REQUEST:
+            return {
+                ...state,
+                pendNotification: true,
+            };
+
+        case deptConstants.GET_DEPT_NOTIFICATION_FAILURE:
+            return {
+                ...state,
+                pendNotification: false,
+                errNotif: action.error,
+            };
+        case deptConstants.GET_DEPT_NOTIFICATION_SUCCESS:
+            return {
+                ...state,
+                pendNotification: false,
+                errNotif: "",
+                listNotification: action.listNotification,
+            };
+
+
 
 
         default:

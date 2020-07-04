@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Select, Button, DatePicker } from "antd";
+import { Form, Input, Select, Button, DatePicker, Alert } from "antd";
 import { employeeActions } from "action/employee.action";
 import { connect } from "react-redux";
 
@@ -13,12 +13,15 @@ class CreateAccountForm extends Component {
       fullName: "",
       email: "",
       phone: "",
+      isFirstLoad: true,
+      isSecondLoad: true
     };
   }
   handleRegisterAccount = () => {
     const { fullName, email, phone } = this.state;
     const { registerAccount } = this.props;
     registerAccount(fullName, email, phone);
+    this.setState({ isFirstLoad: false, isSecondLoad: false });
   };
   onChange = (e) => {
     this.setState({
@@ -30,11 +33,13 @@ class CreateAccountForm extends Component {
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
+      isSecondLoad: true
+
     });
   };
   render() {
-    const { pendding } = this.props;
-    const { fullName, email, phone } = this.state;
+    const { pendding, errMessage, isSuccessCreate } = this.props;
+    const { fullName, email, phone, isFirstLoad, isSecondLoad } = this.state;
     const active = fullName && email.trim() && phone;
     return (
       <div className="outletMain">
@@ -46,47 +51,44 @@ class CreateAccountForm extends Component {
           wrapperCol={{ span: 16 }}
           form={this.form}
         >
+          {errMessage && !isFirstLoad &&
+            <Alert
+              message={errMessage}
+
+              type="error"
+              showIcon
+            />
+          }
+          {isSuccessCreate && !isSecondLoad &&
+            <Alert
+              message="Create success"
+              type="success"
+              showIcon
+            />
+          }
           <Form.Item
+            className="mt-3"
             label=" Full Name"
             name="fullName"
             rules={[{ required: true, message: "Please input your fullname!" }]}
           >
-            <Input name="fullName" value={fullName} onChange={this.onChange} />
+            <Input name="fullName" value={fullName} onChange={this.onChange} onFocus={this.onFocus} />
           </Form.Item>
           <Form.Item
             label=" Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <Input name="email" value={email} onChange={this.onChange} />
+            <Input name="email" value={email} onChange={this.onChange} onFocus={this.onFocus} />
           </Form.Item>
 
           <Form.Item label="Address">
-            <Input.Group compact>
-              <Form.Item
-                noStyle
-                rules={[{ required: true, message: "Province is required" }]}
-              >
-                <Select placeholder="Select province">
-                  <Option value="Ho Chi Minh">Ho Chi Minh</Option>
-                  <Option value="Ha Noi">Ha Noi</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                noStyle
-                rules={[{ required: true, message: "District is required" }]}
-              >
-                <Select placeholder="Select district">
-                  <Option value="District 1">District 1</Option>
-                  <Option value="District 2">District 2</Option>
-                </Select>
-              </Form.Item>
-            </Input.Group>
+
             <Form.Item
               noStyle
               rules={[{ required: true, message: "Street is required" }]}
             >
-              <Input style={{ marginTop: 10 }} placeholder="Input street" />
+              <Input style={{ marginTop: 10 }} placeholder="Input street" onFocus={this.onFocus} />
             </Form.Item>
           </Form.Item>
           <Form.Item
@@ -96,7 +98,7 @@ class CreateAccountForm extends Component {
               { required: true, message: "Please input your phone number!" },
             ]}
           >
-            <Input name="phone" value={phone} onChange={this.onChange} />
+            <Input name="phone" value={phone} onChange={this.onChange} onFocus={this.onFocus} />
           </Form.Item>
           <Form.Item label="Birth Date">
             <DatePicker rules={[{ required: true }]} />
@@ -110,6 +112,7 @@ class CreateAccountForm extends Component {
               loading={pendding}
               disabled={!active}
               onClick={this.handleRegisterAccount}
+              onFocus={this.onFocus}
             >
               Submit
             </Button>
@@ -121,7 +124,9 @@ class CreateAccountForm extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    pendding: state.user.pendding,
+    pendding: state.employee.pendding,
+    errMessage: state.employee.errMessage,
+    isSuccessCreate: state.employee.isSuccessCreate,
   };
 };
 

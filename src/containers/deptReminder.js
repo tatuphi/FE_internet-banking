@@ -14,6 +14,7 @@ import { PlusOutlined, DeleteTwoTone } from "@ant-design/icons";
 import { deptActions } from "action/dept.action";
 import { connect } from "react-redux";
 import { transactionActions } from "action/transaction.action";
+import Item from "antd/lib/list/Item";
 // const ws = new WebSocket('ws://localhost:40510')
 
 const { TabPane } = Tabs;
@@ -24,7 +25,6 @@ const layout = {
 };
 
 class DeptReminder extends Component {
-
 
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ class DeptReminder extends Component {
   componentDidMount = () => {
     const { showDeptRemind, showDeptRemindUnPay } = this.props;
     showDeptRemind();
-    showDeptRemindUnPay();
+    showDeptRemindUnPay()
 
 
   }
@@ -130,9 +130,112 @@ class DeptReminder extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    ;
-
   }
+  onChangeName = (e) => {
+    this.setState({
+      txtName: e.target.value,
+    });
+  };
+  showDeleteConfirm = () => {
+    const { deleteReminder } = this.props;
+    let { txtName, reminderId, check } = this.state;
+    deleteReminder(reminderId, txtName);
+    if (check === "REMINDER") {
+      this.setState({
+        isUpdate: false,
+        showDeErr: false,
+        txtName: " ",
+        showDeSuccess: false,
+      });
+    } else {
+      this.setState({
+        isUpdateRe: false,
+        showDeErr: false,
+        txtName: " ",
+        showDeSuccess: false,
+      });
+    }
+  };
+  isShowDelete = (reminderId, check) => {
+    console.log("1", reminderId);
+    this.setState({
+      isDelete: true,
+      reminderId: reminderId,
+      check: check,
+    });
+  };
+  isCancel = () => {
+    this.setState({ isDelete: false, showDeErr: true, showDeSuccess: true });
+  };
+  transferStatus = (list) => {
+    console.log("1", list);
+    this.setState({
+      listTranDept: list,
+    });
+
+    const { requestReceiver } = this.props;
+    let content = "transfer Dept";
+    let pay = true;
+    requestReceiver(list.bankAccountSender, list.amount, content, pay);
+
+    this.setState({
+      isTransfer: true,
+      isfistLoad: true,
+    });
+  };
+  totalMoney = (amount, type) => {
+    let m = null;
+    if (type === true) {
+      m = +amount + 2200;
+    } else {
+      m = +amount;
+    }
+
+    return `${m} VND`;
+  };
+  handleCancelTransfer = () => {
+    this.setState({
+      isTransfer: false,
+    });
+  };
+  handleSubmitMoney = () => {
+    const { listTranDept, otp, remList } = this.state;
+    let { editList } = this.state;
+    const { verifyOTP, listReminder } = this.props;
+    let code = otp.trim();
+    let typeTransaction = "INDEPT";
+    let content = "Transfer Dept ";
+    let pay = true;
+    console.log("2", listTranDept);
+    console.log("3", remList);
+
+    verifyOTP(
+      listTranDept.bankAccountSender,
+      listTranDept.amount,
+      content,
+      pay,
+      code,
+      typeTransaction,
+      listTranDept._id
+    );
+    editList = editList.length > 0 ? [...editList] : [...listReminder];
+    let send = editList.find((e) => e._id === listTranDept._id);
+    const index = editList.indexOf(send);
+    console.log("test", send);
+    send.status = "PAYED";
+    this.setState({
+      remList: [
+        ...editList.slice(0, index),
+        send,
+        ...editList.slice(index + 1, editList.length),
+      ],
+      issuccessModal: false,
+      isShow: false,
+      otp: "",
+      isUpdateRe: true,
+    });
+  };
+
   render() {
     const {
       listDept,
@@ -208,11 +311,49 @@ class DeptReminder extends Component {
           </div>
           <Tabs type="card">
             <TabPane tab="List other remind" key="1">
-              <div></div>
+              <Table dataSource={listReminder} pagination={{ pageSize: 10 }}>
+                <Column
+                  title="Sender"
+                  dataIndex="bankAccountSender"
+                  key="bankAccountSender"
+                />
+                <Column
+                  title="Amount money"
+                  dataIndex="amount"
+                  key="amount"
+                />
+                <Column title="Status" dataIndex="_id" key="status"
+                  render={(_id) => (
+                    listReminder.map(item =>
+
+                      <div div key={item._id} >
+                        {
+                          item._id === _id &&
+                          <Button type="primary" shape='round' onClick={() => this.transferStatus(item)}>{item.status}</Button>
+
+                        }
+                      </div>
+                    ))}
+                />
+                <Column
+                  title="Action"
+                  key="action"
+                  dataIndex="_id"
+                  render={(_id) => (
+                    <div>
+                      {/* <EditTwoTone onClick={() => this.isShowEdit(_id, 'REMIND')} /> */}
+                      <DeleteTwoTone
+                        onClick={() => this.isShowDelete(_id, "REMIND")}
+                        className="ml-4"
+                      />
+                    </div>
+                  )}
+                />
+              </Table>
             </TabPane>
             <TabPane tab="List dept Create by myself" key="2">
               <div>
-                <Table dataSource={receiverInfo} pagination={{ pageSize: 10 }}>
+                <Table dataSource={listDept} pagination={{ pageSize: 10 }}>
                   <Column
                     title="Account Number receiver dept"
                     dataIndex="bankAccountReceiver"

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Alert } from "antd";
 import { employeeActions } from "action/employee.action";
 import { connect } from "react-redux";
 
@@ -14,12 +14,15 @@ class ApplyMoneyForm extends Component {
     this.state = {
       customerInformation: "",
       amountMoney: "",
+      isFirstLoad: true,
+      isSecondLoad: true
     };
   }
   handleApplyMoney = () => {
     const { customerInformation, amountMoney } = this.state;
     const { applyMoney } = this.props;
     applyMoney(customerInformation, amountMoney);
+    this.setState({ isFirstLoad: false, isSecondLoad: false })
   };
   onChange = (e) => {
     this.setState({
@@ -30,23 +33,36 @@ class ApplyMoneyForm extends Component {
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
+      isSecondLoad: true
     });
   };
   render() {
-    const { customerInformation, amountMoney } = this.state;
-    const { pendding, errMessage } = this.props;
+    const { customerInformation, amountMoney, isFirstLoad, isSecondLoad } = this.state;
+    const { pendding, errMessage, isApplySuccess } = this.props;
     const active = customerInformation && customerInformation.trim();
+    console.log("k", errMessage);
+    console.log("k", isFirstLoad);
     return (
       <div className="outletMain">
         <div>
           <div className="formName"> APPLY MONEY FOR CUSTOMER</div>
           <Form className="myForm" {...layout} form={this.form}>
-            {errMessage && (
-              <Form.Item>
-                <h6 style={{ color: "red" }}>{errMessage}</h6>
-              </Form.Item>
-            )}
-            <Form.Item
+            {errMessage && !isFirstLoad &&
+              <Alert
+                message={errMessage}
+                type="error"
+                showIcon
+              />
+
+            }
+            {isApplySuccess && !isSecondLoad &&
+              <Alert
+                message="Create success"
+                type="success"
+                showIcon
+              />
+            }
+            <Form.Item className="mt-3"
               label="Customer Information"
               name="customerInformation"
               rules={[
@@ -80,6 +96,7 @@ class ApplyMoneyForm extends Component {
                 placeholder="Please input amount money..."
                 onChange={this.onChange}
                 onFocus={this.onFocus}
+                type="number"
               />
             </Form.Item>
             <Form.Item className="btnSubmitItem" label=" " colon={false}>
@@ -102,8 +119,10 @@ class ApplyMoneyForm extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    pendding: state.user.pendding,
-    errMessage: state.user.errMessage,
+    pendding: state.employee.pendding,
+    errMessage: state.employee.errMessage,
+    isApplySuccess: state.employee.isApplySuccess
+
   };
 };
 

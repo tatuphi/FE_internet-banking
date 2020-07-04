@@ -32,7 +32,7 @@ class VerticalMenu extends Component {
     const role = localStorage.getItem("role")
     const { logout } = this.props;
     return (
-      <div>
+      <div style={{ height: '100%' }}>
         {isLogin ?
           <div>{
             role === "CUSTOMER" && <div style={{ width: 250 }}>

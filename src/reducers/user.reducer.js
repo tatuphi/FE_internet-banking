@@ -5,11 +5,13 @@ const initialState = {
   isAuth: localStorage.getItem("isAuth"),
   pendding: false,
   errMessage: "",
+  errOtp: "",
   sendOTP: false,
   updatedPassword: false,
   userInfo: [],
   accountNumber: [],
   beneficiaries: [],
+  errFogot: ""
 };
 
 const user = (state = initialState, action) => {
@@ -25,7 +27,9 @@ const user = (state = initialState, action) => {
         ...state,
         pendding: false,
         isAuth: false,
-        userInfo: action.user,
+        errMessage: action.error
+
+
       };
 
     case userConstant.LOGIN_SUCCESS:
@@ -36,6 +40,8 @@ const user = (state = initialState, action) => {
         ...state,
         pendding: false,
         isAuth: true,
+        userInfo: action.user,
+        errMessage: null
       };
     case userConstant.LOGOUT:
       localStorage.removeItem("token");
@@ -99,7 +105,7 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         pendding: false,
-        errMessage: action.error,
+        errFogot: action.error,
         sendOTP: false,
       };
 
@@ -107,25 +113,29 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         pendding: false,
-        errMessage: "",
+        errFogot: "",
         sendOTP: true,
       };
     case userConstant.FORGOTPASSWORD_REQUEST:
       return {
         ...state,
         pendding: true,
+
       };
     case userConstant.FORGOTPASSWORD_FAILURE:
+      console.log(action.error)
       return {
         ...state,
         pendding: false,
-        errMessage: action.error,
+        errOtp: action.error,
+
       };
     case userConstant.FORGOTPASSWORD_SUCCESS:
       return {
         ...state,
         pendding: false,
-        errMessage: "",
+        errOtp: "",
+
       };
 
     case userConstant.REGISTERBANKACCOUN_REQUEST:

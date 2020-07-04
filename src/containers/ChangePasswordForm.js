@@ -14,12 +14,19 @@ class ChangePasswordForm extends Component {
       currentPassword: "",
       newPassword: "",
       newPasswordConfirm: "",
+      isFirstLoad: true,
+      isSuccess: true
     };
   }
   handleUpdatePassword = () => {
     const { currentPassword, newPassword } = this.state;
     const { updatePassword } = this.props;
     updatePassword(currentPassword, newPassword);
+    this.setState({
+      isFirstLoad: false,
+      isSuccess: false,
+
+    })
   };
   onChange = (e) => {
     this.setState({
@@ -30,11 +37,13 @@ class ChangePasswordForm extends Component {
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
+      isSuccess: true
     });
   };
 
   render() {
-    const { currentPassword, newPassword, newPasswordConfirm } = this.state;
+    const { currentPassword, newPassword,
+      newPasswordConfirm, isFirstLoad, isSuccess } = this.state;
     const { pendding, updatedPassword, errMessage } = this.props;
     const active =
       currentPassword &&
@@ -46,14 +55,14 @@ class ChangePasswordForm extends Component {
         <div>
           <div className="formName"> CHANGE THE PASSWORD</div>
           <Form className="myForm" {...layout} form={this.form}>
-            {updatedPassword && (
+            {updatedPassword && !isFirstLoad && (
               <Form.Item>
                 <h6 style={{ color: "green" }}>
                   Change Password Successfully!
                 </h6>
               </Form.Item>
             )}
-            {errMessage && (
+            {errMessage && !isSuccess && (
               <Form.Item>
                 <h6 style={{ color: "red" }}>{errMessage}</h6>
               </Form.Item>

@@ -14,14 +14,13 @@ class CustomerHistoryTransaction extends Component {
           className="container"
           style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
         >
-          <Row>
-            <Col span={6}>
-              <EmployeeMenu />
-            </Col>
-            <Col span={18}>
-              <CustomerTransaction />
-            </Col>
-          </Row>
+
+          <EmployeeMenu />
+          <div style={{ marginTop: '10%' }}>
+
+            <CustomerTransaction />
+          </div>
+
         </div>
         <Footer />
       </div>

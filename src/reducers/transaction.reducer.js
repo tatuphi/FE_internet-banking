@@ -140,9 +140,9 @@ const transaction = (state = initialState, action) => {
                 ...state,
                 pend: false,
                 saveInfoReceiver: action.saveInfoReceiver,
-                // receiver: [...state.receiver, ...action.saveInfoReceiver],
+                receiver: [...state.receiver, { ...action.saveInfoReceiver }],
                 errsave: null,
-                // getBank: [...action.saveInfoReceiver, ...state.getBank]
+                
 
             };
         case transactionConstants.SAVE_RECEIVE_FAILURE:

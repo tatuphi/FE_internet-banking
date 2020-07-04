@@ -4,7 +4,7 @@ import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
 import { Row, Col } from "antd";
 import EmployeeMenu from "containers/EmployeeRole/EmployeeMenu";
-
+import ShowCustomers from "containers/EmployeeRole/Customer";
 class ApplyMoney extends Component {
   render() {
     return (
@@ -14,14 +14,13 @@ class ApplyMoney extends Component {
           className="container"
           style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
         >
-          <Row>
-            <Col span={6}>
-              <EmployeeMenu />
-            </Col>
-            <Col span={18}>
-              <ApplyMoneyForm />
-            </Col>
-          </Row>
+
+          <EmployeeMenu />
+          <div style={{ marginTop: '10px' }}>
+            <ApplyMoneyForm />
+            <ShowCustomers />
+
+          </div>
         </div>
         <Footer />
       </div>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Alert } from "antd";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -12,20 +12,24 @@ class LoginForm extends Component {
     this.state = {
       username: "",
       password: "",
-      verified: false
+      verified: false,
+      isFirstLoad: true
     };
   }
   handleLogin = () => {
     console.log(this.state.verified)
-    if (!this.state.verified) {
+    // if (!this.state.verified) {
 
-      alert("you need verifed captcha")
-    }
-    else {
-      const { username, password } = this.state;
-      const { login } = this.props;
-      login(username, password);
-    }
+    //   alert("you need verifed captcha")
+    // }
+    // else {
+    const { username, password } = this.state;
+    const { login } = this.props;
+    login(username, password);
+    this.setState({
+      isFirstLoad: false
+    })
+    // }
   };
   onChange = (e) => {
     this.setState({
@@ -33,17 +37,8 @@ class LoginForm extends Component {
     });
     console.log(this.state.username, this.state.password);
   };
-  onChangeCapcha = (value) => {
-    console.log("Captcha value:", value);
-  }
-  // ReCAPTCHAForm = (props) => {
-  //   const recaptchaRef = React.useRef();
 
-  //   const onSubmitWithReCAPTCHA = async () => {
-  //     const token = await recaptchaRef.current.executeAsync();
-  //     console.log('1', token);
-  //   }
-  // }
+
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
@@ -57,25 +52,16 @@ class LoginForm extends Component {
   }
 
   render() {
-    const onloadCallbackCaptcha = () => {
-      // console.log("onloadCallbackCaptcha")
-    }
-
-    const verifyCallback = (respond) => {
-      if (respond) {
-
-        this.setState({ verified: true })
-      }
-    }
 
 
     const inputStyle = {
       height: "40px",
       borderRadius: "5px",
     };
-    const { pendding } = this.props;
-    const { username, password } = this.state;
+    const { pendding, errMessage } = this.props;
+    const { username, password, isFirstLoad } = this.state;
     const activeEmail = username && password.trim();
+    console.log("errMessage", errMessage);
     return (
       <div className=" mt-5 loginForm">
         <div
@@ -99,7 +85,16 @@ class LoginForm extends Component {
               remember: true,
             }}
           >
-            <Form.Item
+            {
+              errMessage && !isFirstLoad &&
+              <Alert
+                message={errMessage}
+                type="error"
+                showIcon
+              />
+
+            }
+            <Form.Item className="mt-2"
               name="username"
               rules={[
                 {
@@ -112,6 +107,7 @@ class LoginForm extends Component {
                 style={inputStyle}
                 value={username}
                 name="username"
+                onFocus={this.onFocus}
                 onChange={this.onChange}
                 placeholder="Please input your username"
               />
@@ -127,32 +123,24 @@ class LoginForm extends Component {
               ]}
             >
               <Input.Password
-                // style={inputStyle}
+                style={inputStyle}
                 value={password}
                 name="password"
+                onFocus={this.onFocus}
                 onChange={this.onChange}
                 placeholder="Password"
               />
             </Form.Item>
-            {/* 6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn */}
 
-            {/* <form onSubmit={this.onSubmitWithReCAPTCHA}>
-              <ReCAPTCHA
-                ref={this.recaptchaRef}
-
-                sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn"
-              />
-            </form> */}
             <ReCAPTCHA
 
               sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn "
               render="explicit"
-              // onloadCallback={onloadCallbackCaptcha}
-              // verifyCallback={
-              //   verifyCallback}
-              onChange={this.onChangeCapcha}
+
+            // onChange={this.onChangeCapcha}
             />
-            <Link to="/forgetPassword">Forget Password</Link>
+            <Link className="mt-2"
+              to="/forgetPassword">Forget Password</Link>
             <Form.Item>
               <Button
                 style={{
@@ -161,24 +149,27 @@ class LoginForm extends Component {
                   height: "40px",
                   borderRadius: "10px",
                   opacity: "1",
+                  marginTop: '10px'
                 }}
                 type="primary"
                 loading={pendding}
                 disabled={!activeEmail}
                 onClick={this.handleLogin}
+                onFocus={this.onFocus}
               >
                 Login
               </Button>
             </Form.Item>
           </Form>
         </div>
-      </div>
+      </div >
     );
   }
 }
 const mapStateToProps = (state) => {
   return {
     pendding: state.user.pendding,
+    errMessage: state.user.errMessage
   };
 };
 

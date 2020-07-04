@@ -62,9 +62,9 @@ class TransferOtherForm extends Component {
       })
     }
 
-    if (this.props.transferUser.userSender && this.props.transferUser.userSender.currentBalance !== prevState.accBalance) {
+    if (this.props.transferUser.getMoney && this.props.transferUser.getMoney.userSender.currentBalance !== prevState.accBalance) {
       this.setState({
-        accBalance: this.props.transferUser.userSender.currentBalance
+        accBalance: this.props.transferUser.getMoney.userSender.currentBalance
       })
     }
 
@@ -192,7 +192,7 @@ class TransferOtherForm extends Component {
   }
   handleSaveBen = () => {
     const { account, naBank, fullName } = this.state
-    let { reminder, tempList } = this.state;
+    let { reminder } = this.state;
     const { saveReceiverInformation, getBank, transactionUser, receiver } = this.props;
     console.log("account", transactionUser);
 
@@ -202,15 +202,15 @@ class TransferOtherForm extends Component {
     let nameRe = fullName
     saveReceiverInformation(account, idBank._id, nameRe, reminder)
       .then(res => {
-        tempList = tempList.length > 0 ? [...tempList] : [...receiver]
+        // tempList = tempList.length > 0 ? [...tempList] : [...receiver]
 
-        let save = [...tempList, { ...res.saveInfo }]
-        this.setState({
-          receiverInfo: save,
-          tempList: save,
-          isUpdate: true,
-          reminder: ""
-        })
+        // let save = [...tempList, { ...res.saveInfo }]
+        // this.setState({
+        //   receiverInfo: save,
+        //   tempList: save,
+        //   isUpdate: true,
+        //   reminder: ""
+        // })
         message.success('This is a success message');
       })
       .catch(() => console.log('err when save info'))
@@ -221,7 +221,7 @@ class TransferOtherForm extends Component {
 
   }
   onGenderChange = value => {
-    const { receiver } = this.props;
+
 
 
     this.setState({
@@ -234,10 +234,10 @@ class TransferOtherForm extends Component {
     const { penTran, transactionUser, showNextModal, receiver, errsave, pend,
       errMessage, pendding2, errMess, successModal, getBank, transferUser } = this.props;
     const { account, amount, content, otp, accBalance,
-      accNumber, isfistLoad, isShow, issuccessModal, isSave, reminder, isUpdate, naBank } = this.state
-    let { receiverInfo } = this.state;
+      accNumber, isfistLoad, isShow, issuccessModal, isSave, reminder, naBank } = this.state
+
     console.log("mo123", naBank);
-    receiverInfo = isUpdate ? [...receiverInfo] : [...receiver];
+    // receiverInfo = isUpdate ? [...receiverInfo] : [...receiver];
     const activeEmail = account && amount.trim();
     const prefixSelector = (
       <Form.Item name="prefix" noStyle>
@@ -277,12 +277,12 @@ class TransferOtherForm extends Component {
               onChange={this.onGenderChange}
 
               showSearch
-              // onSearch={onSearch}
+
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
-              {receiverInfo.map((item, index) =>
+              {receiver.map((item, index) =>
 
                 <Option Option key={index} value={item.numberAccount} >
                   <div className="row">
@@ -506,7 +506,7 @@ class TransferOtherForm extends Component {
             footer={[
               <div>
 
-                <Button type='primary' className="ml-4" onClick={this.showSuccess}>continue</Button>
+                <Button type='primary' style={{ width: '100%' }} onClick={this.showSuccess}>OK</Button>
               </div>
             ]}
 

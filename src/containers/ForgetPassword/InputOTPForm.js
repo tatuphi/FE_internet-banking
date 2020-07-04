@@ -18,12 +18,15 @@ class InputOTPForm extends Component {
       username,
       newPassword: "",
       newPasswordConfirm: "",
+      isSecondErr: true
     };
   }
   handleForgetPassword = () => {
     const { username, email, otp, newPassword } = this.state;
     const { forgotPassword } = this.props;
     forgotPassword(email, username, otp, newPassword);
+    this.setState({ isSecondErr: false })
+
   };
   onChange = (e) => {
     this.setState({
@@ -36,6 +39,11 @@ class InputOTPForm extends Component {
       isFirstLoad: true,
     });
   };
+  handleCancelModal = () => {
+    const { handleCancel } = this.props;
+    handleCancel();
+
+  }
   render() {
     const {
       otp,
@@ -43,8 +51,9 @@ class InputOTPForm extends Component {
       username,
       newPasswordConfirm,
       newPassword,
+      isSecondErr
     } = this.state;
-    const { pendding, errMessage } = this.props;
+    const { pendding, errOtp } = this.props;
     const active =
       email &&
       username &&
@@ -53,13 +62,14 @@ class InputOTPForm extends Component {
       newPassword.trim() &&
       newPassword.length >= 8 &&
       newPassword === newPasswordConfirm;
+
     return (
       <div className="outletMain">
         <div className="formName"> SET UP THE PASSWORD</div>
         <Form className="myForm" {...layout} form={this.form}>
-          {errMessage && (
+          {errOtp && !isSecondErr && (
             <Form.Item>
-              <h6 style={{ color: "red" }}>{errMessage}</h6>
+              <h6 style={{ color: "red" }}>{errOtp}</h6>
             </Form.Item>
           )}
           <Form.Item className="resItem" label="Username" name="username">
@@ -141,7 +151,7 @@ class InputOTPForm extends Component {
           <Form.Item className="btnSubmitItem" label=" " colon={false}>
             <Button
               className="btnSubmit"
-              htmlType="submit"
+              onClick={this.handleCancelModal}
               style={{ marginRight: "10px" }}
             >
               Back
@@ -165,7 +175,7 @@ class InputOTPForm extends Component {
 const mapStateToProps = (state) => {
   return {
     pendding: state.user.pendding,
-    errMessage: state.user.errMessage,
+    errOtp: state.user.errOtp,
   };
 };
 

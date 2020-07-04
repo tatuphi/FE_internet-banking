@@ -15,6 +15,7 @@ class RequestForm extends Component {
     this.state = {
       username: "",
       email: "",
+      loadOpt: false,
     };
   }
   handleSendEmail = () => {
@@ -22,6 +23,9 @@ class RequestForm extends Component {
     const { requestForgotPassword } = this.props;
 
     requestForgotPassword(username, email);
+    this.setState({
+      loadOpt: true
+    })
   };
   onChange = (e) => {
     this.setState({
@@ -34,74 +38,78 @@ class RequestForm extends Component {
       isFirstLoad: true,
     });
   };
+  handleCancel = () => {
+    this.setState({ loadOpt: false })
+    console.log("mo");
+  }
 
   render() {
     const { pendding, sendOTP, errMessage } = this.props;
-    const { username, email } = this.state;
+    const { username, email, loadOpt } = this.state;
     const activeEmail = email.trim();
-
+    console.log(errMessage);
     return (
       <div className="outletMain">
-        {sendOTP ? (
-          <InputOTPForm username={username} email={email} />
+        {sendOTP && loadOpt ? (
+          <InputOTPForm username={username} email={email} handleCancel={this.handleCancel} />
         ) : (
-          <div>
-            <div className="formName"> SET UP THE PASSWORD</div>
-            <Form className="myForm" {...layout} form={this.form}>
-              {errMessage && (
-                <Form.Item>
-                  <h6 style={{ color: "red" }}>{errMessage}</h6>
-                </Form.Item>
-              )}
-              <Form.Item
-                label="Username"
-                name="username"
-                rules={[
-                  { required: true, message: "Please input your username!" },
-                ]}
-              >
-                <Input
+            <div>
+              <div className="formName"> SET UP THE PASSWORD</div>
+              <Form className="myForm" {...layout} form={this.form}>
+                {errMessage && (
+                  <Form.Item>
+                    <h6 style={{ color: "red" }}>{errMessage}</h6>
+                  </Form.Item>
+                )}
+                <Form.Item
+                  label="Username"
                   name="username"
-                  value={username}
-                  onChange={this.onChange}
-                  onFocus={this.onFocus}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  { required: true, message: "Please input your email!" },
-                ]}
-              >
-                <Input
-                  name="email"
-                  value={email}
-                  onChange={this.onChange}
-                  onFocus={this.onFocus}
-                />
-              </Form.Item>
-
-              <Form.Item
-                className="btnSubmitItem"
-                label=" "
-                colon={false}
-                shouldUpdate
-              >
-                <Button
-                  className="btnSubmit"
-                  htmlType="submit"
-                  loading={pendding}
-                  disabled={!activeEmail}
-                  type="primary"
-                  onClick={this.handleSendEmail}
+                  rules={[
+                    { required: true, message: "Please input your username!" },
+                  ]}
                 >
-                  Send
+                  <Input
+                    name="username"
+                    value={username}
+                    onChange={this.onChange}
+                    onFocus={this.onFocus}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                  ]}
+                >
+                  <Input
+                    name="email"
+                    value={email}
+                    onChange={this.onChange}
+                    onFocus={this.onFocus}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  className="btnSubmitItem"
+                  label=" "
+                  colon={false}
+                  shouldUpdate
+                >
+                  <Button
+                    className="btnSubmit"
+                    htmlType="submit"
+                    loading={pendding}
+                    disabled={!activeEmail}
+                    type="primary"
+                    onClick={this.handleSendEmail}
+                  >
+                    Send
                 </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        )}
+                </Form.Item>
+              </Form>
+            </div>
+          )}
       </div>
     );
   }
@@ -109,7 +117,7 @@ class RequestForm extends Component {
 const mapStateToProps = (state) => {
   return {
     pendding: state.user.pendding,
-    errMessage: state.user.errMessage,
+    errMessage: state.user.errFogot,
     sendOTP: state.user.sendOTP,
   };
 };

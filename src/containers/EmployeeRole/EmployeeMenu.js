@@ -10,8 +10,8 @@ import {
 class EmployeeMenu extends Component {
   render() {
     return (
-      <div style={{ width: 250 }}>
-        <Menu mode="inline" theme="dark">
+      <div >
+        <Menu mode="horizontal" >
           <Menu.Item key="1" icon={<ContactsOutlined />}>
             <Link to="/employee/createAccount">Create customer account</Link>
           </Menu.Item>

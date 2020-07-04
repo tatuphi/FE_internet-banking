@@ -53,7 +53,7 @@ class HistoryForm extends Component {
               defaultValue="ALL TRANSACTION">
 
               <Option value="GETMONEY">GET MONEY</Option>
-              <Option value="TRANSFER">TTRANSFER MONEY</Option>
+              <Option value="TRANSFER">TRANSFER MONEY</Option>
               <Option value="INDEPT">PAY INDEPT</Option>
             </Select></div>
 
@@ -84,6 +84,9 @@ class HistoryForm extends Component {
               <Column title="Sender" dataIndex="bankAccountSender" key="bankAccountReceiver"
 
               />
+              <Column title="nameBank" dataIndex="nameBank" key="nameBank"
+
+              />
               <Column title="Amount money" dataIndex="amount" key="amount"
                 render={(amount) => (
                   <div>
@@ -91,7 +94,15 @@ class HistoryForm extends Component {
                   </div>
                 )}
               />
-              <Column title="Type Send" dataIndex="typeSend" key="typeSend" />
+              <Column title="typeSend" dataIndex="typeSend" key="typeSend"
+                render={(typeSend) => (
+                  <div>{
+                    typeSend ? "+ " : "-"
+                  }
+
+                  </div>
+                )}
+              />
               <Column title="Type Transaction" dataIndex="typeTransaction" key="typeTransaction" />
               <Column title="Fee" dataIndex="fee" key="fee"
                 render={(fee) => (

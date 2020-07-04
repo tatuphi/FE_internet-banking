@@ -17,38 +17,95 @@ const showDeptRemind = () => {
 
     function request() {
         return {
-            type: deptConstants.GET_DEPT_REMIND_REQUEST,
+            type: deptConstants.GET_DEPT_REQUEST,
         };
     }
     function success(listDept) {
         return {
-            type: deptConstants.GET_DEPT_REMIND_SUCCESS,
+            type: deptConstants.GET_DEPT_SUCCESS,
             listDept,
         };
     }
 
     function failure(error) {
         return {
-            type: deptConstants.GET_DEPT_REMIND_FAILURE,
+            type: deptConstants.GET_DEPT_FAILURE,
             error
         }
     };
 };
+let ts = 0;
 const showDeptRemindUnPay = () => {
+
+    console.log("time", ts);
+    return (dispatch) => {
+        dispatch(request());
+
+        API.get(`/transfer/showDeptRemindUnPay?ts=${ts}`, { headers: authHeader() })
+            .then((res) => {
+                if (res.status === 200) {
+                    ts = res.data.timeStap;
+                    // console.log("iatw", res.data.timeStap);
+
+                    dispatch(success(res.data.result));
+                    // dispatch(showDeptRemindUnPay())
+                }
+            })
+            .then(() => {
+
+                setTimeout(() => {
+                    dispatch(showDeptRemindUnPay())
+                }, 15000);
+
+            })
+            .catch((err) => {
+                // console.log("hjdhdhd555");
+                // showDeptRemindUnPay();
+
+                dispatch(failure(err))
+                dispatch(showDeptRemindUnPay())
+
+
+            });
+    };
+
+    function request() {
+        return {
+            type: deptConstants.GET_REMIND_REQUEST,
+        };
+    }
+    function success(listReminder) {
+        //showDeptRemindUnPay();
+
+        return {
+            type: deptConstants.GET_REMIND_SUCCESS,
+            listReminder,
+        };
+    }
+
+    function failure(error) {
+        //showDeptRemindUnPay();
+
+        return {
+            type: deptConstants.GET_REMIND_FAILURE,
+            error
+        }
+    };
+};
+const getNotification = () => {
     // let ts = 0;
     return (dispatch) => {
         dispatch(request());
 
-        API.get("/transfer/showDeptRemindUnPay", { headers: authHeader() })
+        API.get("/transfer/getListNotification", { headers: authHeader() })
             .then((res) => {
-                // if (res.status === 200) {
-                // ts = res.data.timeStap;
+
                 console.log("iatw", res.data.result);
                 dispatch(success(res.data.result));
                 // }
 
             }).then(function () {
-                showDeptRemindUnPay();
+                getNotification();
                 console.log(2);
 
             })
@@ -57,19 +114,19 @@ const showDeptRemindUnPay = () => {
 
     function request() {
         return {
-            type: deptConstants.GET_DEPT_REMINDER_REQUEST,
+            type: deptConstants.GET_DEPT_NOTIFICATION_REQUEST,
         };
     }
     function success(listReminder) {
         return {
-            type: deptConstants.GET_DEPT_REMINDER_SUCCESS,
+            type: deptConstants.GET_DEPT_NOTIFICATION_SUCCESS,
             listReminder,
         };
     }
 
     function failure(error) {
         return {
-            type: deptConstants.GET_DEPT_REMINDER_FAILURE,
+            type: deptConstants.GET_DEPT_NOTIFICATION_FAILURE,
             error
         }
     };
@@ -238,4 +295,5 @@ export const deptActions = {
     deleteReminder,
     showDeptRemindUnPay,
     updateReminder,
+    getNotification
 };
