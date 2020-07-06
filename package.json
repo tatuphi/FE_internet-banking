@@ -29,6 +29,10 @@
     "redux-thunk": "^2.3.0",
     "websocket": "^1.0.31"
   },
+  "engines": {
+    "npm": "6.10.3",
+    "node": "12.10.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
