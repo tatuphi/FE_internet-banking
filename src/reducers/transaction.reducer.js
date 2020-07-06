@@ -136,13 +136,15 @@ const transaction = (state = initialState, action) => {
                 errsave: null,
             };
         case transactionConstants.SAVE_RECEIVE_SUCCESS:
+
+            let list = { ...action.saveInfoReceiver.saveInfo, linkedbank: action.saveInfoReceiver.link }
             return {
                 ...state,
                 pend: false,
                 saveInfoReceiver: action.saveInfoReceiver,
-                receiver: [...state.receiver, { ...action.saveInfoReceiver }],
+                receiver: [...state.receiver, { ...list }],
                 errsave: null,
-                
+
 
             };
         case transactionConstants.SAVE_RECEIVE_FAILURE:
@@ -238,11 +240,11 @@ const transaction = (state = initialState, action) => {
             return {
                 ...state,
                 pendDelete: false,
-                // saveInfoReceiver: action.saveInfoReceiver,
+
                 receiver: [...state.receiver.filter(e => e._id !== action.receiverId)],
                 errDelete: null,
                 successDelete: true
-                // getBank: [...action.saveInfoReceiver, ...state.getBank]
+
 
             };
         case transactionConstants.DELETE_RECEIVER_FAILURE:
@@ -261,14 +263,16 @@ const transaction = (state = initialState, action) => {
 
 
         case transactionConstants.EDIT_RECEIVE_SUCCESS:
+            let save = { ...action.editReceiver.receiver, linkedbank: action.editReceiver.link }
+            console.log("hh", save);
             return {
                 ...state,
                 pendEdit: false,
                 editReceiver: action.editReceiver,
                 successEdit: true,
                 errEdit: " ",
+                receiver: [...state.receiver.filter(e => e._id !== action.editReceiver.receiver._id), { ...save }],
 
-                // getBank: [...action.saveInfoReceiver, ...state.getBank]
 
             };
         case transactionConstants.EDIT_RECEIVE_FAILURE:

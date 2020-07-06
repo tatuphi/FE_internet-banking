@@ -36,25 +36,19 @@ class DeptReminder extends Component {
       money: ' ',
       content: ' ',
       isFistLoad: true,
-      receiverInfo: [...listDept],
       txtName: " ",
       isDelete: false,
       reminderId: ' ',
       isLoadUpdate: false,
       isShow: true,
       isTransfer: false,
-      listTranDept: [],
       isfistLoad: true,
-      remList: [...listReminder],
       issuccessModal: true,
       otp: ' ',
       check: '',
-      listTempDept: [],
-      listTempRe: [],
-      listSave: [],
       showDeErr: true,
       showDeSuccess: true,
-      editList: []
+      editList: [],
 
 
 
@@ -93,26 +87,22 @@ class DeptReminder extends Component {
       money: dept.amount,
       content: dept.content,
       check: check,
-      editList: []
+
 
     });
   };
   handleOk = () => {
-    const { requestDept, listDept } = this.props;
-    let { account, money, content, listSave } = this.state;
+    const { requestDept, } = this.props;
+    let { account, money, content } = this.state;
     console.log(account, money, content);
 
     requestDept(account, money, content).then(res => {
-      listSave = listSave.length > 0 ? [...listSave] : [...listDept]
-      let save = [...listSave, { ...res.deptInfo }]
+
       this.setState({
-        receiverInfo: save,
         account: " ",
         money: ' ',
         content: ' ',
-        visible: false,
-        listSave: save,
-        isUpdate: true
+        visible: false
       })
       message.success('This is a success message');
 
@@ -199,16 +189,13 @@ class DeptReminder extends Component {
     });
   };
   handleSubmitMoney = () => {
-    const { listTranDept, otp, remList } = this.state;
+    const { listTranDept, otp } = this.state;
     let { editList } = this.state;
     const { verifyOTP, listReminder } = this.props;
     let code = otp.trim();
     let typeTransaction = "INDEPT";
     let content = "Transfer Dept ";
     let pay = true;
-    console.log("2", listTranDept);
-    console.log("3", remList);
-
     verifyOTP(
       listTranDept.bankAccountSender,
       listTranDept.amount,
@@ -253,7 +240,7 @@ class DeptReminder extends Component {
       errDelete,
       isDeleteSuccess,
     } = this.props;
-    console.log("1", listReminder);
+
     const {
       content,
       account,
@@ -264,17 +251,14 @@ class DeptReminder extends Component {
       isShow,
       otp,
       isfistLoad,
-      isUpdate,
+
       showDeErr,
       showDeSuccess,
-      isUpdateRe,
+
       issuccessModal,
     } = this.state;
     // const isDisable = money && account && content.trim();
-    let { remList, receiverInfo } = this.state;
-    receiverInfo = isUpdate ? [...receiverInfo] : [...listDept];
-    remList = isUpdateRe ? [...remList] : [...listReminder];
-    console.log("h", errMessage);
+
     return (
       <div className="outletMain">
         <div className="formName"> DEPTREMIND LIST SETTINGS</div>
@@ -283,18 +267,23 @@ class DeptReminder extends Component {
           <PlusOutlined /> Add DeptRemind{" "}
         </Button>
         <div className="mt-4">
-          {pendding2 && (
-            <Spin
-              size="large"
+          {pendding2 &&
+            <img
               style={{
                 position: "absolute",
                 zIndex: "3000",
+                height: '150xp',
+                width: '100px',
                 margin: "30%",
+                borderRadius: '50%'
               }}
-            >
-              {/* {' '} */}
-            </Spin>
-          )}
+              src="https://res.cloudinary.com/eventinyourhand/image/upload/v1592392426/LoadingGif/mesmerizing_k5hjkp.gif?fbclid=IwAR2PyNM7ZajJamn-c3tItj8oYZTwzjLpVhvnXqjEgXvS45ZXzWrgDI9Mb4Y
+
+              "
+              alt="logo"
+            />
+
+          }
           <div className="mt-4">
             {pendding && (
               <Spin
@@ -311,7 +300,9 @@ class DeptReminder extends Component {
           </div>
           <Tabs type="card">
             <TabPane tab="List other remind" key="1">
-              <Table dataSource={listReminder} pagination={{ pageSize: 10 }}>
+              <Table dataSource={listReminder}
+                scroll={{ y: 400, x: 500 }}
+                pagination={{ pageSize: 10 }}>
                 <Column
                   title="Sender"
                   dataIndex="bankAccountSender"
@@ -341,7 +332,6 @@ class DeptReminder extends Component {
                   dataIndex="_id"
                   render={(_id) => (
                     <div>
-                      {/* <EditTwoTone onClick={() => this.isShowEdit(_id, 'REMIND')} /> */}
                       <DeleteTwoTone
                         onClick={() => this.isShowDelete(_id, "REMIND")}
                         className="ml-4"

@@ -14,7 +14,10 @@ const initialState = {
   pendDelete: false,
   errDelete: "",
   successDelete: false,
-  issucess: false
+  issucess: false,
+  updatePending: false,
+  updateErr: "",
+  UpdateSuccess: false
 };
 const admin = (state = initialState, action) => {
   switch (action.type) {
@@ -83,13 +86,14 @@ const admin = (state = initialState, action) => {
     case adminConstants.UPDATE_EMPLOYEE_REQUEST:
       return {
         ...state,
-        pendding: true,
+        updatePending: true,
       };
     case adminConstants.UPDATE_EMPLOYEE_SUCCESS:
       return {
         ...state,
-        pendding: false,
-        errMessage: "",
+        updatePending: false,
+        UpdateSuccess: true,
+        updateErr: "",
         updateEmployee: action.updateEmployee,
         listEmployee: [
           ...state.listEmployee.filter((e) => e._id !== action.idEditEmployee),
@@ -99,8 +103,8 @@ const admin = (state = initialState, action) => {
     case adminConstants.UPDATE_EMPLOYEE_FAILURE:
       return {
         ...state,
-        pendding: false,
-        errMessage: action.error,
+        updatePending: false,
+        updateErrs: action.error,
       };
 
     case adminConstants.DELETE_EMPLOYEE_REQUEST:

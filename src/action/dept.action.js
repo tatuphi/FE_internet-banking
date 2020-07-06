@@ -45,7 +45,7 @@ const showDeptRemindUnPay = () => {
             .then((res) => {
                 if (res.status === 200) {
                     ts = res.data.timeStap;
-                    // console.log("iatw", res.data.timeStap);
+                    // conso le.log("iatw", res.data.timeStap);
 
                     dispatch(success(res.data.result));
                     // dispatch(showDeptRemindUnPay())
@@ -63,8 +63,10 @@ const showDeptRemindUnPay = () => {
                 // showDeptRemindUnPay();
 
                 dispatch(failure(err))
-                dispatch(showDeptRemindUnPay())
 
+                setTimeout(() => {
+                    dispatch(showDeptRemindUnPay())
+                }, 15000);
 
             });
     };
@@ -92,20 +94,28 @@ const showDeptRemindUnPay = () => {
         }
     };
 };
-const getNotification = () => {
+const getListNotification = (pageNumber, numberRecord) => {
     // let ts = 0;
     return (dispatch) => {
         dispatch(request());
 
-        API.get("/transfer/getListNotification", { headers: authHeader() })
+        API.get("/transfer/getListNotification", {
+            params: {
+                pageNumber,
+                numberRecord,
+
+            },
+            headers: authHeader()
+        })
+
             .then((res) => {
 
                 console.log("iatw", res.data.result);
-                dispatch(success(res.data.result));
+                dispatch(success(res.data.result, pageNumber));
                 // }
 
             }).then(function () {
-                getNotification();
+                getListNotification();
                 console.log(2);
 
             })
@@ -117,10 +127,11 @@ const getNotification = () => {
             type: deptConstants.GET_DEPT_NOTIFICATION_REQUEST,
         };
     }
-    function success(listReminder) {
+    function success(listNotification, pageNumber) {
         return {
             type: deptConstants.GET_DEPT_NOTIFICATION_SUCCESS,
-            listReminder,
+            listNotification,
+            notiPageNumber: pageNumber,
         };
     }
 
@@ -130,6 +141,52 @@ const getNotification = () => {
             error
         }
     };
+};
+
+const getNumUnreadNotification = () => {
+    console.log("time", ts);
+    return (dispatch) => {
+        API.get(`/transfer/getBadgeNumber?ts=${ts}`, { headers: authHeader() })
+            .then((res) => {
+                if (res.status === 200) {
+                    ts = res.data.timeStap;
+
+                    dispatch(success(res.data.result));
+
+                }
+            }).then(() => {
+
+                setTimeout(() => {
+                    dispatch(getNumUnreadNotification())
+                }, 15000);
+
+            })
+            .catch((err) => {
+                setTimeout(() => {
+                    dispatch(getNumUnreadNotification())
+                }, 15000);
+            });
+    };
+
+    function success(numUnreadNotification) {
+        return {
+            type: deptConstants.GET_UNREADNOTIFICATION,
+            numUnreadNotification,
+        };
+    }
+};
+const setReadNotification = (notificationId) => {
+    return (dispatch) => {
+        API.post('/transfer/setReadNotification', { notificationId }, { headers: authHeader() }).then((res) => {
+            dispatch(success());
+        });
+    };
+
+    function success() {
+        return {
+            type: deptConstants.SET_READ_NOTIFICATION,
+        };
+    }
 };
 const requestDept = (numberAccount, amountMoney, content) => {
     return (dispatch) => {
@@ -227,20 +284,7 @@ const deleteReminder = (reminderId, content) => {
     };
 
 };
-// const deleteReminder = (reminderId, content) => {
-//     return (dispatch) => {
-//         return new Promise((resolve, reject) => {
-//             API.post('/transfer/deleteReminder', {
-//                 reminderId, content
-//             }, { headers: authHeader() })
-//                 .then((res) => {
-//                     resolve('true');
-//                     console.log("test", res.data.result);
-//                 })
-//                 .catch((err) => reject(err));
-//         });
-//     };
-// };
+
 
 const updateReminder = (sentData) => {
     return (dispatch) => {
@@ -295,5 +339,7 @@ export const deptActions = {
     deleteReminder,
     showDeptRemindUnPay,
     updateReminder,
-    getNotification
+    getListNotification,
+    getNumUnreadNotification,
+    setReadNotification
 };

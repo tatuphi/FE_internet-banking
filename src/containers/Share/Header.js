@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { userActions } from 'action/user.action';
+import { deptActions } from 'action/dept.action';
 import { Button, Badge, Popover } from "antd";
 import Notification from 'containers/notification';
+
 import {
   BellOutlined
 } from '@ant-design/icons';
@@ -12,20 +14,30 @@ class Header extends Component {
     super(props);
     this.state = {
       visible: false,
+      open: false,
 
     }
   }
-
-  handleVisibleChange = () => {
-    const { visible } = this.state
-    this.setState({ visible: !visible });
+  componentDidMount = () => {
+    const { getNumUnreadNotification } = this.props;
+    getNumUnreadNotification();
+  };
+  handleVisibleChange = (visible) => {
+    this.setState({ visible, open: !this.state.open });
+    this.props.getNumUnreadNotification()
+  };
+  componentDidMount = () => {
+    this.props.getNumUnreadNotification()
 
   };
-
 
   render() {
     const isAuth = localStorage.getItem('isAuth');
     const fullName = localStorage.getItem('user');
+    const role = localStorage.getItem('role');
+    const { numUnreadNotification } = this.props;
+    const { visible, open } = this.state;
+    console.log("numUnreadNotification", numUnreadNotification);
     const { logout } = this.props;
     return (
       <div className="head">
@@ -38,24 +50,39 @@ class Header extends Component {
           </Link>
           <div className="nav-link ml-auto">
             {isAuth ? (
-              <div className="d-flex">
-                <Popover title="Notifications"
-                  style={{ width: 1000 }}
-                  content={<Notification type="button" />}
-                  trigger="click"
-                  visible={this.state.visible}
-                  onVisibleChange={this.handleVisibleChange}
-                >
 
-
-                  <Badge className="mt-2" count={5}>
-                    <BellOutlined className="head-example" onClick={this.handleVisibleChange} style={{ fontSize: '25px', }} />
-                  </Badge>
-                </Popover>
-
+              < div className="d-flex">
+                {role === 'CUSTOMER' &&
+                  < Popover title="Notifications"
+                    style={{ width: 1000 }}
+                    content={<Notification type="button" />}
+                    trigger="click"
+                    visible={this.state.visible}
+                    onVisibleChange={this.handleVisibleChange}
+                  >
+                    {numUnreadNotification > 0 && !open ? (
+                      <Badge
+                        count={
+                          numUnreadNotification > 99
+                            ? '99+'
+                            : numUnreadNotification
+                        }
+                        className="mt-2"
+                        type="button"
+                      >
+                        <BellOutlined style={{ fontSize: 23 }} />
+                      </Badge>
+                    ) : (
+                        <div type="button">
+                          <BellOutlined style={{ fontSize: 20 }} />
+                        </div>
+                      )}
+                  </Popover>
+                }
                 <p className="ml-5" style={{ fontWeight: "500", fontSize: '23px', color: 'white' }} >{fullName}</p>
                 <Button className="ml-5" onClick={logout}>Logout</Button>
               </div>
+
             ) : (
                 <>
                   <Link className="mr-4 login" to="/login">
@@ -65,18 +92,21 @@ class Header extends Component {
               )}
           </div>
         </nav>
-      </div>
+      </div >
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   isAuth: state.user.isAuth,
+  numUnreadNotification: state.dept.numUnreadNotification,
 
 });
 
 const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(userActions.logout()),
+  getNumUnreadNotification: () =>
+    dispatch(deptActions.getNumUnreadNotification()),
 
 });
 

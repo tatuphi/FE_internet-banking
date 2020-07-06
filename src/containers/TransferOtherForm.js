@@ -3,7 +3,6 @@ import { Form, Input, Select, Checkbox, Button, Modal, Alert, message } from "an
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 import { transactionActions } from "action/transaction.action";
-import { Link } from "react-router-dom";
 const { Option } = Select;
 const layout = {
   labelCol: { span: 6 },
@@ -31,7 +30,7 @@ class TransferOtherForm extends Component {
       accnameReceiver: " ",
       receiverInfo: [...receiver],
       tempList: [],
-      naBank: "S2QBank",
+      naBank: "",
       isSave: true,
       reminder: "",
       ischeck: false,
@@ -120,16 +119,10 @@ class TransferOtherForm extends Component {
       isShow: false,
       fullName: transactionUser.fullName
     });
-
-
-
   }
   showModal = () => {
     this.setState({
       visible: false,
-
-
-
     });
 
   };
@@ -193,7 +186,7 @@ class TransferOtherForm extends Component {
   handleSaveBen = () => {
     const { account, naBank, fullName } = this.state
     let { reminder } = this.state;
-    const { saveReceiverInformation, getBank, transactionUser, receiver } = this.props;
+    const { saveReceiverInformation, getBank, transactionUser } = this.props;
     console.log("account", transactionUser);
 
 
@@ -202,15 +195,6 @@ class TransferOtherForm extends Component {
     let nameRe = fullName
     saveReceiverInformation(account, idBank._id, nameRe, reminder)
       .then(res => {
-        // tempList = tempList.length > 0 ? [...tempList] : [...receiver]
-
-        // let save = [...tempList, { ...res.saveInfo }]
-        // this.setState({
-        //   receiverInfo: save,
-        //   tempList: save,
-        //   isUpdate: true,
-        //   reminder: ""
-        // })
         message.success('This is a success message');
       })
       .catch(() => console.log('err when save info'))
@@ -221,11 +205,11 @@ class TransferOtherForm extends Component {
 
   }
   onGenderChange = value => {
-
-
-
+    const { receiver } = this.props;
+    let item = receiver.find(e => e.numberAccount === value)
     this.setState({
       account: value,
+      naBank: item.linkedbank.nameBank
 
     })
   };

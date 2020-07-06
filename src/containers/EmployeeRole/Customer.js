@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { Form, Input, Select, Table } from "antd";
+import { Table } from "antd";
 import { employeeActions } from "action/employee.action";
 import { connect } from "react-redux";
-const { Column, ColumnGroup } = Table;
-
-const { Option } = Select;
+const { Column } = Table
 
 class ShowCustomers extends Component {
     constructor(props) {
@@ -19,7 +17,7 @@ class ShowCustomers extends Component {
         getCustomer();
     }
     render() {
-        const { listCustomer, pendCustomer } = this.props
+        const { listCustomer } = this.props
         const src = "https://res.cloudinary.com/eventinyourhand/image/upload/v1592392503/LoadingGif/Animations_UI_et_web_design_30_cr%C3%A9ations_en_mouvement_um1i5t.gif?fbclid=IwAR3FTjpL8uQY-3qsk7UFErDGHRp9SKftD6jvWPk0v2ZLNHiIBNDCmt635eQ"
         return (
             <div >

@@ -27,8 +27,6 @@ class BeneficiaryForm extends Component {
       isFistLoad: true,
       visible: false,
       nameBank: " ",
-      listSave: [],
-      receiverInfo: [],
       isDelete: false,
       showDeErr: true,
       showDeSuccess: true,
@@ -81,22 +79,16 @@ class BeneficiaryForm extends Component {
     })
   }
   handleOk = () => {
-    const { saveReceiverInformation, beneficiaries } = this.props;
+    const { saveReceiverInformation } = this.props;
     const { account, nameBank, nameReminder, beneficiary } = this.state;
-    let { listSave } = this.state;
+
     saveReceiverInformation(account, nameBank, beneficiary, nameReminder).then(res => {
-      console.log("res", res)
-      listSave = listSave.length > 0 ? [...listSave] : [...beneficiaries];
-      let data = { ...res.saveInfo, linkedbank: res.link };
-      let save = [...listSave, { ...data }]
+
       this.setState({
         account: " ",
         nameBank: ' ',
         nameRemind: ' ',
         visible: false,
-        isUpdate: true,
-        listSave: save,
-        receiverInfo: save,
         beneficiary: "",
       })
       message.success('This is a success message');
@@ -151,28 +143,16 @@ class BeneficiaryForm extends Component {
   }
   showEditReceiver = () => {
     const { idReceiver, account, nameBank, nameReminder, beneficiary } = this.state;
-    const { editReceiverInformation, beneficiaries } = this.props;
-    let { listSave } = this.state;
+    const { editReceiverInformation } = this.props;
+
     editReceiverInformation(idReceiver, account, nameBank, beneficiary, nameReminder).then(res => {
-      console.log("res", res)
-      listSave = listSave.length > 0 ? [...listSave] : [...beneficiaries];
-      let data = { ...res.receiver, linkedbank: res.link };
-      let send = listSave.find((e) => e._id === idReceiver);
-      const index = listSave.indexOf(send);
-      send = data;
-      let save = [
-        ...listSave.slice(0, index),
-        send,
-        ...listSave.slice(index + 1, listSave.length)
-      ];
+
       this.setState({
         account: " ",
         nameBank: ' ',
         nameRemind: ' ',
         visible: false,
-        isUpdate: true,
-        listSave: save,
-        receiverInfo: save,
+
       })
 
       message.success('This is a success message');
@@ -184,14 +164,12 @@ class BeneficiaryForm extends Component {
 
 
   render() {
-    const { isFistLoad, account, nameReminder, isLoadUpdate, isUpdate, nameBank,
+    const { isFistLoad, account, nameReminder, isLoadUpdate, nameBank,
       showDeErr, showDeSuccess, isEdit, beneficiary } = this.state;
     const { beneficiaries, errsave, pend, getBank,
       pendDelete, errDelete, successDelete, pendding, pendEdit, errEdit } = this.props;
 
-    let { receiverInfo } = this.state;
-    receiverInfo = isUpdate ? [...receiverInfo] : [...beneficiaries]
-    console.log("receiverInfo", receiverInfo);
+
     // const data = [];
 
 
@@ -218,8 +196,9 @@ class BeneficiaryForm extends Component {
               </Spin>
             )}
           </div>
-          <Table dataSource={receiverInfo}
+          <Table dataSource={beneficiaries}
             pagination={{ pageSize: 10 }}
+            scroll={{ y: 400, x: 500 }}
           >
             <Column title="Name Beneficiary " dataIndex="nameBeneficiary" key="nameBeneficiary" />
             <Column title="Reminder Name " dataIndex="nameRemind" key="nameRemind" />

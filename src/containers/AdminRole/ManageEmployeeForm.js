@@ -26,7 +26,9 @@ class ManageEmployeeForm extends Component {
       showDeErr: true,
       showDeSuccess: true,
       idEmployee: "",
-      secondLoad: true
+      secondLoad: true,
+      isUpdate: true,
+      isUpdateSucces: true
     };
   }
   componentDidMount = () => {
@@ -34,10 +36,18 @@ class ManageEmployeeForm extends Component {
     getAllEmployee();
   };
   showModalSave = () => {
-    this.setState({ visible: true });
+    this.setState({ visible: true, isLoadUpdate: false });
   };
   showModalCancelSave = () => {
-    this.setState({ visible: false });
+    this.setState({
+      visible: false,
+      isFistLoad: true,
+      secondLoad: true,
+      fullName: "",
+      email: "",
+      username: "",
+      role: "",
+    });
   };
   onChangeValue(newValue, valueParam) {
     this.setState({
@@ -98,10 +108,25 @@ class ManageEmployeeForm extends Component {
       id: idEmployee,
     };
     updateEmployee(editData);
+    this.setState({
+      isUpdate: false,
+      isUpdateSucces:
+        false
+    })
   };
   onchangeValue = (value) => {
     this.setState({ role: value });
   };
+  onFocusSave = () => {
+    this.setState({
+      isFistLoad: true,
+      secondLoad: true,
+      isUpdate: true,
+      isUpdateSucces:
+        true
+
+    })
+  }
 
   render() {
     const {
@@ -109,11 +134,12 @@ class ManageEmployeeForm extends Component {
       fullName,
       email,
       username,
-      role,
       isLoadUpdate,
       showDeErr,
       showDeSuccess,
       secondLoad,
+      isUpdate,
+      isUpdateSucces
 
     } = this.state;
 
@@ -124,6 +150,9 @@ class ManageEmployeeForm extends Component {
       pendding,
       errMessage,
       issucess,
+      updatePending,
+      updateErr,
+      UpdateSuccess
     } = this.props;
     console.log(("listEmployee", listEmployee));
     return (
@@ -134,19 +163,11 @@ class ManageEmployeeForm extends Component {
           <PlusOutlined /> Add Employee
         </Button>
         <div className="mt-4">
-          {/* {pendding && (
-            <Spin
-              size="large"
-              style={{
-                position: "absolute",
-                zIndex: "3000",
-                margin: "20%",
-              }}
-            ></Spin>
-          )} */}
         </div>
         <div className="mt-3">
-          <Table dataSource={listEmployee} pagination={{ pageSize: 10 }}>
+          <Table dataSource={listEmployee} pagination={{ pageSize: 10 }}
+            scroll={{ y: 400, x: 500 }}
+          >
             <Column
               title="Username"
               dataIndex="username"
@@ -204,13 +225,19 @@ class ManageEmployeeForm extends Component {
                   <Alert message={errMessage} type="error" />
                 )}
                 {issucess && !secondLoad && (
-                  <Alert message="create success" type="error" />
+                  <Alert message="create success" type="success" />
                 )}
-
+                {updateErr && !isUpdate && (
+                  <Alert message={updateErr} type="error" />
+                )}
+                {UpdateSuccess && !isUpdateSucces && (
+                  <Alert message="create success" type="success" />
+                )}
                 <Form.Item label="Full name" className="mt-5">
                   <Input
                     name="fullName"
                     value={fullName}
+                    onFocus={this.onFocusSave}
                     onChange={(e) =>
                       this.onChangeValue(e.target.value, "fullName")
                     }
@@ -221,6 +248,7 @@ class ManageEmployeeForm extends Component {
                   <Input
                     name="email"
                     value={email}
+                    onFocus={this.onFocusSave}
                     onChange={(e) =>
                       this.onChangeValue(e.target.value, "email")
                     }
@@ -233,6 +261,7 @@ class ManageEmployeeForm extends Component {
                       <Input
                         name="username"
                         value={username}
+
                         onChange={(e) =>
                           this.onChangeValue(e.target.value, "username")
                         }
@@ -252,6 +281,8 @@ class ManageEmployeeForm extends Component {
                         key="submit"
                         type="primary"
                         onClick={this.handleUpdate}
+                        loading={updatePending}
+
                       >
                         Update
                       </Button>
@@ -259,7 +290,9 @@ class ManageEmployeeForm extends Component {
                   </div>
                 ) : (
                     <Form.Item label=" " colon={false}>
-                      <Button key="submit" type="primary" onClick={this.handleOk} loading={pendding}>
+                      <Button key="submit" type="primary"
+                        onFocus={this.onFocusSave}
+                        onClick={this.handleOk} loading={pendding}>
                         Save
                     </Button>
                     </Form.Item>
@@ -319,7 +352,10 @@ const mapStateToProps = (state) => {
     pendDelete: state.admin.pendDelete,
     errDelete: state.admin.errDelete,
     successDelete: state.admin.successDelete,
-    issucess: state.admin.issucess
+    issucess: state.admin.issucess,
+    updatePending: state.admin.updatePending,
+    updateErr: state.admin.updateErr,
+    UpdateSuccess: state.admin.UpdateSuccess
   };
 };
 

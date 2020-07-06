@@ -14,14 +14,9 @@ class Home extends Component {
           className="container"
           style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black", height: '100%' }}
         >
-          <Row style={{ height: '100%' }}>
-            <Col span={6} >
-              <VerticalMenu />
-            </Col>
-            <Col span={18}>
 
-            </Col>
-          </Row>
+          <VerticalMenu />
+
         </div>
         <Footer />
       </div>

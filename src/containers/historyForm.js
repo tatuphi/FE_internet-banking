@@ -77,6 +77,7 @@ class HistoryForm extends Component {
           <div>
             <Table dataSource={listHistory}
               pagination={{ pageSize: 10 }}
+              scroll={{ y: 400, x: 500 }}
             >
               <Column title="Receiver" dataIndex="bankAccountReceiver" key="bankAccountReceiver"
 

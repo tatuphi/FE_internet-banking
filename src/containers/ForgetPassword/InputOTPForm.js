@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Form, Input, Button } from "antd";
-import ForgetPassword from "pages/ForgetPassword";
 import { userActions } from "action/user.action";
 import { connect } from "react-redux";
 const layout = {

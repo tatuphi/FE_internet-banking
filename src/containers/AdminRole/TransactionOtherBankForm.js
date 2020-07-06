@@ -53,7 +53,7 @@ class TransactionOtherBankForm extends Component {
     return (
       <div className="history">
         <div className="formName">HISTORY TRANSACTION WITH OTHER BANK</div>
-        {total && <div style={{ color: "green" }}>TOTAL: {total.total}</div>}
+        {total && <div style={{ color: "green", marginRight: '1px' }}>TOTAL: {total.total} VND</div>}
 
         <div className="row mt-6 itemSmall">
           <div className="col col-6 ">
@@ -91,6 +91,7 @@ class TransactionOtherBankForm extends Component {
             <Table
               dataSource={listHistoryLinkBank}
               pagination={{ pageSize: 10 }}
+              scroll={{ y: 400, x: 500 }}
             >
               <Column
                 title="Sender"

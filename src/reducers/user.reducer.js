@@ -11,7 +11,8 @@ const initialState = {
   userInfo: [],
   accountNumber: [],
   beneficiaries: [],
-  errFogot: ""
+  errFogot: "",
+  
 };
 
 const user = (state = initialState, action) => {

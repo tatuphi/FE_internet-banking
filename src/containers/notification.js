@@ -6,8 +6,8 @@ import { CheckCircleTwoTone, DeleteOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { connect } from 'react-redux';
-import { userActions } from 'action/user.action';
-import { deptConstants } from 'constants/index';
+import { deptActions } from 'action/dept.action';
+
 
 const timeStyle = {
     fontSize: '10px',
@@ -27,8 +27,8 @@ class Notification extends Component {
     }
 
     componentDidMount = () => {
-        // const { getListNotification } = this.props;
-        // getListNotification();
+        const { getListNotification } = this.props;
+        getListNotification();
     };
 
     loadMoreNotification = () => {
@@ -104,97 +104,66 @@ class Notification extends Component {
         }
     };
 
-    // renderNotification = (item) => {
-    //     switch (item.type) {
-    //         case 'CREDIT_REFUND_FAILED':
-    //             item.url = notificationTypeConstants.CREDIT_REFUND_FAILED;
-    //             break;
-    //         case 'CREDIT_REFUND_SUCCESS':
-    //             item.url = notificationTypeConstants.CREDIT_REFUND_SUCCESS;
-    //             break;
-    //         case 'SESSION_CANCEL':
-    //             item.url = notificationTypeConstants.SESSION_CANCEL;
-    //             break;
-    //         case 'EVENT_REJECT':
-    //             item.url = notificationTypeConstants.EVENT_REJECT;
-    //             break;
-    //         case 'EVENT_CANCEL':
-    //             item.url = notificationTypeConstants.EVENT_CANCEL;
-    //             break;
-    //         case 'ZALOPAY_REFUND_SUCCESS':
-    //             item.url = notificationTypeConstants.ZALOPAY_REFUND_SUCCESS;
-    //             break;
-    //         case 'ZALOPAY_REFUND_FAILED':
-    //             item.url = notificationTypeConstants.ZALOPAY_REFUND_FAILED;
-    //             break;
-    //         case 'JOINED_EVENT':
-    //             item.url = notificationTypeConstants.JOINED_EVENT;
-    //             break;
-    //         default:
-    //             item.url = notificationTypeConstants.JOINED_EVENT;
-    //     }
+    renderNotification = (item) => {
 
-    //     return (
-    //         <List.Item key={item._id} type="button">
-    //             <div>
-    //                 <div className="d-flex">
-    //                     <List.Item.Meta avatar={<Avatar src={item.url} />} />
-    //                     {item.isRead ? (
-    //                         <div
-    //                             onClick={() =>
-    //                                 item.linkTo.urlWeb
-    //                                     ? window.location.replace(item.linkTo.urlWeb)
-    //                                     : window.location.replace('http://localhost:3000/my-events')
-    //                             }
-    //                         >
-    //                             {this.getNameSender(item.title, item.users_sender.fullName)}
-    //                         </div>
-    //                     ) : (
-    //                             <h6
-    //                                 onClick={() =>
-    //                                     this.handleMarkAsRead(item._id) || item.linkTo.urlWeb
-    //                                         ? window.location.replace(item.linkTo.urlWeb)
-    //                                         : window.location.replace('http://localhost:3000/my-events')
-    //                                 }
-    //                             >
-    //                                 {this.getNameSender(item.title, item.users_sender.fullName)}
-    //                             </h6>
-    //                         )}
-    //                 </div>
+        return (
+            <List.Item key={item._id} type="button">
+                <div>
+                    <div className="d-flex">
+                        {item.isRead ? (
+                            <div
+                                onClick={() =>
+                                    item.linkTo
+                                        ? window.location.replace(item.linkTo)
+                                        : window.location.replace('http://localhost:3000/deptRemind')
+                                }
+                            >
+                            </div>
+                        ) : (
+                                <h6
+                                    onClick={() =>
+                                        this.handleMarkAsRead(item._id)
+                                        // ? window.location.replace(item.linkTo.urlWeb)
+                                        // : window.location.replace('http://localhost:3000/deptRemind')
+                                    }
+                                >
 
-    //                 <div className="d-flex">
-    //                     <p style={timeStyle} className="ml-3">
-    //                         {new Date(item.createdAt).toLocaleString()}
-    //                     </p>
-    //                     <div className="ml-auto">
-    //                         {!item.isRead && (
-    //                             <Tooltip title="Mask as read" className="mr-2">
-    //                                 <CheckCircleTwoTone
-    //                                     onClick={() => this.handleMarkAsRead(item._id)}
-    //                                 />
-    //                             </Tooltip>
-    //                         )}
+                                </h6>
+                            )}
+                    </div>
 
-    //                         <Tooltip title="Delete">
-    //                             <DeleteOutlined
-    //                                 onClick={() => this.handleDeleleNotification(item._id)}
-    //                             />
-    //                         </Tooltip>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </List.Item>
-    //     );
-    // };
+                    <div className="row" onClick={() => this.handleMarkAsRead(item._id)}>
+                        <div className="col">
+                            <p style={timeStyle} className="ml-3">
+                                {new Date(item.createAt).toLocaleString()}
+                            </p>
+                        </div>
+                        <div className="col">
+                            <p>{item.users_sender.accountName}</p>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <p>{item.contentNotification}</p>
+                        </div>
+                        <div className="col">
+                            <p>{item.amount} VND</p>
+                        </div>
+                    </div>
+                </div>
+            </List.Item>
+        );
+    };
 
     render() {
         const { data, loading } = this.state;
+        console.log("data", data)
         return (
             <div className="demo-infinite-container">
                 <InfiniteScroll
                     initialLoad={false}
                     pageStart={0}
-                    // loadMore={this.loadMoreNotification}
+                    loadMore={this.loadMoreNotification}
                     hasMore={!loading}
                     useWindow={false}
                 >
@@ -212,16 +181,16 @@ class Notification extends Component {
                             <Spin />
                         </div>
                     )}
-                    {/* <List
+                    <List
                         dataSource={data}
                         renderItem={(item) => this.renderNotification(item)}
-                    > */}
-                    {/* {loading && (
+                    >
+                        {/* {loading && (
               <div className="demo-loading-container">
                 <Spin />
               </div>
             )} */}
-                    {/* </List> */}
+                    </List>
                 </InfiniteScroll>
             </div>
         );
@@ -229,16 +198,15 @@ class Notification extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    // notifications: state.user.notifications,
-    // isLoadedMore: state.user.isLoadedMore,
+    notifications: state.dept.listNotification,
+    isLoadedMore: state.dept.isLoadedMore,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    // getListNotification: (pageNumber, numberRecord) =>
-    //     dispatch(userActions.getListNotification(pageNumber, numberRecord)),
-    // setReadNotification: (id) => dispatch(userActions.setReadNotification(id)),
-    // setDeleteNotification: (id) =>
-    //     dispatch(userActions.setDeleteNotification(id)),
+    getListNotification: (pageNumber, numberRecord) =>
+        dispatch(deptActions.getListNotification(pageNumber, numberRecord)),
+    setReadNotification: (id) => dispatch(deptActions.setReadNotification(id)),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notification);

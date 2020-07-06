@@ -4,12 +4,7 @@ import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
-
-
-
-import TransferMoneyForm from "containers/TransferMoneyForm";
 import VerticalMenu from "containers/Share/VerticalMenu";
-import Item from "antd/lib/list/Item";
 const { Option } = Select;
 const { Panel } = Collapse;
 

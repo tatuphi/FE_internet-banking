@@ -16,6 +16,9 @@ const initialState = {
     pendNotification: false,
     errNotif: " ",
     listNotification: [],
+    notiPageNumber: 0,
+    numUnreadNotification: 0,
+
 
 };
 const dept = (state = initialState, action) => {
@@ -53,6 +56,7 @@ const dept = (state = initialState, action) => {
             };
         case deptConstants.GET_REMIND_SUCCESS:
             // deptActions.showDeptRemindUnPay()
+
             return {
                 ...state,
                 pendRe: false,
@@ -78,6 +82,7 @@ const dept = (state = initialState, action) => {
                 pendding: false,
                 errMessage: "",
                 addDept: action.addDept,
+                listDept: [...state.listDept, { ...action.addDept.deptInfo }]
 
             };
         case deptConstants.EDIT_DEPT_REMIND_REQUEST:
@@ -139,11 +144,25 @@ const dept = (state = initialState, action) => {
                 ...state,
                 pendNotification: false,
                 errNotif: "",
-                listNotification: action.listNotification,
+                listNotification: action.notiPageNumber === 1 ? [...action.listNotification] : [...state.listNotification, ...action.listNotification,],
+                isLoadedMore: action.listNotification.length === 10 ? true : false,
+            };
+        case deptConstants.GET_UNREADNOTIFICATION:
+            return {
+                ...state,
+                numUnreadNotification: action.numUnreadNotification,
             };
 
+        case deptConstants.SET_READ_NOTIFICATION:
+            return {
+                ...state,
+            };
 
-
+        case deptConstants.DELETE_NOTIFICATION:
+            return {
+                ...state,
+                listNotification: [...state.listNotification.filter(item => item._id !== action.delNotificationId)]
+            };
 
         default:
             return state;
