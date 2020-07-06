@@ -18,7 +18,7 @@ const initialState = {
     listNotification: [],
     notiPageNumber: 0,
     numUnreadNotification: 0,
-
+   
 
 };
 const dept = (state = initialState, action) => {
