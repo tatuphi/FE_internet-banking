@@ -14,7 +14,8 @@ import { PlusOutlined, DeleteTwoTone } from "@ant-design/icons";
 import { deptActions } from "action/dept.action";
 import { connect } from "react-redux";
 import { transactionActions } from "action/transaction.action";
-import Item from "antd/lib/list/Item";
+
+
 // const ws = new WebSocket('ws://localhost:40510')
 
 const { TabPane } = Tabs;
@@ -28,8 +29,7 @@ class DeptReminder extends Component {
 
   constructor(props) {
     super(props);
-    const { listDept, listReminder } = this.props;
-    console.log('listReminder', listReminder);
+
     this.state = {
       visible: false,
       account: '',
@@ -43,7 +43,6 @@ class DeptReminder extends Component {
       isShow: true,
       isTransfer: false,
       isfistLoad: true,
-      issuccessModal: true,
       otp: ' ',
       check: '',
       showDeErr: true,
@@ -70,27 +69,7 @@ class DeptReminder extends Component {
       content: "",
     });
   };
-  isShowEdit = (idEvent, check) => {
-    const { listDept, listReminder } = this.props;
-    let dept = null;
-    if (check === 'REMINDER') {
-      dept = listReminder.find((ele) => ele._id === idEvent)
 
-    } else {
-      dept = listDept.find((ele) => ele._id === idEvent)
-
-    }
-    this.setState({
-      visible: true,
-      isLoadUpdate: true,
-      account: dept.bankAccountReceiver,
-      money: dept.amount,
-      content: dept.content,
-      check: check,
-
-
-    });
-  };
   handleOk = () => {
     const { requestDept, } = this.props;
     let { account, money, content } = this.state;
@@ -167,7 +146,6 @@ class DeptReminder extends Component {
     let content = "transfer Dept";
     let pay = true;
     requestReceiver(list.bankAccountSender, list.amount, content, pay);
-
     this.setState({
       isTransfer: true,
       isfistLoad: true,
@@ -196,6 +174,7 @@ class DeptReminder extends Component {
     let typeTransaction = "INDEPT";
     let content = "Transfer Dept ";
     let pay = true;
+    let nameBank = "MPBank"
     verifyOTP(
       listTranDept.bankAccountSender,
       listTranDept.amount,
@@ -203,25 +182,32 @@ class DeptReminder extends Component {
       pay,
       code,
       typeTransaction,
+      nameBank,
       listTranDept._id
-    );
-    editList = editList.length > 0 ? [...editList] : [...listReminder];
-    let send = editList.find((e) => e._id === listTranDept._id);
-    const index = editList.indexOf(send);
-    console.log("test", send);
-    send.status = "PAYED";
-    this.setState({
-      remList: [
-        ...editList.slice(0, index),
-        send,
-        ...editList.slice(index + 1, editList.length),
-      ],
-      issuccessModal: false,
-      isShow: false,
-      otp: "",
-      isUpdateRe: true,
-    });
+    ).then(res => {
+      editList = editList.length > 0 ? [...editList] : [...listReminder];
+      let send = editList.find((e) => e._id === listTranDept._id);
+      const index = editList.indexOf(send);
+      send.status = "PAYED";
+      this.setState({
+        remList: [
+          ...editList.slice(0, index),
+          send,
+          ...editList.slice(index + 1, editList.length),
+        ],
+        otp: "",
+        isUpdateRe: true,
+        isTransfer: false
+      })
+      message.success('This is a success message');
+
+    }).catch((err) => console.log(err))
+    this.setState({ isShow: false })
+
   };
+  onFocus = () => {
+    this.setState({ isShow: true })
+  }
 
   render() {
     const {
@@ -232,7 +218,6 @@ class DeptReminder extends Component {
       transactionUser,
       penTran,
       pendding2,
-      successModal,
       erMessage,
       showNextModal,
       listReminder,
@@ -240,7 +225,7 @@ class DeptReminder extends Component {
       errDelete,
       isDeleteSuccess,
     } = this.props;
-
+    console.log("action", listReminder)
     const {
       content,
       account,
@@ -254,8 +239,6 @@ class DeptReminder extends Component {
 
       showDeErr,
       showDeSuccess,
-
-      issuccessModal,
     } = this.state;
     // const isDisable = money && account && content.trim();
 
@@ -272,14 +255,12 @@ class DeptReminder extends Component {
               style={{
                 position: "absolute",
                 zIndex: "3000",
-                height: '150xp',
-                width: '100px',
+                height: '200xp',
+                width: '200px',
                 margin: "30%",
                 borderRadius: '50%'
               }}
-              src="https://res.cloudinary.com/eventinyourhand/image/upload/v1592392426/LoadingGif/mesmerizing_k5hjkp.gif?fbclid=IwAR2PyNM7ZajJamn-c3tItj8oYZTwzjLpVhvnXqjEgXvS45ZXzWrgDI9Mb4Y
-
-              "
+              src="/loading-website.gif"
               alt="logo"
             />
 
@@ -320,7 +301,7 @@ class DeptReminder extends Component {
                       <div div key={item._id} >
                         {
                           item._id === _id &&
-                          <Button type="primary" shape='round' onClick={() => this.transferStatus(item)}>{item.status}</Button>
+                          <Button type="primary" shape='round' style={{ width: '80px' }} onClick={() => this.transferStatus(item)}>{item.status}</Button>
 
                         }
                       </div>
@@ -361,7 +342,7 @@ class DeptReminder extends Component {
                     dataIndex="_id"
                     render={(_id) => (
                       <div>
-                        {/* <EditTwoTone onClick={() => this.isShowEdit(_id, 'REMIND')} /> */}
+
                         <DeleteTwoTone
                           onClick={() => this.isShowDelete(_id, "REMIND")}
                           className="ml-4"
@@ -441,11 +422,7 @@ class DeptReminder extends Component {
         </Modal>
         <Modal
           visible={this.state.isDelete}
-          // okText="yes"
-          // okType='danger'
-          // cancelText='No'
 
-          // confirmLoading={confirmLoading}
 
           onCancel={this.isCancel}
           footer={[]}
@@ -492,10 +469,12 @@ class DeptReminder extends Component {
               <Form style={{ fontWeight: "bold", fontSize: "13px" }}>
                 <div className="row">
                   <div className="col">Source account</div>
-                  <div className="col">
-                    {" "}
-                    {this.state.listTranDept.bankAccountReceiver}
-                  </div>
+                  {this.state.listTranDept.bankAccountReceiver &&
+                    <div className="col">
+
+                      {this.state.listTranDept.bankAccountReceiver}
+                    </div>
+                  }
                 </div>
                 <div className="row">
                   <div className="col">Account receiver:</div>
@@ -568,6 +547,7 @@ class DeptReminder extends Component {
                       className="btnSubmit"
                       htmlType="submit"
                       loading={penTran}
+                      onFocus={this.onFocus}
                       // disabled={!active}
                       type="primary"
                       onClick={this.handleSubmitMoney}
@@ -577,49 +557,13 @@ class DeptReminder extends Component {
                   </Form.Item>
                   <div>
                     <Button onClick={this.handleCancelTransfer}>cancel</Button>
-                    <Button onClick={this.showModal}>Back</Button>
                   </div>
                 </div>
               </Form>
             </div>
           </Modal>
         )}
-        {successModal && !issuccessModal && (
-          <Modal
-            visible={this.state.isModal}
-            // onOk={this.showSuccess}
-            onCancel={this.showSuccess}
-            width={300}
-            footer={[
-              <div>
-                {/* <Link to="/">
-                  <Button type='primary'>Back home</Button>
-                </Link> */}
-                <Button
-                  type="primary"
-                  className="ml-4"
-                  onClick={this.showSuccess}
-                >
-                  continue
-                </Button>
-              </div>,
-            ]}
-          >
-            <div
-              style={{ color: "white", height: "40px", background: "green" }}
-            >
-              This transaction is complete{" "}
-            </div>
-            {/* {
-              transferUser.type ? <div>
-                <h5>Do you want to save receiver information for next times? </h5>
-                <p>{saveInfoReceiver.msg}</p>
-            
-              </div>
-                : ' '
-            } */}
-          </Modal>
-        )}
+
       </div>
     );
   }
@@ -666,6 +610,7 @@ const mapDispatchToProps = (dispatch) => ({
     typeSend,
     otp,
     typeTransaction,
+    nameBank,
     idRemind
   ) =>
     dispatch(
@@ -676,6 +621,7 @@ const mapDispatchToProps = (dispatch) => ({
         typeSend,
         otp,
         typeTransaction,
+        nameBank,
         idRemind
       )
     ),

@@ -18,18 +18,18 @@ class LoginForm extends Component {
   }
   handleLogin = () => {
     console.log(this.state.verified)
-    // if (!this.state.verified) {
+    if (!this.state.verified) {
 
-    //   alert("you need verifed captcha")
-    // }
-    // else {
-    const { username, password } = this.state;
-    const { login } = this.props;
-    login(username, password);
-    this.setState({
-      isFirstLoad: false
-    })
-    // }
+      alert("you need verifed captcha")
+    }
+    else {
+      const { username, password } = this.state;
+      const { login } = this.props;
+      login(username, password);
+      this.setState({
+        isFirstLoad: false
+      })
+    }
   };
   onChange = (e) => {
     this.setState({
@@ -53,6 +53,7 @@ class LoginForm extends Component {
 
   render() {
 
+    const src = "/logo_transparent.png"
 
     const inputStyle = {
       height: "40px",
@@ -63,18 +64,12 @@ class LoginForm extends Component {
     const activeEmail = username && password.trim();
     console.log("errMessage", errMessage);
     return (
-      <div className=" mt-5 loginForm">
+      <div className=" mt-5  login ">
         <div
-          style={{
-            marginRight: "5%",
-            marginLeft: "5%",
-          }}
+          className="form"
         >
           <h1
-            style={{
-              textAlign: "center",
-              color: "blue",
-            }}
+            className="name"
           >
             Login
           </h1>
@@ -131,13 +126,14 @@ class LoginForm extends Component {
                 placeholder="Password"
               />
             </Form.Item>
+            {/* "6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn */}
 
             <ReCAPTCHA
-
-              sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn "
+              sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn"
+              // sitekey="6LfP964ZAAAAALLWBRE1XATl2QnwMdEMnQ1qtFbW"
               render="explicit"
 
-            // onChange={this.onChangeCapcha}
+              onChange={this.onChangeCapcha}
             />
             <Link className="mt-2"
               to="/forgetPassword">Forget Password</Link>
@@ -145,11 +141,14 @@ class LoginForm extends Component {
               <Button
                 style={{
                   width: "100%",
-                  background: "#F4D03F",
+
                   height: "40px",
                   borderRadius: "10px",
                   opacity: "1",
-                  marginTop: '10px'
+                  marginTop: '10px',
+                  color: 'white',
+                  fontWeight: 'bolder',
+                  backgroundColor: '#1890ff'
                 }}
                 type="primary"
                 loading={pendding}

@@ -40,21 +40,21 @@ class Header extends Component {
     console.log("numUnreadNotification", numUnreadNotification);
     const { logout } = this.props;
     return (
-      <div className="head">
-        <nav className="nav header ">
+      <div className=" head ">
+        <nav className=" nav header">
           <Link to="" className="nav-link active web-name ">
             Internet Banking
           </Link>
           <Link to="" className="nav-link active web-name1 mr-5">
             MPBank
           </Link>
-          <div className="nav-link ml-auto">
+          <div className="nav-link ml-auto user-nav ">
             {isAuth ? (
 
               < div className="d-flex">
                 {role === 'CUSTOMER' &&
                   < Popover title="Notifications"
-                    style={{ width: 1000 }}
+
                     content={<Notification type="button" />}
                     trigger="click"
                     visible={this.state.visible}
@@ -85,7 +85,7 @@ class Header extends Component {
 
             ) : (
                 <>
-                  <Link className="mr-4 login" to="/login">
+                  <Link className="mr-4 nameLogin " to="/login">
                     Đăng Nhập
             </Link>
                 </>

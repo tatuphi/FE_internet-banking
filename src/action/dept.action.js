@@ -43,11 +43,12 @@ const showDeptRemindUnPay = () => {
 
         API.get(`/transfer/showDeptRemindUnPay?ts=${ts}`, { headers: authHeader() })
             .then((res) => {
+                let stap = ts;
                 if (res.status === 200) {
                     ts = res.data.timeStap;
                     // conso le.log("iatw", res.data.timeStap);
 
-                    dispatch(success(res.data.result));
+                    dispatch(success(res.data.result, stap));
                     // dispatch(showDeptRemindUnPay())
                 }
             })
@@ -76,12 +77,13 @@ const showDeptRemindUnPay = () => {
             type: deptConstants.GET_REMIND_REQUEST,
         };
     }
-    function success(listReminder) {
+    function success(listReminder, stap) {
         //showDeptRemindUnPay();
-
+        console.log("timeTempt", stap)
         return {
             type: deptConstants.GET_REMIND_SUCCESS,
             listReminder,
+            stap
         };
     }
 
@@ -148,10 +150,11 @@ const getNumUnreadNotification = () => {
     return (dispatch) => {
         API.get(`/transfer/getBadgeNumber?ts=${ts}`, { headers: authHeader() })
             .then((res) => {
+                let temp = ts;
                 if (res.status === 200) {
                     ts = res.data.timeStap;
 
-                    dispatch(success(res.data.result));
+                    dispatch(success(res.data.result, temp));
 
                 }
             }).then(() => {
@@ -168,10 +171,11 @@ const getNumUnreadNotification = () => {
             });
     };
 
-    function success(numUnreadNotification) {
+    function success(numUnreadNotification, temp) {
         return {
             type: deptConstants.GET_UNREADNOTIFICATION,
             numUnreadNotification,
+            temp,
         };
     }
 };

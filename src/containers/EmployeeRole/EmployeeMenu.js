@@ -24,6 +24,7 @@ class EmployeeMenu extends Component {
             </Link>
           </Menu.Item>
         </Menu>
+        
       </div>
     );
   }

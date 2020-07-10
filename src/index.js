@@ -11,6 +11,8 @@ import rootReducer from "./reducers";
 import * as serviceWorker from "./serviceWorker";
 import "antd/dist/antd.css";
 
+import 'bootstrap/dist/css/bootstrap.css';
+
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(

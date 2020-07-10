@@ -126,36 +126,40 @@ const verifyOTP = (
   idRemind
 ) => {
   return (dispatch) => {
-    let headers = authHeader();
-    dispatch(request());
+    return new Promise((resolve, reject) => {
+      let headers = authHeader();
+      dispatch(request());
 
-    API.post(
-      `/transfer/verifyOTP`,
-      {
-        receiver,
-        amountMoney,
-        content,
-        typeSend,
-        code,
-        typeTransaction,
-        nameBank,
-        idRemind,
-      },
-      { headers: headers }
-    )
-      .then((res) => {
-        console.log("transaction : ", res.data.result);
-        dispatch(success(res.data.result));
-      })
-      .catch((error) => {
-        const { data } = error.response;
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
-      });
+      API.post(
+        `/transfer/verifyOTP`,
+        {
+          receiver,
+          amountMoney,
+          content,
+          typeSend,
+          code,
+          typeTransaction,
+          nameBank,
+          idRemind,
+        },
+        { headers: headers }
+      )
+        .then((res) => {
+          console.log("transaction : ", res.data.result);
+          dispatch(success(res.data.result));
+          resolve(res.data.result);
+        })
+        .catch((error) => {
+          const { data } = error.response;
+          if (data.error) {
+            return dispatch(
+              failure(data.error.message) || "OOPs! something wrong"
+            );
+          }
+          return dispatch(failure(error) || "OOPs! something wrong");
+          reject();
+        });
+    });
   };
 
   function request() {

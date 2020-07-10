@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { List, Avatar, Spin, Tooltip } from 'antd';
-import { CheckCircleTwoTone, DeleteOutlined } from '@ant-design/icons';
+import { List, Spin, } from 'antd';
+
 // import reqwest from 'reqwest';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { connect } from 'react-redux';
 import { deptActions } from 'action/dept.action';
+import history from "config/history.config";
+import { Link } from 'react-router-dom';
 
 
 const timeStyle = {
@@ -103,53 +105,59 @@ class Notification extends Component {
             setReadNotification(notificationId);
         }
     };
+    ontransaction = (id) => {
+        history.push("/deptRemind");
+    }
 
     renderNotification = (item) => {
 
         return (
             <List.Item key={item._id} type="button">
-                <div>
+                <div onClick={this.ontransaction}>
                     <div className="d-flex">
                         {item.isRead ? (
+
                             <div
-                                onClick={() =>
-                                    item.linkTo
-                                        ? window.location.replace(item.linkTo)
-                                        : window.location.replace('http://localhost:3000/deptRemind')
-                                }
+
                             >
+
+                                {this.getNameSender(item.type, item.users_sender.accountName)}
+
                             </div>
                         ) : (
                                 <h6
                                     onClick={() =>
                                         this.handleMarkAsRead(item._id)
-                                        // ? window.location.replace(item.linkTo.urlWeb)
-                                        // : window.location.replace('http://localhost:3000/deptRemind')
+
                                     }
                                 >
+
+                                    {this.getNameSender(item.type, item.users_sender.accountName)}
 
                                 </h6>
                             )}
                     </div>
+                    <div>
+                        <div className="row" onClick={() => this.handleMarkAsRead(item._id)}>
+                            <div className="col">
+                                <p style={timeStyle} className="ml-3">
+                                    {new Date(item.createAt).toLocaleString()}
+                                </p>
+                            </div>
 
-                    <div className="row" onClick={() => this.handleMarkAsRead(item._id)}>
-                        <div className="col">
-                            <p style={timeStyle} className="ml-3">
-                                {new Date(item.createAt).toLocaleString()}
-                            </p>
                         </div>
-                        <div className="col">
-                            <p>{item.users_sender.accountName}</p>
+                        <div className="row">
+                            <div className="col">
+                                <p>{item.contentNotification}</p>
+                            </div>
+                            <div className="col">
+                                <p>{item.amount} VND</p>
+                            </div>
+
                         </div>
+
                     </div>
-                    <div className="row">
-                        <div className="col">
-                            <p>{item.contentNotification}</p>
-                        </div>
-                        <div className="col">
-                            <p>{item.amount} VND</p>
-                        </div>
-                    </div>
+
                 </div>
             </List.Item>
         );

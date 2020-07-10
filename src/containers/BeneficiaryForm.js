@@ -199,6 +199,7 @@ class BeneficiaryForm extends Component {
           <Table dataSource={beneficiaries}
             pagination={{ pageSize: 10 }}
             scroll={{ y: 400, x: 500 }}
+
           >
             <Column title="Name Beneficiary " dataIndex="nameBeneficiary" key="nameBeneficiary" />
             <Column title="Reminder Name " dataIndex="nameRemind" key="nameRemind" />

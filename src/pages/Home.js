@@ -1,24 +1,27 @@
 import React, { Component } from "react";
-import { Row, Col } from "antd";
-import Header from "containers/Share/Header";
-import Footer from "containers/Share/Footer";
+
 import VerticalMenu from "containers/Share/VerticalMenu";
-import TransferOtherForm from "containers/TransferOtherForm";
+
 
 class Home extends Component {
   render() {
+    const isLogin = localStorage.getItem("isAuth");
     return (
-      <div style={{ backgroundColor: "#757272", height: '100%' }}>
-        <Header />
-        <div
-          className="container"
-          style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black", height: '100%' }}
-        >
+      <div >
 
-          <VerticalMenu />
+        <div className="commom"
+
+
+        >
+          {
+            isLogin ? <VerticalMenu />
+              : <div>
+                <img src='/instagram_profile_image.png' alt='lo' style={{ width: '100%', height: '100%' }} />
+              </div>
+          }
 
         </div>
-        <Footer />
+
       </div>
     );
   }

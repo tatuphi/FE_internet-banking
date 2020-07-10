@@ -22,21 +22,20 @@ class ForgetPassword extends Component {
       opacity: "0.8",
     };
     return (
-      <div style={back}>
+      <div className="login ">
+        <div className="row ">
+          <div className="col-sm-6 col-md-6 mt-5">
+            <Link to='/'>
+              <img src={src} alt="logo" style={{ width: '90%' }} />
 
-        <Link to='/login'>
-          <img
-            style={{ height: 250, width: 400 }}
-            src="/instagram_profile_image.png"
-            alt="logo"
-          />
-        </Link>
-
-        <div className="container" style={{ width: "50%" }}>
-          <RequestForm />
+            </Link>
+          </div>
+          <div className="col-sm-6 col-md-6 mt-5 formForgot" >
+            <RequestForm />
+          </div>
         </div>
-
       </div>
+
     );
   }
 }

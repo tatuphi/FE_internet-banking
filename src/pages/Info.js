@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Select, Collapse, Row, Col } from 'antd';
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
-import Header from "containers/Share/Header";
-import Footer from "containers/Share/Footer";
+
 import VerticalMenu from "containers/Share/VerticalMenu";
 const { Option } = Select;
 const { Panel } = Collapse;
@@ -41,11 +40,11 @@ class informationUser extends Component {
         return (
 
 
-            <div style={{ backgroundColor: "#757272" }} >
-                <Header />
+            <div className="commom">
+
                 <div
-                    className="container"
-                    style={{ backgroundColor: "white", boxShadow: "2px 5px 5px black" }}
+                    className="container background"
+
                 >
                     <Row>
                         <Col span={6}>
@@ -55,7 +54,7 @@ class informationUser extends Component {
                             <div className="outletMain">
                                 <div className=" formName">INFORMATION ACCOUNT</div>
                                 <hr></hr>
-                                <Collapse accordion className='mt-4'>
+                                <Collapse accordion className='mt-4' >
 
                                     {accountNumber.map(item =>
 
@@ -96,7 +95,7 @@ class informationUser extends Component {
 
 
 
-                <Footer />
+
             </div>
 
         );

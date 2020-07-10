@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import LoginForm from "containers/LoginForm";
 import { userActions } from "action/user.action";
+import { Link } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
@@ -13,25 +14,18 @@ class Login extends Component {
 
   render() {
 
-    const back = {
-      // background: `url(${src})`,
-      background: "black",
-      width: "100%",
-      height: "100%",
-      opacity: "0.8",
-    };
+    const src = "/logo_transparent.png"
 
     return (
-      <div style={back}>
-        <div className="row">
-          <div className="col col-6 col-md-6 ">
-            <img
-              style={{ height: 590, width: 700 }}
-              src="/instagram_profile_image.png"
-              alt="logo"
-            />
+      <div className="login ">
+        <div className="row  loginname">
+          <div className="col-sm-6 col-md-6 mt-5">
+            <Link to='/'>
+              <img src={src} alt="logo" style={{ width: '90%' }} />
+
+            </Link>
           </div>
-          <div className="col col-3 col-md-3 " style={{ marginTop: "5%" }}>
+          <div className="col-sm-6 col-md-6 mt-5 " >
             <LoginForm />
           </div>
         </div>

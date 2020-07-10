@@ -125,17 +125,17 @@ class TransferMoneyForm extends Component {
     let nameAccount = "";
 
     saveReceiverInformation(account, idBank, nameAccount, reminder)
-      // .then(res => {
-      //   listTemp = listTemp.length > 0 ? [...listTemp] : [...receiver]
-      //   let save = [...listTemp, { ...res.saveInfo }]
-      //   this.setState({
+    // .then(res => {
+    //   listTemp = listTemp.length > 0 ? [...listTemp] : [...receiver]
+    //   let save = [...listTemp, { ...res.saveInfo }]
+    //   this.setState({
 
-      //     receiverInfo: save,
-      //     listTemp: save,
-      //     isUpdate: true
-      //   })
-      // })
-      // .catch(() => console.log('err when save info'))
+    //     receiverInfo: save,
+    //     listTemp: save,
+    //     isUpdate: true
+    //   })
+    // })
+    // .catch(() => console.log('err when save info'))
     this.setState({
       isSave: false
 
@@ -547,12 +547,12 @@ class TransferMoneyForm extends Component {
             visible={this.state.isModal}
             onCancel={this.showSuccess}
             width={300}
-            bodyStyle={{ background: 'green', borderRadius: '5px' }}
+            bodyStyle={{ background: '#1e860e', borderRadius: '5px' }}
             footer={null}
           >
             <div >
               <h6 style={{ color: 'white', fontWeight: 'bolder' }} >This transaction is complete </h6>
-              <Button  type='primary' shape="round" onClick={this.showSuccess}>OK</Button>
+              <Button type='primary' shape="round" style={{ width: '100%', marginTop: '5%' }} onClick={this.showSuccess}>OK</Button>
             </div>
           </Modal>
         }

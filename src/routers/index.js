@@ -18,32 +18,22 @@ import ApplyMoney from "pages/Employee/ApplyMoney";
 import CustomerHistoryTransaction from "pages/Employee/CustomerHistoryTransaction";
 import ManageEmployee from "pages/Admin/ManageEmployee";
 import TransactionOtherBank from "pages/Admin/TransactionOtherBank";
+import Profile from "pages/Profile"
+import Header from "containers/Share/Header";
+import Footer from "containers/Share/Footer";
 class WrapRouter extends Component {
   componentDidMount() { }
   render() {
 
     const role = localStorage.getItem('role')
-    console.log(role)
-    const routes = [
-      {
-        path: "/",
-        exact: true,
-        main: () => <Homepage />,
-      },
+    const isAuth = localStorage.getItem('isAuth');
+
+
+    const noLayoutRoutes = [
       {
         path: "/login",
         exact: true,
         main: () => <Login />,
-      },
-      {
-        path: "/info",
-        exact: true,
-        main: () => <Info />,
-      },
-      {
-        path: "/employee/createAccount",
-        exact: true,
-        main: () => role === 'EMPLOYEE' ? <CreateBankAccount /> : <Redirect to='/' />
       },
       {
         path: "/forgetPassword",
@@ -51,19 +41,48 @@ class WrapRouter extends Component {
         main: () => <ForgetPassword />,
       },
       {
+        path: "",
+        exact: true,
+        main: () => <NotFound />,
+      },
+    ];
+    const routes = [
+      {
+        path: "/",
+        exact: true,
+        main: () => <Homepage />,
+      },
+
+      {
+        path: "/info",
+        exact: true,
+        main: () => isAuth ? <Info /> : <Redirect to='/login' />
+      },
+      {
+        path: "/profile",
+        exact: true,
+        main: () => isAuth ? <Profile /> : <Redirect to='/login' />,
+      },
+      {
+        path: "/employee/createAccount",
+        exact: true,
+        main: () => role === 'EMPLOYEE' ? <CreateBankAccount /> : <Redirect to='/' />
+      },
+
+      {
         path: "/changePassword",
         exact: true,
-        main: () => <ChangePassword />,
+        main: () => isAuth ? <ChangePassword /> : <Redirect to='/login' />,
       },
       {
         path: "/transferMoney",
         exact: true,
-        main: () => <TransferMoney />,
+        main: () => role === 'CUSTOMER' ? <TransferMoney /> : <Redirect to='/' />,
       },
       {
         path: "/transferOtherBank",
         exact: true,
-        main: () => <TransferOtherBank />,
+        main: () => role === 'CUSTOMER' ? <TransferOtherBank /> : <Redirect to='/' />,
       },
       {
         path: "/beneficiary",
@@ -73,12 +92,12 @@ class WrapRouter extends Component {
       {
         path: "/deptRemind",
         exact: true,
-        main: () => <DeptRemind />,
+        main: () => role === 'CUSTOMER' ? <DeptRemind /> : <Redirect to='/' />,
       },
       {
         path: "/historyPagement",
         exact: true,
-        main: () => <HistoryPayment />,
+        main: () => role === 'CUSTOMER' ? <HistoryPayment /> : <Redirect to='/' />,
       },
 
       {
@@ -95,30 +114,54 @@ class WrapRouter extends Component {
       {
         path: "/admin/getEmployee",
         exact: true,
-        main: () => <ManageEmployee />,
+        main: () => role === 'ADMIN' ? <ManageEmployee /> : <Redirect to='/' />,
       },
       {
         path: "/admin/transactionOtherBank",
         exact: true,
-        main: () => <TransactionOtherBank />,
+        main: () => role === 'ADMIN' ? < TransactionOtherBank /> : < Redirect to='/' />,
       },
-      {
-        path: "",
-        exact: true,
-        main: () => <NotFound />,
-      },
+
+
     ];
     return (
       <Router history={history}>
         <Switch>
           {routes.map((item, index) => (
+
             <Route
               key={index}
               path={item.path}
               exact={item.exact}
-              component={item.main}
-            />
+            >
+              <>
+                <div className="fixed-top">
+                  <Header />
+                </div>
+                <div className="mt-5">
+                  {item.main()}
+                </div>
+
+                <Footer />
+              </>
+            </Route>
+
           ))}
+          {
+            noLayoutRoutes.map((item, index) => <Route
+              key={index}
+              path={item.path}
+              exact={item.exact}
+            >
+
+              {item.main()}
+
+
+
+
+            </Route>)
+          }
+
         </Switch>
       </Router>
     );

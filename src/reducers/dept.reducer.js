@@ -18,7 +18,7 @@ const initialState = {
     listNotification: [],
     notiPageNumber: 0,
     numUnreadNotification: 0,
-   
+
 
 };
 const dept = (state = initialState, action) => {
@@ -56,12 +56,13 @@ const dept = (state = initialState, action) => {
             };
         case deptConstants.GET_REMIND_SUCCESS:
             // deptActions.showDeptRemindUnPay()
+            console.log("action.timeTempt", action.listReminder)
 
             return {
                 ...state,
                 pendRe: false,
                 errMessage: "",
-                listReminder: action.listReminder,
+                listReminder: action.stap === 0 ? [...action.listReminder] : [...state.listReminder, ...action.listReminder]
             };
 
 
@@ -148,9 +149,10 @@ const dept = (state = initialState, action) => {
                 isLoadedMore: action.listNotification.length === 10 ? true : false,
             };
         case deptConstants.GET_UNREADNOTIFICATION:
+            console.log("action.temp", action.temp)
             return {
                 ...state,
-                numUnreadNotification: action.numUnreadNotification,
+                numUnreadNotification: action.temp === 0 ? action.numUnreadNotification : action.numUnreadNotification + state.numUnreadNotification
             };
 
         case deptConstants.SET_READ_NOTIFICATION:
