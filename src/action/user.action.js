@@ -1,6 +1,7 @@
 import API from "config/axios.config";
 import { userConstant } from "constants/index";
 import history from "config/history.config";
+import handleCatch from "utils/middleWare"
 
 import authHeader from "../utils/auth-header";
 
@@ -18,18 +19,9 @@ const login = (username, password) => {
         history.push("/");
       })
       .catch((error) => {
-        // console.log("data.error", error.response);
-        // const { data } = error.response;
-
-        // if (data.error) {
-        //   console.log("data.error", error.response);
-        //   return dispatch(
-        //     failure(data.error.message) || "OOPs! something wrong"
-        //   );
-        // }
-        return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
-
+        handleCatch(dispatch, failure, error)
       });
+
   };
 
   function request() {
@@ -60,7 +52,9 @@ const getUserCurrent = () => {
         console.log(res.data.result);
         dispatch(success(res.data.result));
       })
-      .catch((err) => dispatch(failure(err)));
+      .catch((error) => {
+        handleCatch(dispatch, failure, error)
+      });
   };
 
   function request() {
@@ -102,7 +96,9 @@ const getAccountNumber = (typeAccount) => {
         console.log("typeAccount : ", res.data.result);
         dispatch(success(res.data.result));
       })
-      .catch((err) => dispatch(failure(err)));
+      .catch((error) => {
+        handleCatch(dispatch, failure, error)
+      });
   };
 
   function request() {
@@ -141,13 +137,7 @@ const requestForgotPassword = (username, email) => {
           dispatch(success());
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error)
         });
     }
   };
@@ -184,13 +174,7 @@ const forgotPassword = (email, username, otp, newPassword) => {
           history.push("/login");
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error)
         });
     }
   };
@@ -213,7 +197,9 @@ const getBeneficiary = () => {
         console.log(res.data.result);
         dispatch(success(res.data.result));
       })
-      .catch((err) => dispatch(failure(err)));
+      .catch((error) => {
+        handleCatch(dispatch, failure, error)
+      });
   };
 
   function request() {
@@ -254,13 +240,7 @@ const updatePassword = (oldPassword, newPassword) => {
           dispatch(success());
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            console.log("data.error", error.response);
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
+          handleCatch(dispatch, failure, error)
         });
     }
   };

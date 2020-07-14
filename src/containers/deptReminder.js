@@ -469,7 +469,7 @@ class DeptReminder extends Component {
               <Form style={{ fontWeight: "bold", fontSize: "13px" }}>
                 <div className="row">
                   <div className="col">Source account</div>
-                  {this.state.listTranDept.bankAccountReceiver &&
+                  {this.state.listTranDept &&
                     <div className="col">
 
                       {this.state.listTranDept.bankAccountReceiver}

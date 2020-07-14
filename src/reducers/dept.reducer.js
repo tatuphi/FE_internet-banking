@@ -158,6 +158,7 @@ const dept = (state = initialState, action) => {
         case deptConstants.SET_READ_NOTIFICATION:
             return {
                 ...state,
+                numUnreadNotification: state.numUnreadNotification - 1
             };
 
         case deptConstants.DELETE_NOTIFICATION:

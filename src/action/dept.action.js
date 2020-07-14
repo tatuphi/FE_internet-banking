@@ -2,6 +2,7 @@ import API from "config/axios.config";
 import { deptConstants } from "constants/index";
 import history from "config/history.config";
 import authHeader from "../utils/auth-header";
+import handleCatch from "../utils/middleWare"
 
 const showDeptRemind = () => {
     return (dispatch) => {
@@ -12,7 +13,7 @@ const showDeptRemind = () => {
                 console.log(res.data.result);
                 dispatch(success(res.data.result));
             })
-            .catch((err) => dispatch(failure(err)));
+            .catch((error) => handleCatch(dispatch, failure, error));
     };
 
     function request() {
@@ -59,11 +60,11 @@ const showDeptRemindUnPay = () => {
                 }, 15000);
 
             })
-            .catch((err) => {
+            .catch((error) => {
                 // console.log("hjdhdhd555");
                 // showDeptRemindUnPay();
 
-                dispatch(failure(err))
+                handleCatch(dispatch, failure, error)
 
                 setTimeout(() => {
                     dispatch(showDeptRemindUnPay())
@@ -121,7 +122,7 @@ const getListNotification = (pageNumber, numberRecord) => {
                 console.log(2);
 
             })
-            .catch((err) => dispatch(failure(err)));
+            .catch((error) => handleCatch(dispatch, failure, error));
     };
 
     function request() {
@@ -165,6 +166,7 @@ const getNumUnreadNotification = () => {
 
             })
             .catch((err) => {
+
                 setTimeout(() => {
                     dispatch(getNumUnreadNotification())
                 }, 15000);
@@ -204,16 +206,17 @@ const requestDept = (numberAccount, amountMoney, content) => {
                     resolve(res.data.result)
                 })
                 .catch((error) => {
-                    const { data } = error.response;
-                    console.log('1', data.error.message);
-                    if (data.error) {
-                        return dispatch(
+                    handleCatch(dispatch, failure, error);
+                    // const { data } = error.response;
+                    // console.log('1', data.error.message);
+                    // if (data.error) {
+                    //     return dispatch(
 
-                            failure(data.error.message) || "OOPs! something wrong"
-                        );
-                    }
+                    //         failure(data.error.message) || "OOPs! something wrong"
+                    //     );
+                    // }
                     reject()
-                    return dispatch(failure(error) || "OOPs! something wrong");
+
                 });
 
         });
@@ -252,16 +255,9 @@ const deleteReminder = (reminderId, content) => {
                     resolve(res.data.result)
                 })
                 .catch((error) => {
-                    const { data } = error.response;
-                    console.log('1', data.error.message);
-                    if (data.error) {
-                        return dispatch(
 
-                            failure(data.error.message) || "OOPs! something wrong"
-                        );
-                    }
                     reject()
-                    return dispatch(failure(error) || "OOPs! something wrong");
+                    handleCatch(dispatch, failure, error);
                 });
 
         });
@@ -302,16 +298,9 @@ const updateReminder = (sentData) => {
                     resolve(res.data.result)
                 })
                 .catch((error) => {
-                    const { data } = error.response;
-                    console.log('1', data.error.message);
-                    if (data.error) {
-                        return dispatch(
-
-                            failure(data.error.message) || "OOPs! something wrong"
-                        );
-                    }
+                    handleCatch(dispatch, failure, error);
                     reject()
-                    return dispatch(failure(error) || "OOPs! something wrong");
+
                 });
 
         });

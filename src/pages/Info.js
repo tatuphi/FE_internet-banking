@@ -54,37 +54,41 @@ class informationUser extends Component {
                             <div className="outletMain">
                                 <div className=" formName">INFORMATION ACCOUNT</div>
                                 <hr></hr>
-                                <Collapse accordion className='mt-4' >
+                                {accountNumber &&
 
-                                    {accountNumber.map(item =>
+                                    <Collapse accordion className='mt-4' >
 
-                                        <Panel header={`Information Account ${item.typeAccount}`} key={item._key}>
-                                            <div>
-                                                <div className="d-flex mt-1">
-                                                    <p>Account Number :</p>
-                                                    <p>{item.accountNumber}</p>
+                                        {accountNumber.map(item =>
+
+                                            <Panel header={`Information Account ${item.typeAccount}`} key={item._key}>
+                                                <div>
+                                                    <div className="d-flex mt-1">
+                                                        <p>Account Number :</p>
+                                                        <p>{item.accountNumber}</p>
+                                                    </div>
+                                                    <div className="d-flex mt-1">
+                                                        <p>Balance Current:</p>
+                                                        <p>{item.currentBalance} VND</p>
+
+                                                    </div>
+                                                    <div className="d-flex mt-1">
+                                                        <p>Type Account:</p>
+                                                        <p>{item.typeAccount} </p>
+
+                                                    </div>
                                                 </div>
-                                                <div className="d-flex mt-1">
-                                                    <p>Balance Current:</p>
-                                                    <p>{item.currentBalance} VND</p>
+                                            </Panel>
 
-                                                </div>
-                                                <div className="d-flex mt-1">
-                                                    <p>Type Account:</p>
-                                                    <p>{item.typeAccount} </p>
-
-                                                </div>
-                                            </div>
-                                        </Panel>
-
-                                    )}
+                                        )}
 
 
 
 
 
-                                </Collapse>,
-                            <div >
+                                    </Collapse>
+                                }
+
+                                <div >
                                 </div>
                             </div>
 

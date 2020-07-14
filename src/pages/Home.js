@@ -16,7 +16,7 @@ class Home extends Component {
           {
             isLogin ? <VerticalMenu />
               : <div>
-                <img src='/instagram_profile_image.png' alt='lo' style={{ width: '100%', height: '100%' }} />
+
               </div>
           }
 

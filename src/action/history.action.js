@@ -2,6 +2,7 @@ import API from "config/axios.config";
 import { historyConstants } from "constants/index";
 import history from "config/history.config";
 import authHeader from "../utils/auth-header";
+import handleCatch from "../utils/middleWare"
 
 const transactionHistory = (sentData) => {
     return (dispatch) => {
@@ -15,16 +16,7 @@ const transactionHistory = (sentData) => {
                 // resolve(res.data.result)
             })
             .catch((error) => {
-                const { data } = error.response;
-                console.log('1', data.error.message);
-                if (data.error) {
-                    return dispatch(
-
-                        failure(data.error.message) || "OOPs! something wrong"
-                    );
-                }
-                // reject()
-                return dispatch(failure(error) || "OOPs! something wrong");
+                handleCatch(dispatch, failure, error);
             });
 
         // });

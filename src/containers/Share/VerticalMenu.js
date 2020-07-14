@@ -39,7 +39,7 @@ class VerticalMenu extends Component {
             role === "CUSTOMER" && <div >
               <Menu
 
-
+                // style={{ width: '30%', fontSize: '20px' }}
 
                 theme='dark'
 

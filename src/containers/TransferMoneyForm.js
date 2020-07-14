@@ -25,8 +25,8 @@ class TransferMoneyForm extends Component {
       pay: true,
       visible: false,
       otp: ' ',
-      accNumber: accountNumber.length > 0 ? accountNumber[0].accountNumber : '',
-      accBalance: accountNumber.length > 0 ? accountNumber[0].currentBalance : '',
+      accNumber: accountNumber && accountNumber.length > 0 ? accountNumber[0].accountNumber : '',
+      accBalance: accountNumber && accountNumber.length > 0 ? accountNumber[0].currentBalance : '',
       isShow: true,
       isfistLoad: true,
       issuccessModal: true,
@@ -53,7 +53,7 @@ class TransferMoneyForm extends Component {
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.accountNumber.length !== 0 && !prevState.accNumber) {
+    if (this.props.accountNumber && this.props.accountNumber.length !== 0 && !prevState.accNumber) {
       this.setState({
         accBalance: this.props.accountNumber[0].currentBalance,
         accNumber: this.props.accountNumber[0].accountNumber,

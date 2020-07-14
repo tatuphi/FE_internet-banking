@@ -1,5 +1,6 @@
 import API from "config/axios.config";
 import { transactionConstants } from "constants/index";
+import handleCatch from "../utils/middleWare"
 
 import authHeader from "../utils/auth-header";
 
@@ -13,7 +14,9 @@ const receiverTransfer = (dataSent) => {
       .then((res) => {
         dispatch(success(res.data.result));
       })
-      .catch((err) => dispatch(failure(err)));
+      .catch((error) => {
+        handleCatch(dispatch, failure, error)
+      });
   };
 
   function request() {
@@ -48,7 +51,9 @@ const receiverInformation = (idReceiver) => {
         console.log("typeAccount : ", res.data.result);
         dispatch(success(res.data.result));
       })
-      .catch((err) => dispatch(failure(err)));
+      .catch((error) => {
+        handleCatch(dispatch, failure, error)
+      });
   };
 
   function request() {
@@ -86,13 +91,7 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        const { data } = error.response;
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error)
       });
   };
 
@@ -150,13 +149,7 @@ const verifyOTP = (
           resolve(res.data.result);
         })
         .catch((error) => {
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error)
           reject();
         });
     });
@@ -202,14 +195,7 @@ const saveReceiverInformation = (
           resolve(res.data.result);
         })
         .catch((error) => {
-          console.log(error);
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error)
           reject();
         });
     });
@@ -257,14 +243,7 @@ const editReceiverInformation = (
           resolve(res.data.result);
         })
         .catch((error) => {
-          console.log(error);
-          const { data } = error.response;
-          if (data.error) {
-            return dispatch(
-              failure(data.error.message) || "OOPs! something wrong"
-            );
-          }
-          return dispatch(failure(error) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error)
           reject();
         });
     });
@@ -301,13 +280,7 @@ const deleteReceiver = (receiverId) => {
       })
       .catch((error) => {
         console.log(error);
-        const { data } = error.response;
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error)
       });
   };
 
@@ -353,14 +326,7 @@ const linkBankAccount = (
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        const { data } = error.response;
-        console.log("1", data.error.message);
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error)
       });
   };
 
@@ -405,14 +371,7 @@ const verifyOTPLinkBank = (
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        const { data } = error.response;
-        console.log("1", data.error.message);
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error)
       });
   };
 
@@ -446,14 +405,7 @@ const getLinkBank = () => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        const { data } = error.response;
-        console.log("1", data.error.message);
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error)
       });
   };
 
