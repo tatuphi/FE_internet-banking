@@ -305,7 +305,8 @@ class TransferOtherForm extends Component {
             >
               {
                 getBank.map(item =>
-                  <Option key={item._id} value={item.nameBank}>{item.nameBank}</Option>
+                  item._id !== '5ee353c900cceb8a5001c7cf' &&
+                  <Option key={item._id} value={item.nameBank} > {item.nameBank}</Option>
                 )
               }
 
