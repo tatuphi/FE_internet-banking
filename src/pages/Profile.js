@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Form, Input, InputNumber, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col } from 'antd';
 import { userActions } from "action/user.action";
-import { Link } from "react-router-dom";
+
 
 import VerticalMenu from "containers/Share/VerticalMenu";
 

@@ -36,7 +36,7 @@ class Header extends Component {
     const fullName = localStorage.getItem('user');
     const role = localStorage.getItem('role');
     const { numUnreadNotification } = this.props;
-    const { visible, open } = this.state;
+    const { open } = this.state;
     console.log("numUnreadNotification", numUnreadNotification);
     const { logout } = this.props;
     return (

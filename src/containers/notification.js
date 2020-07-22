@@ -8,7 +8,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { connect } from 'react-redux';
 import { deptActions } from 'action/dept.action';
 import history from "config/history.config";
-import { Link } from 'react-router-dom';
+
 
 
 const timeStyle = {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Form, Input, Select, Button, DatePicker, Alert } from "antd";
+import { Form, Input, Button, DatePicker, Alert } from "antd";
 import { employeeActions } from "action/employee.action";
 import { connect } from "react-redux";
 
-const { Option } = Select;
+
 
 class CreateAccountForm extends Component {
   constructor(props) {

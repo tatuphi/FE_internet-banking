@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import {
   PlusOutlined, DeleteTwoTone, EditTwoTone
 } from '@ant-design/icons';
-import { userActions } from "action/user.action";
+
 import { transactionActions } from "action/transaction.action";
-import { transactionConstants } from "constants";
+
 const { Column, } = Table;
 
 const { Option } = Select;
@@ -291,7 +291,7 @@ class BeneficiaryForm extends Component {
             footer={[
             ]}
           >
-            <div className="outletMain">
+            <div>
               <div className=" formName">DELETE REMINDER</div>
               <Form className="myForm" {...layout} form={this.form} >
                 {

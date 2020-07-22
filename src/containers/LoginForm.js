@@ -53,7 +53,7 @@ class LoginForm extends Component {
 
   render() {
 
-    const src = "/logo_transparent.png"
+
 
     const inputStyle = {
       height: "40px",

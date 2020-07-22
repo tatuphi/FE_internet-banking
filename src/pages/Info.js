@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Select, Collapse, Row, Col } from 'antd';
+import { Collapse, Row, Col } from 'antd';
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 
 import VerticalMenu from "containers/Share/VerticalMenu";
-const { Option } = Select;
+
 const { Panel } = Collapse;
 
 class informationUser extends Component {
@@ -34,7 +34,7 @@ class informationUser extends Component {
     }
 
     render() {
-        const { accountNumber, pendding, userInfo } = this.props;
+        const { accountNumber, userInfo } = this.props;
         console.log('tl', userInfo)
         console.log("mo:", accountNumber)
         return (

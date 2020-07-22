@@ -1,6 +1,5 @@
 import API from "config/axios.config";
 import { deptConstants } from "constants/index";
-import history from "config/history.config";
 import authHeader from "../utils/auth-header";
 import handleCatch from "../utils/middleWare"
 

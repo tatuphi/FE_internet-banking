@@ -366,7 +366,7 @@ class DeptReminder extends Component {
           footer={[]}
         >
           {" "}
-          <div className="outletMain">
+          <div >
             <div className=" formName">ADD REMINDER</div>
             <Form className="myForm" {...layout} form={this.form}>
               {errMessage && !isFistLoad && (
@@ -427,7 +427,7 @@ class DeptReminder extends Component {
           onCancel={this.isCancel}
           footer={[]}
         >
-          <div className="outletMain">
+          <div>
             <div className=" formName">DELETE REMINDER</div>
             <Form className="myForm" {...layout} form={this.form}>
               {errDelete && !showDeErr && (
@@ -463,7 +463,7 @@ class DeptReminder extends Component {
             onCancel={this.handleCancelTransfer}
             footer={null}
           >
-            <div className="outletMain">
+            <div>
               <div className=" formName">TRANSACTION INFORMATION</div>
 
               <Form style={{ fontWeight: "bold", fontSize: "13px" }}>

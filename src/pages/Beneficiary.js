@@ -11,14 +11,14 @@ class Beneficiary extends Component {
           className="container"
 
         >
-          <Row>
-            <Col span={6}>
-              <VerticalMenu />
-            </Col>
-            <Col span={18}>
-              <BeneficiaryForm />
-            </Col>
-          </Row>
+            <Row>
+              <Col span={6}>
+                <VerticalMenu />
+              </Col>
+              <Col span={18}>
+                <BeneficiaryForm />
+              </Col>
+            </Row>
         </div>
 
       </div>

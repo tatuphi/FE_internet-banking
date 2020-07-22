@@ -166,11 +166,11 @@ class TransactionOtherBankForm extends Component {
 
               <Column
                 title="Date"
-                dataIndex="timeOTP"
-                key="timeOTP"
-                render={(timeOTP) => (
+                dataIndex="createAt"
+                key="createAt"
+                render={(createAt) => (
                   <div>
-                    <p>{moment(timeOTP).format("DD/MM/YYYY ")}</p>
+                    <p>{moment(createAt).format("DD/MM/YYYY ")}</p>
                   </div>
                 )}
               />

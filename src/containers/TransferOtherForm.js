@@ -160,7 +160,6 @@ class TransferOtherForm extends Component {
       otp: ' ',
       content: '',
       visible: false,
-      isModal: false,
       isShow: true,
       isfistLoad: true,
       issuccessModal: true,
@@ -379,7 +378,7 @@ class TransferOtherForm extends Component {
 
             ]}
           >
-            <div className="outletMain">
+            <div >
               <div className=" formName">TRANSACTION INFORMATION</div>
 
               <Form.Item style={{ textAlign: "center", fontWeight: "bold", color: 'red' }}>
@@ -488,6 +487,7 @@ class TransferOtherForm extends Component {
             bodyStyle={{ background: 'green' }}
             width={300}
             footer={[
+
               <div>
 
                 <Button type='primary' style={{ width: '100%' }} onClick={this.showSuccess}>OK</Button>

@@ -17,7 +17,7 @@ import MenuItem from "antd/lib/menu/MenuItem";
 import { connect } from "react-redux";
 import EmployeeMenu from "containers/EmployeeRole/EmployeeMenu";
 import AdminMenu from "containers/AdminRole/AdminMenu"
-const { SubMenu } = Menu;
+
 class VerticalMenu extends Component {
   state = {
     collapsed: false,
@@ -37,6 +37,7 @@ class VerticalMenu extends Component {
         {isLogin ?
           <div>{
             role === "CUSTOMER" && <div >
+
               <Menu
 
                 // style={{ width: '30%', fontSize: '20px' }}
@@ -77,13 +78,17 @@ class VerticalMenu extends Component {
                 <Menu.Item icon={<InfoCircleOutlined />} key="14">
                   <Link to="/profile">
                     Profile
-                    </Link>
+    </Link>
                 </Menu.Item>
 
                 <Menu.Item key="15" icon={<LogoutOutlined />}>
                   <Link onClick={logout}>Logout</Link>
                 </Menu.Item>
               </Menu>
+
+
+
+
 
             </div>
           }

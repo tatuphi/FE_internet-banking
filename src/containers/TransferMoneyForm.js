@@ -3,7 +3,7 @@ import { Form, Input, Select, Checkbox, Button, Modal, Alert, } from "antd";
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 import { transactionActions } from "action/transaction.action";
-import { Link } from "react-router-dom";
+
 
 const { Option } = Select;
 const layout = {
@@ -118,24 +118,14 @@ class TransferMoneyForm extends Component {
   }
   handleSaveBen = () => {
     const { account, reminder } = this.state
-    const { saveReceiverInformation, receiver } = this.props;
-    let { listTemp } = this.state;
+    const { saveReceiverInformation } = this.props;
+
 
     let idBank = "5ee353c900cceb8a5001c7cf";
     let nameAccount = "";
 
     saveReceiverInformation(account, idBank, nameAccount, reminder)
-    // .then(res => {
-    //   listTemp = listTemp.length > 0 ? [...listTemp] : [...receiver]
-    //   let save = [...listTemp, { ...res.saveInfo }]
-    //   this.setState({
 
-    //     receiverInfo: save,
-    //     listTemp: save,
-    //     isUpdate: true
-    //   })
-    // })
-    // .catch(() => console.log('err when save info'))
     this.setState({
       isSave: false
 
@@ -207,7 +197,6 @@ class TransferMoneyForm extends Component {
       otp: ' ',
       content: '',
       visible: false,
-      isModal: false,
       isShow: true,
       isfistLoad: true,
       issuccessModal: true,
@@ -253,7 +242,7 @@ class TransferMoneyForm extends Component {
     const { penTran, transactionUser, showNextModal, receiver, errsave,
       errMessage, pendding2, errMess, successModal, pend } = this.props;
     const { account, amount, content, otp, accBalance,
-      isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder, isUpdate } = this.state
+      isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder } = this.state
 
     const activeEmail = account && amount.trim();
     // let { receiverInfo } = this.state;
@@ -443,7 +432,7 @@ class TransferMoneyForm extends Component {
 
             ]}
           >
-            <div className="outletMain">
+            <div >
               <div className=" formName">TRANSACTION INFORMATION</div>
 
               <Form.Item style={{ textAlign: "center", fontWeight: "bold", color: 'red' }}>

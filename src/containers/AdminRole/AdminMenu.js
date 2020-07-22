@@ -20,6 +20,9 @@ class AdminMenu extends Component {
             </Link>
           </Menu.Item>
         </Menu>
+        <div>
+          <img src='/wellcome.png' alt='logo' />
+        </div>
       </div>
     );
   }
