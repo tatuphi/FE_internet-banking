@@ -1,16 +1,14 @@
 import React, { Component } from "react";
-import { Form, Input, Select, Checkbox, Button, Modal, Alert, } from "antd";
+import { Form, Input, Select, Checkbox, Button, Modal, Alert } from "antd";
 import { connect } from "react-redux";
 import { userActions } from "action/user.action";
 import { transactionActions } from "action/transaction.action";
-
 
 const { Option } = Select;
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 16 },
 };
-
 
 class TransferMoneyForm extends Component {
   formRef = React.createRef();
@@ -24,9 +22,15 @@ class TransferMoneyForm extends Component {
       content: " ",
       pay: true,
       visible: false,
-      otp: ' ',
-      accNumber: accountNumber && accountNumber.length > 0 ? accountNumber[0].accountNumber : '',
-      accBalance: accountNumber && accountNumber.length > 0 ? accountNumber[0].currentBalance : '',
+      otp: " ",
+      accNumber:
+        accountNumber && accountNumber.length > 0
+          ? accountNumber[0].accountNumber
+          : "",
+      accBalance:
+        accountNumber && accountNumber.length > 0
+          ? accountNumber[0].currentBalance
+          : "",
       isShow: true,
       isfistLoad: true,
       issuccessModal: true,
@@ -36,12 +40,12 @@ class TransferMoneyForm extends Component {
       reminder: "",
       ischeck: false,
       isSave: true,
-      listTemp: []
+      listTemp: [],
     };
   }
   componentDidMount = () => {
     const { getAccountNumber, receiverTransfer } = this.props;
-    let type = 'Credit'
+    let type = "Credit";
     let sentData = {};
     let a = "mpbank";
     let idBank = "5ee353c900cceb8a5001c7cf";
@@ -49,121 +53,104 @@ class TransferMoneyForm extends Component {
     sentData.idBank = idBank;
     getAccountNumber(type);
     receiverTransfer(sentData);
-
-  }
+  };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.accountNumber && this.props.accountNumber.length !== 0 && !prevState.accNumber) {
+    if (
+      this.props.accountNumber &&
+      this.props.accountNumber.length !== 0 &&
+      !prevState.accNumber
+    ) {
       this.setState({
         accBalance: this.props.accountNumber[0].currentBalance,
         accNumber: this.props.accountNumber[0].accountNumber,
-      })
+      });
     }
 
-    if (this.props.transferUser.userSender && this.props.transferUser.userSender.currentBalance !== prevState.accBalance) {
+    if (
+      this.props.transferUser.userSender &&
+      this.props.transferUser.userSender.currentBalance !== prevState.accBalance
+    ) {
       this.setState({
-        accBalance: this.props.transferUser.userSender.currentBalance
-      })
+        accBalance: this.props.transferUser.userSender.currentBalance,
+      });
     }
+  };
 
-  }
-
-
-
-
-  onGenderChange = value => {
+  onGenderChange = (value) => {
     // this.formRef.current.setFieldsValue({
     //   account: value,
     // });
 
-    console.log('change value ', value)
-    this.setState({ account: value })
+    console.log("change value ", value);
+    this.setState({ account: value });
   };
   onChangeAcount = (value) => {
     this.setState({
-      account: value
-    })
-
-
-  }
+      account: value,
+    });
+  };
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    ;
-
   };
-  onChangePayer = value => {
+  onChangePayer = (value) => {
     let check = null;
     if (value === "true") {
       check = true;
-    }
-    else {
-      check = false
+    } else {
+      check = false;
     }
     this.setState({
       pay: check,
-    })
+    });
     console.log(this.state.pay);
-  }
+  };
   handleSubmit = () => {
-    const { account, amount, content, pay, } = this.state
-    const { requestReceiver, } = this.props;
-    requestReceiver(account, amount, content, pay)
+    const { account, amount, content, pay } = this.state;
+    const { requestReceiver } = this.props;
+    requestReceiver(account, amount, content, pay);
     this.setState({
       visible: true,
-      isfistLoad: false
+      isfistLoad: false,
     });
-
-  }
+  };
   handleSaveBen = () => {
-    const { account, reminder } = this.state
+    const { account, reminder } = this.state;
     const { saveReceiverInformation } = this.props;
-
 
     let idBank = "5ee353c900cceb8a5001c7cf";
     let nameAccount = "";
 
-    saveReceiverInformation(account, idBank, nameAccount, reminder)
+    saveReceiverInformation(account, idBank, nameAccount, reminder);
 
     this.setState({
-      isSave: false
-
-    })
-
-
-
-
-  }
+      isSave: false,
+    });
+  };
   onFocusSave = () => {
-    this.setState({ isSave: true })
-  }
+    this.setState({ isSave: true });
+  };
   handleSubmitMoney = () => {
-    const { account, amount, content, pay, otp } = this.state
+    const { account, amount, content, pay, otp } = this.state;
     const { verifyOTP } = this.props;
     let code = otp.trim();
-    let typeTransaction = 'TRANSFER';
+    let typeTransaction = "TRANSFER";
     let nameBank = "MPBank";
-    verifyOTP(account, amount, content, pay, code, typeTransaction, nameBank)
+    verifyOTP(account, amount, content, pay, code, typeTransaction, nameBank);
     this.setState({
       issuccessModal: false,
       isModal: true,
-      isShow: false
+      isShow: false,
     });
-
-
-
-  }
+  };
   showModal = () => {
     this.setState({
       visible: false,
-
-
-
     });
-
   };
-  handleOk = e => {
+  handleOk = (e) => {
     console.log(e);
     this.setState({
       account: "",
@@ -171,78 +158,89 @@ class TransferMoneyForm extends Component {
       content: " ",
       pay: false,
       visible: false,
-      otp: ' ',
-
+      otp: " ",
     });
-
   };
 
-  handleCancel = e => {
+  handleCancel = (e) => {
     console.log(e);
     this.setState({
       visible: false,
-      amount: ' ',
-      content: ' ',
-      otp: ' ',
-      account: ' ',
-
-
+      amount: " ",
+      content: " ",
+      otp: " ",
+      account: " ",
     });
   };
   showSuccess = () => {
     this.setState({
       isModal: false,
       amount: " ",
-      account: ' ',
-      otp: ' ',
-      content: '',
+      account: " ",
+      otp: " ",
+      content: "",
       visible: false,
       isShow: true,
       isfistLoad: true,
       issuccessModal: true,
       accnameReceiver: " ",
-
-
     });
-  }
+  };
   onFocus = () => {
-
     this.setState({
-      isShow: true
-    })
-  }
+      isShow: true,
+    });
+  };
   handleSaveInfo = () => {
     let { ischeck } = this.state;
-    this.setState({ ischeck: !ischeck })
-
-  }
+    this.setState({ ischeck: !ischeck });
+  };
   totalMoney = (amount, type) => {
     let m = null;
     if (type === true) {
       m = +amount + 2200;
-    }
-    else {
+    } else {
       m = +amount;
     }
 
     return `${m} VND`;
-
-  }
+  };
   onFocusAccount = () => {
     this.setState({
-      isfistLoad: true
-    })
-  }
+      isfistLoad: true,
+    });
+  };
 
   onChangeName = (e) => {
     this.setState({ reminder: e.target.value });
-  }
+  };
 
   render() {
-    const { penTran, transactionUser, showNextModal, receiver, errsave,
-      errMessage, pendding2, errMess, successModal, pend } = this.props;
-    const { account, amount, content, otp, accBalance,
-      isSave, accNumber, isfistLoad, isShow, issuccessModal, reminder } = this.state
+    const {
+      penTran,
+      transactionUser,
+      showNextModal,
+      receiver,
+      errsave,
+      errMessage,
+      pendding2,
+      errMess,
+      successModal,
+      pend,
+    } = this.props;
+    const {
+      account,
+      amount,
+      content,
+      otp,
+      accBalance,
+      isSave,
+      accNumber,
+      isfistLoad,
+      isShow,
+      issuccessModal,
+      reminder,
+    } = this.state;
 
     const activeEmail = account && amount.trim();
     // let { receiverInfo } = this.state;
@@ -263,8 +261,7 @@ class TransferMoneyForm extends Component {
         <hr />
 
         <Form className="myForm" {...layout} form={this.form}>
-
-          <Form.Item label="Source account" name="username">
+          <Form.Item label="Source Account" name="username">
             <p className="resText mt-2">{accNumber}</p>
           </Form.Item>
           <Form.Item
@@ -272,60 +269,42 @@ class TransferMoneyForm extends Component {
             label="Current Balance"
             name="currentBalance"
           >
-
-            <span className="resText" > {accBalance}  VNĐ</span>
-
+            <span className="resText"> {accBalance} VNĐ</span>
           </Form.Item>
         </Form>
-
 
         <div className="titlePart">TRANSFER INFORMATION</div>
         <hr />
 
-        <Form {...layout} name="control-ref" className="myForm"
-
-
-        >
+        <Form {...layout} name="control-ref" className="myForm">
           <div className="titlePart">BENEFICIARY INFORMATION</div>
           <hr />
           {errMessage && !isfistLoad && (
             <Alert message={errMessage} type="error" />
-
           )}
 
-          <Form.Item className=" mt-3"
-            name="Receiver"
-            label="Receiver"
-          >
+          <Form.Item className=" mt-3" name="Receiver" label="Receiver">
             <Select
               placeholder="List Beneficiary"
               onChange={this.onGenderChange}
-
               showSearch
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-
-
             >
-              {receiver.map((item, index) =>
+              {receiver.map((item, index) => (
                 <Option key={index} value={item.numberAccount}>
                   <div className="row">
                     <div className="col">{item.nameRemind}</div>
                     <div className="col">{item.nameBeneficiary}</div>
-
                   </div>
                 </Option>
-              )}
-
-
+              ))}
             </Select>
           </Form.Item>
 
-
-
           <Form.Item
-            label="accountNumber"
+            label="Account Number"
             // name="account"
             rules={[
               {
@@ -334,39 +313,42 @@ class TransferMoneyForm extends Component {
               },
             ]}
           >
-            <Input name="account" type="number"
-              value={account} onChange={this.onChange} />
+            <Input
+              name="account"
+              type="number"
+              value={account}
+              onChange={this.onChange}
+            />
           </Form.Item>
 
-          <Form.Item label="Save beneficiary information">
+          <Form.Item label="Save Beneficiary Information">
             <Checkbox onClick={this.handleSaveInfo} className="resText" />
-
           </Form.Item>
-          {
-            errsave && !isSave && <Alert message={errsave} type="error" />
-
-          }
-          {this.state.ischeck &&
-
-            <Form.Item label="Beneficiary Name" className="mt-3"
-            >
-
+          {errsave && !isSave && <Alert message={errsave} type="error" />}
+          {this.state.ischeck && (
+            <Form.Item label="Beneficiary Name" className="mt-3">
               <div className="d-flex ">
-                <Input placeholder="Input Beneficiary" name="reminder"
+                <Input
+                  placeholder="Input Beneficiary"
+                  name="reminder"
                   value={reminder}
                   onFocus={this.onFocusSave}
                   onChange={this.onChangeName}
                 />
-                <Button loading={pend} type='primary' onClick={this.handleSaveBen}>Submit</Button>
+                <Button
+                  loading={pend}
+                  type="primary"
+                  onClick={this.handleSaveBen}
+                >
+                  Submit
+                </Button>
               </div>
             </Form.Item>
-
-
-          }
+          )}
           <div className="titlePart">TRANSACTION INFORMATION</div>
           <hr />
-          <Form.Item label="Transfer amount"
-
+          <Form.Item
+            label="Transfer Amount"
             rules={[
               {
                 required: true,
@@ -374,8 +356,10 @@ class TransferMoneyForm extends Component {
               },
             ]}
           >
-
-            <Input addonAfter={prefixSelector} placeholder="Input amount" name="amount"
+            <Input
+              addonAfter={prefixSelector}
+              placeholder="Input amount"
+              name="amount"
               value={amount}
               type="number"
               onChange={this.onChange}
@@ -383,23 +367,20 @@ class TransferMoneyForm extends Component {
             />
           </Form.Item>
 
-
-          <Form.Item label="Transfer content"
-
-          >
-            <Input placeholder="Input amount" name="content"
+          <Form.Item label="Transfer Content">
+            <Input
+              placeholder="Input amount"
+              name="content"
               value={content}
-
               onChange={this.onChange}
             />
           </Form.Item>
-          <Form.Item label="Transfer fee">
+          <Form.Item label="Transfer Fee">
             <Select onChange={this.onChangePayer} defaultValue="Payer">
               <Option value="true">Payer</Option>
               <Option value="false">Payee</Option>
             </Select>
           </Form.Item>
-
 
           <Form.Item label=" " colon={false}>
             <Button
@@ -411,82 +392,90 @@ class TransferMoneyForm extends Component {
               onClick={this.handleSubmit}
               disabled={!activeEmail}
             >
-              continue
+              Continue
             </Button>
           </Form.Item>
-
         </Form>
 
-
-
-        {
-          showNextModal &&
-
+        {showNextModal && (
           <Modal
             visible={this.state.visible}
-            style={{ top: '10px' }}
+            style={{ top: "10px" }}
             onCancel={this.handleCancel}
-
-
-            footer={[
-
-            ]}
+            footer={[]}
           >
-            <div >
+            <div>
               <div className=" formName">TRANSACTION INFORMATION</div>
 
-              <Form.Item style={{ textAlign: "center", fontWeight: "bold", color: 'red' }}>
+              <Form.Item
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "red",
+                }}
+              >
                 OTP has just been sent to your email !!!
-          </Form.Item>
+              </Form.Item>
               <hr></hr>
 
-              <Form style={{ fontWeight: 'bold', fontSize: '13px' }}>
-                <div className='row'>
-                  <div className='col' >Source account:</div>
-                  <div className='col'> {transactionUser.sender.accountNumber}</div>
+              <Form style={{ fontWeight: "bold", fontSize: "13px" }}>
+                <div className="row">
+                  <div className="col">Source Account:</div>
+                  <div className="col">
+                    {" "}
+                    {transactionUser.sender.accountNumber}
+                  </div>
                 </div>
-                <div className='row'>
-                  <div className='col'>Account receiver:</div>
-                  <div className='col'> {transactionUser.receiver}</div>
+                <div className="row">
+                  <div className="col">Account Receiver:</div>
+                  <div className="col"> {transactionUser.receiver}</div>
                 </div>
-                <div className='row'>
-                  <div className='col'>Name receiver:</div>
-                  <div className='col' style={{ textTransform: 'uppercase' }}> {transactionUser.nameReceiver}</div>
+                <div className="row">
+                  <div className="col">Name Receiver:</div>
+                  <div className="col" style={{ textTransform: "uppercase" }}>
+                    {" "}
+                    {transactionUser.nameReceiver}
+                  </div>
                 </div>
-                <div className='row'>
-                  <div className='col'>Amount Money:</div>
-                  <div className='col'>  {transactionUser.amountMoney}</div>
+                <div className="row">
+                  <div className="col">Amount Money:</div>
+                  <div className="col"> {transactionUser.amountMoney}</div>
                 </div>
-                <div className='row'>
-                  <div className='col'>Type Send:</div>
-                  <div className='col'>   {transactionUser.typeSend ? "Payer" : "Payee"}</div>
+                <div className="row">
+                  <div className="col">Type Send:</div>
+                  <div className="col">
+                    {" "}
+                    {transactionUser.typeSend ? "Payer" : "Payee"}
+                  </div>
                 </div>
-                <div className='row'>
-                  <div className='col'>Content:</div>
-                  <div className='col'>    {transactionUser.content}</div>
+                <div className="row">
+                  <div className="col">Content:</div>
+                  <div className="col"> {transactionUser.content}</div>
                 </div>
-                <div className='row'>
-                  <div className='col'>Fee transaction:</div>
-                  <div className='col'>  2200 VND</div>
+                <div className="row">
+                  <div className="col">Fee Transaction:</div>
+                  <div className="col"> 2200 VND</div>
                 </div>
                 <hr></hr>
-                <div className="row" style={{ fontSize: '20px', fontWeight: 'bolder' }}>
+                <div
+                  className="row"
+                  style={{ fontSize: "20px", fontWeight: "bolder" }}
+                >
                   <div className="col">Total:</div>
-                  <div className="col"> {this.totalMoney(transactionUser.amountMoney, transactionUser.typeSend)}</div>
+                  <div className="col">
+                    {" "}
+                    {this.totalMoney(
+                      transactionUser.amountMoney,
+                      transactionUser.typeSend
+                    )}
+                  </div>
                 </div>
-
-
-
               </Form>
-              <Form >
-                {errMess && !isShow && (
-                  <Alert message={errMess} type="error" />
-
-                )}
-                <Form.Item className="mt-2"
+              <Form>
+                {errMess && !isShow && <Alert message={errMess} type="error" />}
+                <Form.Item
+                  className="mt-2"
                   label="OTP Code"
-
-
                   rules={[
                     { required: true, message: "Please input your OTP!" },
                     { length: 6, message: "OTP has 6 numbers!" },
@@ -501,52 +490,66 @@ class TransferMoneyForm extends Component {
                     placeholder="Input the OTP"
                   />
                 </Form.Item>
-                <div className='d-flex'>
-                  <Form.Item colon={false} style={{ marginLeft: '20%' }} >
-
+                <div className="d-flex">
+                  <Form.Item colon={false} style={{ marginLeft: "20%" }}>
                     <Button
                       className="btnSubmit"
                       htmlType="submit"
                       loading={penTran}
-
                       type="primary"
                       onClick={this.handleSubmitMoney}
-                      shape='round'
-
+                      shape="round"
                     >
                       Submit
-            </Button>
+                    </Button>
                   </Form.Item>
                   <div>
-                    <Button type="primary" shape='round' className='ml-3' onClick={this.handleCancel}>cancel</Button>
-                    <Button type="primary" shape='round' className='ml-3' onClick={this.showModal}>Back</Button>
+                    <Button
+                      type="primary"
+                      shape="round"
+                      className="ml-3"
+                      onClick={this.handleCancel}
+                    >
+                      cancel
+                    </Button>
+                    <Button
+                      type="primary"
+                      shape="round"
+                      className="ml-3"
+                      onClick={this.showModal}
+                    >
+                      Back
+                    </Button>
                   </div>
                 </div>
               </Form>
-
-
-
             </div>
           </Modal>
-
-        }
-        {
-          successModal && !issuccessModal &&
+        )}
+        {successModal && !issuccessModal && (
           <Modal
             visible={this.state.isModal}
             onCancel={this.showSuccess}
             width={300}
-            bodyStyle={{ background: '#1e860e', borderRadius: '5px' }}
+            bodyStyle={{ background: "#1e860e", borderRadius: "5px" }}
             footer={null}
           >
-            <div >
-              <h6 style={{ color: 'white', fontWeight: 'bolder' }} >This transaction is complete </h6>
-              <Button type='primary' shape="round" style={{ width: '100%', marginTop: '5%' }} onClick={this.showSuccess}>OK</Button>
+            <div>
+              <h6 style={{ color: "white", fontWeight: "bolder" }}>
+                This transaction is complete{" "}
+              </h6>
+              <Button
+                type="primary"
+                shape="round"
+                style={{ width: "100%", marginTop: "5%" }}
+                onClick={this.showSuccess}
+              >
+                OK
+              </Button>
             </div>
           </Modal>
-        }
-
-      </div >
+        )}
+      </div>
     );
   }
 }
@@ -567,16 +570,57 @@ const mapStateToProps = (state) => {
     saveInfoReceiver: state.transaction.saveInfoReceiver,
     pend: state.transaction.pend,
     errsave: state.transaction.errsave,
-    penTran: state.transaction.penTran
+    penTran: state.transaction.penTran,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getAccountNumber: (typeAccount) => dispatch(userActions.getAccountNumber(typeAccount)),
-  receiverTransfer: (sentData) => dispatch(transactionActions.receiverTransfer(sentData)),
-  requestReceiver: (receiver, amountMoney, content, typeSend) => dispatch(transactionActions.requestReceiver(receiver, amountMoney, content, typeSend)),
-  verifyOTP: (receiver, amountMoney, content, typeSend, otp, typeTransaction, nameBank,) => dispatch(transactionActions.verifyOTP(receiver, amountMoney, content, typeSend, otp, typeTransaction, nameBank)),
-  saveReceiverInformation: (accountNumber, idBank, nameBeneficiary, nameRemind) => dispatch(transactionActions.saveReceiverInformation(accountNumber, idBank, nameBeneficiary, nameRemind)),
-
+  getAccountNumber: (typeAccount) =>
+    dispatch(userActions.getAccountNumber(typeAccount)),
+  receiverTransfer: (sentData) =>
+    dispatch(transactionActions.receiverTransfer(sentData)),
+  requestReceiver: (receiver, amountMoney, content, typeSend) =>
+    dispatch(
+      transactionActions.requestReceiver(
+        receiver,
+        amountMoney,
+        content,
+        typeSend
+      )
+    ),
+  verifyOTP: (
+    receiver,
+    amountMoney,
+    content,
+    typeSend,
+    otp,
+    typeTransaction,
+    nameBank
+  ) =>
+    dispatch(
+      transactionActions.verifyOTP(
+        receiver,
+        amountMoney,
+        content,
+        typeSend,
+        otp,
+        typeTransaction,
+        nameBank
+      )
+    ),
+  saveReceiverInformation: (
+    accountNumber,
+    idBank,
+    nameBeneficiary,
+    nameRemind
+  ) =>
+    dispatch(
+      transactionActions.saveReceiverInformation(
+        accountNumber,
+        idBank,
+        nameBeneficiary,
+        nameRemind
+      )
+    ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TransferMoneyForm);

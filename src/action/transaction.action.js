@@ -1,6 +1,6 @@
 import API from "config/axios.config";
 import { transactionConstants } from "constants/index";
-import handleCatch from "../utils/middleWare"
+import handleCatch from "../utils/middleWare";
 
 import authHeader from "../utils/auth-header";
 
@@ -8,6 +8,7 @@ const receiverTransfer = (dataSent) => {
   console.log("1", dataSent);
   return (dispatch) => {
     let headers = authHeader();
+    console.log("token", headers);
     dispatch(request());
 
     API.get(`/transfer/receiver`, { params: dataSent, headers: headers })
@@ -15,7 +16,7 @@ const receiverTransfer = (dataSent) => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -52,7 +53,7 @@ const receiverInformation = (idReceiver) => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -91,7 +92,7 @@ const requestReceiver = (receiver, amountMoney, content, typeSend) => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -149,7 +150,7 @@ const verifyOTP = (
           resolve(res.data.result);
         })
         .catch((error) => {
-          handleCatch(dispatch, failure, error)
+          handleCatch(dispatch, failure, error);
           reject();
         });
     });
@@ -195,7 +196,7 @@ const saveReceiverInformation = (
           resolve(res.data.result);
         })
         .catch((error) => {
-          handleCatch(dispatch, failure, error)
+          handleCatch(dispatch, failure, error);
           reject();
         });
     });
@@ -243,7 +244,7 @@ const editReceiverInformation = (
           resolve(res.data.result);
         })
         .catch((error) => {
-          handleCatch(dispatch, failure, error)
+          handleCatch(dispatch, failure, error);
           reject();
         });
     });
@@ -280,7 +281,7 @@ const deleteReceiver = (receiverId) => {
       })
       .catch((error) => {
         console.log(error);
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -326,7 +327,7 @@ const linkBankAccount = (
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -371,7 +372,7 @@ const verifyOTPLinkBank = (
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -405,7 +406,7 @@ const getLinkBank = () => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 

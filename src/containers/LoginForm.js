@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userActions } from "action/user.action";
 
-
 class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -13,22 +12,20 @@ class LoginForm extends Component {
       username: "",
       password: "",
       verified: false,
-      isFirstLoad: true
+      isFirstLoad: true,
     };
   }
   handleLogin = () => {
-    console.log(this.state.verified)
+    console.log(this.state.verified);
     if (!this.state.verified) {
-
-      alert("you need verifed captcha")
-    }
-    else {
+      alert("you need verifed captcha");
+    } else {
       const { username, password } = this.state;
       const { login } = this.props;
       login(username, password);
       this.setState({
-        isFirstLoad: false
-      })
+        isFirstLoad: false,
+      });
     }
   };
   onChange = (e) => {
@@ -38,7 +35,6 @@ class LoginForm extends Component {
     console.log(this.state.username, this.state.password);
   };
 
-
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
@@ -46,15 +42,11 @@ class LoginForm extends Component {
   };
   onChangeCapcha = (value) => {
     if (value) {
-
-      this.setState({ verified: true })
+      this.setState({ verified: true });
     }
-  }
+  };
 
   render() {
-
-
-
     const inputStyle = {
       height: "40px",
       borderRadius: "5px",
@@ -65,14 +57,8 @@ class LoginForm extends Component {
     console.log("errMessage", errMessage);
     return (
       <div className=" mt-5  login ">
-        <div
-          className="form"
-        >
-          <h1
-            className="name"
-          >
-            Login
-          </h1>
+        <div className="form">
+          <h1 className="name">Login</h1>
           <Form
             style={{ marginTop: "10%", zIndex: "-1" }}
             name="basic"
@@ -80,16 +66,11 @@ class LoginForm extends Component {
               remember: true,
             }}
           >
-            {
-              errMessage && !isFirstLoad &&
-              <Alert
-                message={errMessage}
-                type="error"
-                showIcon
-              />
-
-            }
-            <Form.Item className="mt-2"
+            {errMessage && !isFirstLoad && (
+              <Alert message={errMessage} type="error" showIcon />
+            )}
+            <Form.Item
+              className="mt-2"
               name="username"
               rules={[
                 {
@@ -132,11 +113,11 @@ class LoginForm extends Component {
               sitekey="6LcNLQEVAAAAAEsLQiouq4Lm_rsj4g9f_ngtFlgn"
               // sitekey="6LfP964ZAAAAALLWBRE1XATl2QnwMdEMnQ1qtFbW"
               render="explicit"
-
               onChange={this.onChangeCapcha}
             />
-            <Link className="mt-2"
-              to="/forgetPassword">Forget Password</Link>
+            <Link className="mt-2" to="/forgetPassword">
+              Forget Password
+            </Link>
             <Form.Item>
               <Button
                 style={{
@@ -145,10 +126,10 @@ class LoginForm extends Component {
                   height: "40px",
                   borderRadius: "10px",
                   opacity: "1",
-                  marginTop: '10px',
-                  color: 'white',
-                  fontWeight: 'bolder',
-                  backgroundColor: '#1890ff'
+                  marginTop: "10px",
+                  color: "white",
+                  fontWeight: "bolder",
+                  backgroundColor: "#1890ff",
                 }}
                 type="primary"
                 loading={pendding}
@@ -161,14 +142,14 @@ class LoginForm extends Component {
             </Form.Item>
           </Form>
         </div>
-      </div >
+      </div>
     );
   }
 }
 const mapStateToProps = (state) => {
   return {
     pendding: state.user.pendding,
-    errMessage: state.user.errMessage
+    errMessage: state.user.errMessage,
   };
 };
 

@@ -1,7 +1,7 @@
 import API from "config/axios.config";
 import { employeeConstants } from "constants/index";
 import authHeader from "../utils/auth-header";
-
+import handleCatch from "utils/middleWare";
 const registerAccount = (fullName, email, phone) => {
   const regex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
   return (dispatch) => {
@@ -22,7 +22,7 @@ const registerAccount = (fullName, email, phone) => {
           dispatch(success(res.data.result));
         })
         .catch((error) => {
-          return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error);
         });
     }
   };
@@ -55,7 +55,7 @@ const applyMoney = (accountNumber, amountMoney) => {
           dispatch(success(res.data.result));
         })
         .catch((error) => {
-          return dispatch(failure(error.response.data.message) || "OOPs! something wrong");
+          handleCatch(dispatch, failure, error);
         });
     }
   };
@@ -66,7 +66,7 @@ const applyMoney = (accountNumber, amountMoney) => {
     return { type: employeeConstants.APPLYMONEY_SUCCESS, money };
   }
   function failure(error) {
-    console.log(error)
+    console.log(error);
     return { type: employeeConstants.APPLYMONEY_FAILURE, error };
   }
 };
@@ -83,13 +83,7 @@ const customerTransaction = (sentData) => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        const { data } = error.response;
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error);
       });
   };
   function request() {
@@ -125,13 +119,7 @@ const getCustomerUserId = (userInfo, cb) => {
         cb(res.data.result);
       })
       .catch((error) => {
-        const { data } = error.response;
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error);
       });
   };
   function request() {
@@ -163,16 +151,9 @@ const getCustomer = () => {
       .then((res) => {
         console.log(res.data.result);
         dispatch(success(res.data.result));
-
       })
       .catch((error) => {
-        const { data } = error.response;
-        if (data.error) {
-          return dispatch(
-            failure(data.error.message) || "OOPs! something wrong"
-          );
-        }
-        return dispatch(failure(error) || "OOPs! something wrong");
+        handleCatch(dispatch, failure, error);
       });
   };
   function request() {
@@ -199,5 +180,5 @@ export const employeeActions = {
   applyMoney,
   customerTransaction,
   getCustomerUserId,
-  getCustomer
+  getCustomer,
 };

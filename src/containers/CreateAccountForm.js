@@ -3,8 +3,6 @@ import { Form, Input, Button, DatePicker, Alert } from "antd";
 import { employeeActions } from "action/employee.action";
 import { connect } from "react-redux";
 
-
-
 class CreateAccountForm extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +12,7 @@ class CreateAccountForm extends Component {
       email: "",
       phone: "",
       isFirstLoad: true,
-      isSecondLoad: true
+      isSecondLoad: true,
     };
   }
   handleRegisterAccount = () => {
@@ -33,8 +31,7 @@ class CreateAccountForm extends Component {
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
-      isSecondLoad: true
-
+      isSecondLoad: true,
     });
   };
   render() {
@@ -51,46 +48,50 @@ class CreateAccountForm extends Component {
           wrapperCol={{ span: 16 }}
           form={this.form}
         >
-          {errMessage && !isFirstLoad &&
-            <Alert
-              message={errMessage}
-
-              type="error"
-              showIcon
-            />
-          }
-          {isSuccessCreate && !isSecondLoad &&
-            <Alert
-              message="Create success"
-              type="success"
-              showIcon
-            />
-          }
+          {errMessage && !isFirstLoad && (
+            <Alert message={errMessage} type="error" showIcon />
+          )}
+          {isSuccessCreate && !isSecondLoad && (
+            <Alert message="Create success" type="success" showIcon />
+          )}
           <Form.Item
             className="mt-3"
             label=" Full Name"
             name="fullName"
             rules={[{ required: true, message: "Please input your fullname!" }]}
           >
-            <Input name="fullName" value={fullName} onChange={this.onChange} onFocus={this.onFocus} />
+            <Input
+              name="fullName"
+              value={fullName}
+              onChange={this.onChange}
+              onFocus={this.onFocus}
+            />
           </Form.Item>
           <Form.Item
             label=" Email"
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <Input name="email" value={email} onChange={this.onChange} onFocus={this.onFocus} />
+            <Input
+              name="email"
+              value={email}
+              onChange={this.onChange}
+              onFocus={this.onFocus}
+            />
           </Form.Item>
 
-          <Form.Item label="Address">
-
+          {/* <Form.Item label="Address">
             <Form.Item
               noStyle
               rules={[{ required: true, message: "Street is required" }]}
             >
-              <Input style={{ marginTop: 10 }} placeholder="Input street" onFocus={this.onFocus} />
+              <Input
+                style={{ marginTop: 10 }}
+                placeholder="Input street"
+                onFocus={this.onFocus}
+              />
             </Form.Item>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="Phone number"
             name="phone"
@@ -98,11 +99,16 @@ class CreateAccountForm extends Component {
               { required: true, message: "Please input your phone number!" },
             ]}
           >
-            <Input name="phone" value={phone} onChange={this.onChange} onFocus={this.onFocus} />
+            <Input
+              name="phone"
+              value={phone}
+              onChange={this.onChange}
+              onFocus={this.onFocus}
+            />
           </Form.Item>
-          <Form.Item label="Birth Date">
+          {/* <Form.Item label="Birth Date">
             <DatePicker rules={[{ required: true }]} />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item className="btnSubmitItem" label=" " colon={false}>
             <Button

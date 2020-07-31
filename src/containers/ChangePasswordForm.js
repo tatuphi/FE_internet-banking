@@ -15,7 +15,7 @@ class ChangePasswordForm extends Component {
       newPassword: "",
       newPasswordConfirm: "",
       isFirstLoad: true,
-      isSuccess: true
+      isSuccess: true,
     };
   }
   handleUpdatePassword = () => {
@@ -25,8 +25,7 @@ class ChangePasswordForm extends Component {
     this.setState({
       isFirstLoad: false,
       isSuccess: false,
-
-    })
+    });
   };
   onChange = (e) => {
     this.setState({
@@ -37,13 +36,18 @@ class ChangePasswordForm extends Component {
   onFocus = () => {
     this.setState({
       isFirstLoad: true,
-      isSuccess: true
+      isSuccess: true,
     });
   };
 
   render() {
-    const { currentPassword, newPassword,
-      newPasswordConfirm, isFirstLoad, isSuccess } = this.state;
+    const {
+      currentPassword,
+      newPassword,
+      newPasswordConfirm,
+      isFirstLoad,
+      isSuccess,
+    } = this.state;
     const { pendding, updatedPassword, errMessage } = this.props;
     const active =
       currentPassword &&
@@ -68,7 +72,7 @@ class ChangePasswordForm extends Component {
               </Form.Item>
             )}
             <Form.Item
-              label="Current password"
+              label="Current Password"
               name="currentPassword"
               rules={[
                 {
@@ -85,7 +89,7 @@ class ChangePasswordForm extends Component {
               />
             </Form.Item>
             <Form.Item
-              label="New password"
+              label="New Password"
               name="newPassword"
               rules={[
                 {
@@ -102,7 +106,7 @@ class ChangePasswordForm extends Component {
               />
             </Form.Item>
             <Form.Item
-              label="New password confirm"
+              label="New Password Confirm"
               name="newPasswordConfirm"
               rules={[
                 {

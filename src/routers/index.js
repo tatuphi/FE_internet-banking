@@ -18,17 +18,12 @@ import ApplyMoney from "pages/Employee/ApplyMoney";
 import CustomerHistoryTransaction from "pages/Employee/CustomerHistoryTransaction";
 import ManageEmployee from "pages/Admin/ManageEmployee";
 import TransactionOtherBank from "pages/Admin/TransactionOtherBank";
-import Profile from "pages/Profile"
+import Profile from "pages/Profile";
 import Header from "containers/Share/Header";
 import Footer from "containers/Share/Footer";
 class WrapRouter extends Component {
-  componentDidMount() { }
+  componentDidMount() {}
   render() {
-
-    const role = localStorage.getItem('role')
-    const isAuth = localStorage.getItem('isAuth');
-
-
     const noLayoutRoutes = [
       {
         path: "/login",
@@ -56,112 +51,92 @@ class WrapRouter extends Component {
       {
         path: "/info",
         exact: true,
-        main: () => isAuth ? <Info /> : <Redirect to='/login' />
+        main: () => <Info />,
       },
       {
         path: "/profile",
         exact: true,
-        main: () => isAuth ? <Profile /> : <Redirect to='/login' />,
+        main: () => <Profile />,
       },
       {
         path: "/employee/createAccount",
         exact: true,
-        main: () => role === 'EMPLOYEE' ? <CreateBankAccount /> : <Redirect to='/' />
+        main: () => <CreateBankAccount />,
       },
 
       {
         path: "/changePassword",
         exact: true,
-        main: () => isAuth ? <ChangePassword /> : <Redirect to='/login' />,
+        main: () => <ChangePassword />,
       },
       {
         path: "/transferMoney",
         exact: true,
-        main: () => role === 'CUSTOMER' ? <TransferMoney /> : <Redirect to='/' />,
+        main: () => <TransferMoney />,
       },
       {
         path: "/transferOtherBank",
         exact: true,
-        main: () => role === 'CUSTOMER' ? <TransferOtherBank /> : <Redirect to='/' />,
+        main: () => <TransferOtherBank />,
       },
       {
         path: "/beneficiary",
         exact: true,
-        main: () => role === 'CUSTOMER' ? <Beneficiary /> : <Redirect to='/' />
+        main: () => <Beneficiary />,
       },
       {
         path: "/deptRemind",
         exact: true,
-        main: () => role === 'CUSTOMER' ? <DeptRemind /> : <Redirect to='/' />,
+        main: () => <DeptRemind />,
       },
       {
         path: "/historyPagement",
         exact: true,
-        main: () => role === 'CUSTOMER' ? <HistoryPayment /> : <Redirect to='/' />,
+        main: () => <HistoryPayment />,
       },
 
       {
         path: "/employee/applyMoney",
         exact: true,
-        main: () => role === 'EMPLOYEE' ? <ApplyMoney /> : <Redirect to='/' />,
+        main: () => <ApplyMoney />,
       },
       {
         path: "/employee/customerTransaction",
         exact: true,
-        main: () => role === 'EMPLOYEE' ? <CustomerHistoryTransaction /> : <Redirect to='/' />,
+        main: () => <CustomerHistoryTransaction />,
       },
 
       {
         path: "/admin/getEmployee",
         exact: true,
-        main: () => role === 'ADMIN' ? <ManageEmployee /> : <Redirect to='/' />,
+        main: () => <ManageEmployee />,
       },
       {
         path: "/admin/transactionOtherBank",
         exact: true,
-        main: () => role === 'ADMIN' ? < TransactionOtherBank /> : < Redirect to='/' />,
+        main: () => <TransactionOtherBank />,
       },
-
-
     ];
     return (
       <Router history={history}>
         <Switch>
           {routes.map((item, index) => (
-
-            <Route
-              key={index}
-              path={item.path}
-              exact={item.exact}
-            >
+            <Route key={index} path={item.path} exact={item.exact}>
               <>
                 <div className="fixed-top">
                   <Header />
                 </div>
-                <div className="mt-5">
-                  {item.main()}
-                </div>
+                <div className="mt-5">{item.main()}</div>
 
                 <Footer />
               </>
             </Route>
-
           ))}
-          {
-            noLayoutRoutes.map((item, index) => <Route
-              key={index}
-              path={item.path}
-              exact={item.exact}
-            >
-
+          {noLayoutRoutes.map((item, index) => (
+            <Route key={index} path={item.path} exact={item.exact}>
               {item.main()}
-
-
-
-
-            </Route>)
-          }
-
+            </Route>
+          ))}
         </Switch>
       </Router>
     );

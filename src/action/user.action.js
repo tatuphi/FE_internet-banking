@@ -1,7 +1,7 @@
 import API from "config/axios.config";
 import { userConstant } from "constants/index";
 import history from "config/history.config";
-import handleCatch from "utils/middleWare"
+import handleCatch from "utils/middleWare";
 
 import authHeader from "../utils/auth-header";
 
@@ -19,9 +19,8 @@ const login = (username, password) => {
         history.push("/");
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
-
   };
 
   function request() {
@@ -53,7 +52,7 @@ const getUserCurrent = () => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -97,7 +96,7 @@ const getAccountNumber = (typeAccount) => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -137,7 +136,7 @@ const requestForgotPassword = (username, email) => {
           dispatch(success());
         })
         .catch((error) => {
-          handleCatch(dispatch, failure, error)
+          handleCatch(dispatch, failure, error);
         });
     }
   };
@@ -174,7 +173,7 @@ const forgotPassword = (email, username, otp, newPassword) => {
           history.push("/login");
         })
         .catch((error) => {
-          handleCatch(dispatch, failure, error)
+          handleCatch(dispatch, failure, error);
         });
     }
   };
@@ -198,7 +197,7 @@ const getBeneficiary = () => {
         dispatch(success(res.data.result));
       })
       .catch((error) => {
-        handleCatch(dispatch, failure, error)
+        handleCatch(dispatch, failure, error);
       });
   };
 
@@ -240,7 +239,7 @@ const updatePassword = (oldPassword, newPassword) => {
           dispatch(success());
         })
         .catch((error) => {
-          handleCatch(dispatch, failure, error)
+          handleCatch(dispatch, failure, error);
         });
     }
   };
