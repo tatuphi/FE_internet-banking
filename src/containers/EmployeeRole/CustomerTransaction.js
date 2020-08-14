@@ -9,6 +9,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Column } = Table;
 const { Search } = Input;
+var formatMoney = new Intl.NumberFormat();
 
 class CustomerTransaction extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class CustomerTransaction extends Component {
       userId: "",
       userInfo: "",
       accountName: "",
+      isfirstLoad: false,
     };
   }
 
@@ -28,7 +30,11 @@ class CustomerTransaction extends Component {
       customerTransaction({
         userId: res.userId,
       });
-      this.setState({ userId: res.userId, accountName: res.accountName });
+      this.setState({
+        userId: res.userId,
+        accountName: res.accountName,
+        isfirstLoad: true,
+      });
     });
 
     //
@@ -68,7 +74,9 @@ class CustomerTransaction extends Component {
   };
 
   render() {
-    const { listCustomerTransaction, pendding, userResult } = this.props;
+    const { listCustomerTransaction, pendding, userResult, total } = this.props;
+    const { isfirstLoad } = this.state;
+    console.log(total);
     return (
       <div className="history">
         <div className="formName">
@@ -80,6 +88,11 @@ class CustomerTransaction extends Component {
             {userResult.accountName}
           </span>
         </div>
+        {total && isfirstLoad && (
+          <div style={{ color: "green", marginRight: "1px" }}>
+            TOTAL: {formatMoney.format(total.total)} VND
+          </div>
+        )}
         <div className="itemPayment">
           <Search
             placeholder="Search username or account number of customer..."
@@ -136,11 +149,16 @@ class CustomerTransaction extends Component {
                 key="amount"
                 render={(amount) => (
                   <div>
-                    <p>{`${amount} VND`}</p>
+                    <p>{`${formatMoney.format(amount)} VND`}</p>
                   </div>
                 )}
               />
-              <Column title="Type Send" dataIndex="typeSend" key="typeSend" />
+              <Column
+                title="Type Send"
+                dataIndex="typeSend"
+                key="typeSend"
+                render={(typeSend) => (typeSend ? "Payer" : "Payee")}
+              />
               <Column
                 title="Type Transaction"
                 dataIndex="typeTransaction"
@@ -152,7 +170,7 @@ class CustomerTransaction extends Component {
                 key="fee"
                 render={(fee) => (
                   <div>
-                    <p>{`${fee} VND`}</p>
+                    <p>{`${formatMoney.format(fee)} VND`}</p>
                   </div>
                 )}
               />
@@ -179,6 +197,7 @@ const mapStateToProps = (state) => {
     userResult: state.employee.userResult,
     listCustomerTransaction: state.employee.listCustomerTransaction,
     errMessage: state.employee.errMessage,
+    total: state.employee.total,
   };
 };
 

@@ -7,6 +7,7 @@ import { adminActions } from "action/admin.action";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Column } = Table;
+var formatMoney = new Intl.NumberFormat();
 
 class TransactionOtherBankForm extends Component {
   constructor(props) {
@@ -53,7 +54,11 @@ class TransactionOtherBankForm extends Component {
     return (
       <div className="history">
         <div className="formName">HISTORY TRANSACTION WITH OTHER BANK</div>
-        {total && <div style={{ color: "green", marginRight: '1px' }}>TOTAL: {total.total} VND</div>}
+        {total && (
+          <div style={{ color: "green", marginRight: "1px" }}>
+            TOTAL: {formatMoney.format(total.total)} VND
+          </div>
+        )}
 
         <div className="row mt-6 itemSmall">
           <div className="col col-6 ">
@@ -119,7 +124,7 @@ class TransactionOtherBankForm extends Component {
                 key="amount"
                 render={(amount) => (
                   <div>
-                    <p>{`${amount} VND`}</p>
+                    <p>{`${formatMoney.format(amount)} VND`}</p>
                   </div>
                 )}
               />
@@ -129,7 +134,7 @@ class TransactionOtherBankForm extends Component {
                 key="fee"
                 render={(fee) => (
                   <div>
-                    <p>{`${fee} VND`}</p>
+                    <p>{`${formatMoney.format(fee)} VND`}</p>
                   </div>
                 )}
               />

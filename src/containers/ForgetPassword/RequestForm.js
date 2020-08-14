@@ -4,11 +4,6 @@ import { userActions } from "action/user.action";
 import { connect } from "react-redux";
 import InputOTPForm from "./InputOTPForm";
 
-const layout = {
-  labelCol: { span: 5 },
-  wrapperCol: { span: 16 },
-};
-
 class RequestForm extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +19,8 @@ class RequestForm extends Component {
 
     requestForgotPassword(username, email);
     this.setState({
-      loadOpt: true
-    })
+      loadOpt: true,
+    });
   };
   onChange = (e) => {
     this.setState({
@@ -39,77 +34,103 @@ class RequestForm extends Component {
     });
   };
   handleCancel = () => {
-    this.setState({ loadOpt: false })
+    this.setState({ loadOpt: false });
     console.log("mo");
-  }
+  };
 
   render() {
     const { pendding, sendOTP, errMessage } = this.props;
     const { username, email, loadOpt } = this.state;
     const activeEmail = email.trim();
     console.log(errMessage);
+    const inputStyle = {
+      height: "40px",
+      borderRadius: "5px",
+    };
     return (
-      <div className="outletMain">
-        {sendOTP && loadOpt ? (
-          <InputOTPForm username={username} email={email} handleCancel={this.handleCancel} />
-        ) : (
-            <div>
-              <div className="formName"> SET UP THE PASSWORD</div>
-              <Form className="myForm" {...layout} form={this.form}>
-                {errMessage && (
-                  <Form.Item>
-                    <h6 style={{ color: "red" }}>{errMessage}</h6>
-                  </Form.Item>
-                )}
-                <Form.Item
-                  label="Username"
-                  name="username"
-                  rules={[
-                    { required: true, message: "Please input your username!" },
-                  ]}
-                >
-                  <Input
-                    name="username"
-                    value={username}
-                    onChange={this.onChange}
-                    onFocus={this.onFocus}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[
-                    { required: true, message: "Please input your email!" },
-                  ]}
-                >
-                  <Input
-                    name="email"
-                    value={email}
-                    onChange={this.onChange}
-                    onFocus={this.onFocus}
-                  />
-                </Form.Item>
+      <div>
+        <div>
+          {sendOTP && loadOpt ? (
+            <InputOTPForm
+              username={username}
+              email={email}
+              handleCancel={this.handleCancel}
+            />
+          ) : (
+            <div className=" mt-5  login ">
+              <div className="form">
+                <h4 className="name">Set up password</h4>
 
-                <Form.Item
-                  className="btnSubmitItem"
-                  label=" "
-                  colon={false}
-                  shouldUpdate
+                <Form
+                  className="myForm"
+                  form={this.form}
+                  style={{ marginTop: "10%", zIndex: "-1" }}
                 >
-                  <Button
-                    className="btnSubmit"
-                    htmlType="submit"
-                    loading={pendding}
-                    disabled={!activeEmail}
-                    type="primary"
-                    onClick={this.handleSendEmail}
+                  {errMessage && (
+                    <Form.Item>
+                      <h6 style={{ color: "red" }}>{errMessage}</h6>
+                    </Form.Item>
+                  )}
+                  <Form.Item
+                    name="username"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your username!",
+                      },
+                    ]}
                   >
-                    Send
-                </Button>
-                </Form.Item>
-              </Form>
+                    <Input
+                      style={{ inputStyle }}
+                      name="username"
+                      placeholder="Username"
+                      value={username}
+                      onChange={this.onChange}
+                      onFocus={this.onFocus}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      { required: true, message: "Please input your email!" },
+                    ]}
+                  >
+                    <Input
+                      style={{ inputStyle }}
+                      name="email"
+                      value={email}
+                      placeholder="Email"
+                      onChange={this.onChange}
+                      onFocus={this.onFocus}
+                    />
+                  </Form.Item>
+
+                  <Form.Item shouldUpdate>
+                    <Button
+                      style={{
+                        width: "100%",
+                        height: "40px",
+                        borderRadius: "10px",
+                        opacity: "1",
+                        marginTop: "10px",
+                        color: "white",
+                        fontWeight: "bolder",
+                        backgroundColor: "#1890ff",
+                      }}
+                      htmlType="submit"
+                      loading={pendding}
+                      disabled={!activeEmail}
+                      type="primary"
+                      onClick={this.handleSendEmail}
+                    >
+                      Send
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
             </div>
           )}
+        </div>
       </div>
     );
   }

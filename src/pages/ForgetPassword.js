@@ -14,23 +14,21 @@ class ForgetPassword extends Component {
     };
   }
   render() {
-    const src = "/instagram_profile_image.png";
+    const src = "/logo_transparent.png";
 
     return (
       <div className="login ">
-        <div className="row ">
+        <div className="row  loginname">
           <div className="col-sm-6 col-md-6 mt-5">
-            <Link to='/'>
-              <img src={src} alt="logo" style={{ width: '90%' }} />
-
+            <Link to="/">
+              <img src={src} alt="logo" style={{ width: "90%" }} />
             </Link>
           </div>
-          <div className="col-sm-6 col-md-6 mt-5 formForgot" >
+          <div className="col-sm-6 col-md-6 mt-5 ">
             <RequestForm />
           </div>
         </div>
       </div>
-
     );
   }
 }

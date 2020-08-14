@@ -28,7 +28,7 @@ class ManageEmployeeForm extends Component {
       idEmployee: "",
       secondLoad: true,
       isUpdate: true,
-      isUpdateSucces: true
+      isUpdateSucces: true,
     };
   }
   componentDidMount = () => {
@@ -59,7 +59,7 @@ class ManageEmployeeForm extends Component {
     const { createEmployee } = this.props;
     const { fullName, email } = this.state;
     createEmployee(fullName, email);
-    this.setState({ isFistLoad: false, secondLoad: false })
+    this.setState({ isFistLoad: false, secondLoad: false });
   };
   isShowDelete = (idEmployee) => {
     this.setState({
@@ -110,9 +110,8 @@ class ManageEmployeeForm extends Component {
     updateEmployee(editData);
     this.setState({
       isUpdate: false,
-      isUpdateSucces:
-        false
-    })
+      isUpdateSucces: false,
+    });
   };
   onchangeValue = (value) => {
     this.setState({ role: value });
@@ -122,11 +121,9 @@ class ManageEmployeeForm extends Component {
       isFistLoad: true,
       secondLoad: true,
       isUpdate: true,
-      isUpdateSucces:
-        true
-
-    })
-  }
+      isUpdateSucces: true,
+    });
+  };
 
   render() {
     const {
@@ -139,8 +136,7 @@ class ManageEmployeeForm extends Component {
       showDeSuccess,
       secondLoad,
       isUpdate,
-      isUpdateSucces
-
+      isUpdateSucces,
     } = this.state;
 
     const {
@@ -152,20 +148,25 @@ class ManageEmployeeForm extends Component {
       issucess,
       updatePending,
       updateErr,
-      UpdateSuccess
+      UpdateSuccess,
     } = this.props;
     console.log(("listEmployee", listEmployee));
     return (
       <div className="history">
-
         <div className="formName"> LIST EMPLOYEE MANAGEMENT</div>
-        <Button type="primary" shape="round" onClick={this.showModalSave} className="ml-2">
+        <Button
+          type="primary"
+          shape="round"
+          onClick={this.showModalSave}
+          className="ml-2"
+        >
           <PlusOutlined /> Add Employee
         </Button>
-        <div className="mt-4">
-        </div>
+        <div className="mt-4"></div>
         <div className="mt-3">
-          <Table dataSource={listEmployee} pagination={{ pageSize: 10 }}
+          <Table
+            dataSource={listEmployee}
+            pagination={{ pageSize: 10 }}
             scroll={{ y: 400, x: 500 }}
           >
             <Column
@@ -249,9 +250,9 @@ class ManageEmployeeForm extends Component {
                     name="email"
                     value={email}
                     onFocus={this.onFocusSave}
-                    onChange={(e) =>
-                      this.onChangeValue(e.target.value, "email")
-                    }
+                    // onChange={(e) =>
+                    //   this.onChangeValue(e.target.value, "email")
+                    // }
                   />
                 </Form.Item>
 
@@ -262,9 +263,9 @@ class ManageEmployeeForm extends Component {
                         name="username"
                         value={username}
 
-                        onChange={(e) =>
-                          this.onChangeValue(e.target.value, "username")
-                        }
+                        // onChange={(e) =>
+                        //   this.onChangeValue(e.target.value, "username")
+                        // }
                       />
                     </Form.Item>
                     <Form.Item label="Role">
@@ -282,21 +283,24 @@ class ManageEmployeeForm extends Component {
                         type="primary"
                         onClick={this.handleUpdate}
                         loading={updatePending}
-
                       >
                         Update
                       </Button>
                     </Form.Item>
                   </div>
                 ) : (
-                    <Form.Item label=" " colon={false}>
-                      <Button key="submit" type="primary"
-                        onFocus={this.onFocusSave}
-                        onClick={this.handleOk} loading={pendding}>
-                        Save
+                  <Form.Item label=" " colon={false}>
+                    <Button
+                      key="submit"
+                      type="primary"
+                      onFocus={this.onFocusSave}
+                      onClick={this.handleOk}
+                      loading={pendding}
+                    >
+                      Save
                     </Button>
-                    </Form.Item>
-                  )}
+                  </Form.Item>
+                )}
               </Form>
             </div>
           </Modal>
@@ -355,7 +359,7 @@ const mapStateToProps = (state) => {
     issucess: state.admin.issucess,
     updatePending: state.admin.updatePending,
     updateErr: state.admin.updateErr,
-    UpdateSuccess: state.admin.UpdateSuccess
+    UpdateSuccess: state.admin.UpdateSuccess,
   };
 };
 

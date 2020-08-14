@@ -9,6 +9,7 @@ import { historyActions } from "action/history.action";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Column } = Table;
+var formatMoney = new Intl.NumberFormat();
 
 class HistoryForm extends Component {
   constructor(props) {
@@ -36,9 +37,7 @@ class HistoryForm extends Component {
   };
 
   render() {
-    var formatMoney = new Intl.NumberFormat();
-
-    const { listHistory, pendingHistory } = this.props;
+    const { listHistory, pendingHistory, total } = this.props;
     return (
       <div className="history outletMain">
         <div className="formName">HISTORY PAYMENT</div>
@@ -79,10 +78,16 @@ class HistoryForm extends Component {
             )}
           </div>
           <div>
+            {total && (
+              <div style={{ color: "green", marginRight: "1px" }}>
+                TOTAL: {formatMoney.format(total.total)} VND
+              </div>
+            )}
+
             <Table
               dataSource={listHistory}
               pagination={{ pageSize: 10 }}
-              scroll={{ y: 400, x: 500 }}
+              scroll={{ y: 500, x: 500 }}
             >
               <Column
                 title="Receiver"
@@ -109,7 +114,7 @@ class HistoryForm extends Component {
                 title="Type Send"
                 dataIndex="typeSend"
                 key="typeSend"
-                render={(typeSend) => <div>{typeSend ? "+ " : "-"}</div>}
+                render={(typeSend) => <div>{typeSend ? "Payer" : "Payee"}</div>}
               />
               <Column
                 title="Type"
@@ -148,6 +153,7 @@ const mapStateToProps = (state) => {
     pendingHistory: state.history.pendingHistory,
     listHistory: state.history.listHistory,
     errHistory: state.history.errHistory,
+    total: state.history.total,
   };
 };
 
