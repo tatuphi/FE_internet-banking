@@ -36,6 +36,8 @@ class HistoryForm extends Component {
   };
 
   render() {
+    var formatMoney = new Intl.NumberFormat();
+
     const { listHistory, pendingHistory } = this.props;
     return (
       <div className="history outletMain">
@@ -99,7 +101,7 @@ class HistoryForm extends Component {
                 key="amount"
                 render={(amount) => (
                   <div>
-                    <p>{`${amount} VND`}</p>
+                    <p>{`${formatMoney.format(amount)} VND`}</p>
                   </div>
                 )}
               />
@@ -120,7 +122,7 @@ class HistoryForm extends Component {
                 key="fee"
                 render={(fee) => (
                   <div>
-                    <p>{`${fee} VND`}</p>
+                    <p>{`${formatMoney.format(fee)} VND`}</p>
                   </div>
                 )}
               />

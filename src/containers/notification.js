@@ -14,6 +14,7 @@ const timeStyle = {
 };
 
 let page = 2;
+var formatMoney = new Intl.NumberFormat();
 
 class Notification extends Component {
   constructor(props) {
@@ -119,7 +120,7 @@ class Notification extends Component {
                   <div className="col">
                     <p>{item.users_sender.accountName}</p>
                   </div>
-                  <p>{item.amount} VND</p>
+                  <p>{formatMoney.format(item.amount)} VND</p>
                 </div>
               </div>
             ) : (
@@ -129,7 +130,7 @@ class Notification extends Component {
                   <div className="col">
                     <p>{item.users_sender.accountName}</p>
                   </div>
-                  <p>{item.amount} VND</p>
+                  <p>{formatMoney.format(item.amount)} VND</p>
                 </div>
               </h6>
             )}

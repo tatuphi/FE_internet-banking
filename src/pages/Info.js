@@ -35,6 +35,7 @@ class informationUser extends Component {
     const { accountNumber, userInfo } = this.props;
     console.log("tl", userInfo);
     console.log("mo:", accountNumber);
+    var formatMoney = new Intl.NumberFormat();
     return (
       <div className="commom">
         <div className="container background">
@@ -61,7 +62,10 @@ class informationUser extends Component {
                           </div>
                           <div className="d-flex mt-1">
                             <p>
-                              Balance Current: <b>{item.currentBalance} VND</b>
+                              Balance Current:{" "}
+                              <b>
+                                {formatMoney.format(item.currentBalance)} VND
+                              </b>
                             </p>
                           </div>
                           <div className="d-flex mt-1">

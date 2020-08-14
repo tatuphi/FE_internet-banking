@@ -246,6 +246,8 @@ class TransferMoneyForm extends Component {
     // let { receiverInfo } = this.state;
     // receiverInfo = isUpdate ? [...receiverInfo] : [...receiver];
 
+    var formatMoney = new Intl.NumberFormat();
+
     const prefixSelector = (
       <Form.Item name="prefix" noStyle>
         <span>VND</span>
@@ -269,7 +271,10 @@ class TransferMoneyForm extends Component {
             label="Current Balance"
             name="currentBalance"
           >
-            <span className="resText"> {accBalance} VNĐ</span>
+            <span className="resText">
+              {" "}
+              {formatMoney.format(accBalance)} VNĐ
+            </span>
           </Form.Item>
         </Form>
 
@@ -439,7 +444,10 @@ class TransferMoneyForm extends Component {
                 </div>
                 <div className="row">
                   <div className="col">Amount Money:</div>
-                  <div className="col"> {transactionUser.amountMoney}</div>
+                  <div className="col">
+                    {" "}
+                    {formatMoney.format(transactionUser.amountMoney)}
+                  </div>
                 </div>
                 <div className="row">
                   <div className="col">Type Send:</div>
@@ -454,7 +462,7 @@ class TransferMoneyForm extends Component {
                 </div>
                 <div className="row">
                   <div className="col">Fee Transaction:</div>
-                  <div className="col"> 2200 VND</div>
+                  <div className="col"> 2,200 VND</div>
                 </div>
                 <hr></hr>
                 <div
@@ -510,7 +518,7 @@ class TransferMoneyForm extends Component {
                       className="ml-3"
                       onClick={this.handleCancel}
                     >
-                      cancel
+                      Cancel
                     </Button>
                     <Button
                       type="primary"

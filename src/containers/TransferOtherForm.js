@@ -17,6 +17,7 @@ const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 16 },
 };
+var formatMoney = new Intl.NumberFormat();
 
 class TransferOtherForm extends Component {
   constructor(props) {
@@ -268,7 +269,9 @@ class TransferOtherForm extends Component {
             label="Current Balance"
             name="currentBalance"
           >
-            <span className="resText">{accBalance} VND</span>
+            <span className="resText">
+              {formatMoney.format(accBalance)} VND
+            </span>
           </Form.Item>
         </Form>
         <div className="titlePart">TRANSACTION INFORMATION</div>
@@ -445,7 +448,7 @@ class TransferOtherForm extends Component {
                   style={{ fontSize: "20px", fontWeight: 500 }}
                 >
                   <div className="col">Amount money </div>
-                  <div className="col">{amount}</div>
+                  <div className="col">{formatMoney.format(amount)}</div>
                 </div>
                 <div
                   className="row"
@@ -462,7 +465,7 @@ class TransferOtherForm extends Component {
                   style={{ fontSize: "20px", fontWeight: 500 }}
                 >
                   <div className="col">Fee</div>
-                  <div className="col"> 3.300</div>
+                  <div className="col"> 3,300</div>
                 </div>
                 <div
                   className="row"
@@ -517,7 +520,7 @@ class TransferOtherForm extends Component {
                   </Form.Item>
                   <div>
                     <Button className="ml-4" onClick={this.handleCancel}>
-                      cancel
+                      Cancel
                     </Button>
                     <Button className="ml-4" onClick={this.showModal}>
                       Back
